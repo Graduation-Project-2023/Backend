@@ -18,17 +18,11 @@ if (!DB_HOST || !DB_NAME || !DB_USERNAME || !DB_PASSWORD || !TEST_DB_NAME) {
     throw new Error('Missing db Env')
 }
 
-if (ENV === 'dev') {
-    db_name = DB_NAME
-}else {
-    db_name = TEST_DB_NAME
-}
-
 const db = new pg.Pool({
     host: DB_HOST,
+    database: (ENV === 'dev') ? DB_NAME : TEST_DB_NAME,
     user: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: db_name
+    password: DB_PASSWORD
 })
 
-export default db;  
+export default db;

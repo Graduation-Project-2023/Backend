@@ -1,0 +1,19 @@
+
+POST http://127.0.0.1:3000/api/auth/register
+CONTENT-TYPE: application/json
+
+{
+  "username": "rafa",
+  "email": "rafa@rafa.com",
+  "password": "test"
+}
+
+###
+
+POST http://127.0.0.1:3000/api/auth/login
+CONTENT-TYPE: application/json
+
+{
+  "email": "rafa@rafa.com",
+  "password": "test"
+}

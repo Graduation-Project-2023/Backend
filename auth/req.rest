@@ -17,3 +17,12 @@ CONTENT-TYPE: application/json
   "email": "rafa@rafa.com",
   "password": "test"
 }
+
+###
+
+POST http://127.0.0.1:3000/api/auth/reset_password
+CONTENT-TYPE: application/json
+
+{
+  "email": "mowe7amedraafat@aol.com"
+}

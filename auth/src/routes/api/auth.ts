@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import { User, UserModel } from '../../models/users'
+import sendEmail from '../../utils/mail'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
@@ -46,6 +47,23 @@ server.post('/login', async (req: Request, res: Response) => {
     } catch(err) {
         return res.status(500).json(err)
     }
+})
+
+server.post('/reset_password', async (req: Request, res: Response) => {
+    const email = req.body.email
+    if (!email) {
+        return res.status(400).json({ error: 'email is required' })
+    }
+    try {
+        sendEmail(email, "https://www.google.com");
+        res.json({message: 'Reset link sent'})
+    } catch(err) {
+        return res.status(500).json(err)
+    }
+})
+
+server.post('/signout', async (req: Request, res: Response) => {
+
 })
 
 export default server;

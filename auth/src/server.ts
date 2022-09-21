@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './routes/index';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('on and running!');
+  res.sendFile(path.join(__dirname, 'view/index.html'));
 });
 
 app.use('/api', routes);

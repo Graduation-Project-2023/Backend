@@ -3,9 +3,9 @@ POST http://127.0.0.1:3000/api/auth/register
 CONTENT-TYPE: application/json
 
 {
-  "username": "rafa",
-  "email": "rafa@rafa.com",
-  "password": "test"
+  "username": "1mowsdaqsdeew",
+  "email": "1mo7wmsddedwraaffsdat@icloud.com",
+  "password": "tewdsfst"
 }
 
 ###
@@ -14,15 +14,25 @@ POST http://127.0.0.1:3000/api/auth/login
 CONTENT-TYPE: application/json
 
 {
-  "email": "rafa@rafa.com",
-  "password": "test"
+  "email": "mo7awmdedwraaffsdat@icloud.com",
+  "password": "tewdsfst"
 }
 
 ###
 
-POST http://127.0.0.1:3000/api/auth/reset_password
+POST http://127.0.0.1:3000/api/auth/forgot_password
 CONTENT-TYPE: application/json
 
 {
-  "email": "mowe7amedraafat@aol.com"
+  "email": "mo7amedraafat@icloud.com"
+}
+
+###
+
+POST http://127.0.0.1:3000/api/auth/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3NmJmMTFhLWJjNmEtNDU1Ni04ZjgyLWQ0NWU3NDNkODRmMCIsInVzZXJuYW1lIjoibW8iLCJlbWFpbCI6Im1vN2FtZWRyYWFmYXRAaWNsb3VkLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjYzNzM0OTMzLCJleHAiOjE2NjM3MzU4MzN9.M079C8Fl-AeH-9vli7pPUTzFuRXoXlucu_IgHvS9eZM
+CONTENT-TYPE: application/json
+
+{
+  "password": "12wwe3",
+  "confpassword": "12wwe3"
 }

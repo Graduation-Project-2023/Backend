@@ -1,30 +1,30 @@
 
-POST http://127.0.0.1:3000/api/auth/register
+POST http://151279430aaf.087cf7b7.alx-cod.online/api/auth/register
 CONTENT-TYPE: application/json
 
 {
-  "username": "1mowsdaqsdeew",
-  "email": "1mo7wmsddedwraaffsdat@icloud.com",
+  "username": "rafa1",
+  "email": "mo7amedraafat@icloud.com",
   "password": "tewdsfst"
 }
 
 ###
 
-POST http://127.0.0.1:3000/api/auth/login
+POST http://151279430aaf.087cf7b7.alx-cod.online/api/auth/login
 CONTENT-TYPE: application/json
 
 {
-  "email": "mo7awmdedwraaffsdat@icloud.com",
+  "email": "mo7amedraafat@icloud.com",
   "password": "tewdsfst"
 }
 
 ###
 
-POST http://127.0.0.1:3000/api/auth/forgot_password
+POST http://151279430aaf.087cf7b7.alx-cod.online/api/auth/forgot_password
 CONTENT-TYPE: application/json
 
 {
-  "email": "mo7amedraafat@icloud.com"
+  "email": "mo7amedraafat@aol.com"
 }
 
 ###

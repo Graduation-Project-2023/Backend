@@ -1,0 +1,49 @@
+
+generator client {
+    provider="prisma-client-js"
+}
+
+datasource db {
+    provider="postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+    ADMIN
+    STUDENT
+    PROFESSOR
+}
+
+model User {
+    id String @id @default(uuid())
+    email String @unique
+    password String
+    role Role
+}
+
+
+enum Religion {
+    MUSLIM
+    CHRISTIAN
+}
+
+enum Gender {
+    MALE 
+    FEMALE
+}
+
+model form {
+    id String @id @default(uuid())
+    fullname String
+    nationality String
+    gender Gender
+    religion Religion
+    nationalId String
+    birthDate DateTime
+    birthPlace String
+    guardianName String
+    Address String
+    contactEmail String
+    contactPhone String
+    city String
+}

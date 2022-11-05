@@ -1,0 +1,1 @@
+// join all the routes in this folder and export them to the server

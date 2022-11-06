@@ -42,7 +42,7 @@ model form {
     birthDate DateTime
     birthPlace String
     guardianName String
-    Address String
+    address String
     contactEmail String
     contactPhone String
     city String

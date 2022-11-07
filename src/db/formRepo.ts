@@ -3,10 +3,10 @@ import prisma from ".";
 import { Prisma } from "@prisma/client";
 
 export class FormRepo extends Repo<
-  Prisma.formCreateInput,
-  Prisma.formUpdateInput,
-  Prisma.formWhereUniqueInput,
-  Prisma.formWhereInput
+  Prisma.FormCreateInput,
+  Prisma.FormUpdateInput,
+  Prisma.FormWhereUniqueInput,
+  Prisma.FormWhereInput
 > {
   constructor() {
     super(prisma.form);

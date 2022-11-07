@@ -19,6 +19,7 @@ model User {
     email String @unique
     password String
     role Role
+    @@map("users")
 }
 
 
@@ -32,7 +33,7 @@ enum Gender {
     FEMALE
 }
 
-model form {
+model Form {
     id String @id @default(uuid())
     fullname String
     nationality String
@@ -46,4 +47,5 @@ model form {
     contactEmail String
     contactPhone String
     city String
+    @@map("forms")
 }

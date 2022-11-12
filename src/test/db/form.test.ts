@@ -15,7 +15,8 @@ describe("FormRepo crud", () => {
 
   it("should create a form", async () => {
     form = await formRepo.create({
-      fullname: "حمود الحمود",
+      arabicName: "حمود الحمود",
+      englishName: "Hammoud Hammoud",
       nationality: "Saudi",
       gender: "MALE",
       religion: "MUSLIM",
@@ -30,7 +31,7 @@ describe("FormRepo crud", () => {
     });
     expect(form).to.be.ok;
     expect(form.id).to.be.ok;
-    expect(form.fullname).to.equal("حمود الحمود");
+    expect(form.arabicName).to.equal("حمود الحمود");
   });
 
   it("should read a form", async () => {

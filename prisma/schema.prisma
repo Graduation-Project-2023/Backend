@@ -14,14 +14,19 @@ enum Role {
     PROFESSOR
 }
 
-model User {
-    id String @id @default(uuid())
-    email String @unique
-    password String
-    role Role
-    @@map("users")
+enum Level {
+    FIRST
+    SECOND
+    THIRD 
+    FOURTH
+    FIFTH
 }
 
+enum Semester {
+    FIRST
+    SECOND
+    SUMMER
+}
 
 enum Religion {
     MUSLIM
@@ -33,9 +38,141 @@ enum Gender {
     FEMALE
 }
 
+enum Grade {
+    A
+    B
+    C
+    D
+    E
+    F
+}
+
+model User {
+    id String @id @default(uuid())
+    student Student?
+    professor Professor?
+    email String @unique
+    password String
+    role Role
+    @@map("users")
+}
+
+model Department {
+    id String @id @default(uuid())
+    name String
+    courses Course[]
+    students Student[]
+    professors Professor[]
+    branches Branch[]
+    @@map("departments")
+}
+
+model Branch {
+    id String @id @default(uuid())
+    name String
+    department Department @relation(fields: [departmentId], references: [id])
+    departmentId String
+    courses Course[]
+    students Student[]
+    professors Professor[]
+    @@map("branches")
+}
+
+model Professor {
+    id String @id @default(uuid())
+    user User @relation(fields: [userId], references: [id])
+    userId String @unique
+    englishName String
+    arabicName String
+    department Department? @relation(fields: [departmentId], references: [id])
+    departmentId String?
+    branch Branch? @relation(fields: [branchId], references: [id])
+    branchId String?
+    courses Class[]
+    @@map("professors")
+}
+
+model Student {
+    id String @id @default(uuid())
+    user User @relation(fields: [userId], references: [id])
+    userId String @unique
+    department Department? @relation(fields: [departmentId], references: [id])
+    branch Branch? @relation(fields: [branchId], references: [id])
+    enrolledClasses StudentClass[]
+    grades CourseGrade[]
+    departmentId String
+    branchId String
+    englishName String
+    arabicName String
+    nationality String
+    gender Gender
+    religion Religion
+    nationalId String
+    birthDate DateTime
+    birthPlace String
+    guardianName String
+    address String
+    contactEmail String
+    contactPhone String
+    city String
+    @@map("students") 
+}
+
+model Course {
+    id String @id @default(uuid())
+    englishName String
+    arabicName String
+    code String @unique
+    level Level
+    semester Semester
+    department Department? @relation(fields: [departmentId], references: [id])
+    departmentId String?
+    branch Branch? @relation(fields: [branchId], references: [id])
+    branchId String?
+    unlockedCourse Course? @relation("CoursePrerequisites", fields: [unlockedCourseId], references: [id])
+    unlockedCourseId String?
+    classes Class[] 
+    grades CourseGrade[]
+    prerequisites Course[] @relation("CoursePrerequisites")
+    @@map("courses")
+}
+
+model CourseGrade {
+    id String @id @default(uuid())
+    course Course @relation(fields: [courseId], references: [id])
+    courseId String
+    student Student @relation(fields: [studentId], references: [id])
+    studentId String
+    grade Grade
+    @@map("courses_grades")
+}
+
+model Class {
+    id String @id @default(uuid())
+    course Course @relation(fields: [courseId], references: [id])
+    courseId String @unique
+    professor Professor @relation(fields: [professorId], references: [id])
+    professorId String
+    students StudentClass[]
+    finished Boolean
+    @@map("classes")
+}
+
+model StudentClass {
+    id String @id @default(uuid())
+    student Student @relation(fields: [studentId], references: [id])
+    studentId String
+    class Class @relation(fields: [classId], references: [id])
+    classId String
+    classWork Int
+    finalExam Int
+    @@map("student_classes")
+}
+
 model Form {
     id String @id @default(uuid())
-    fullname String
+    englishName String
+    arabicName String
     nationality String
     gender Gender
     religion Religion

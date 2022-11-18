@@ -13,7 +13,7 @@ describe("userRepo crud", () => {
     expect(userRepo).to.be.ok;
   });
 
-  it("should create a form", async () => {
+  it("should create a user", async () => {
     user = await userRepo.create({
       email: "HamoodAdmin@eng.suez.edu.eg",
       password: "123456789",
@@ -24,16 +24,16 @@ describe("userRepo crud", () => {
     expect(user.email).to.equal("HamoodAdmin@eng.suez.edu.eg");
   });
 
-  it("should read a form", async () => {
-    const newForm = await userRepo.read({ id: user.id });
-    expect(newForm).to.be.ok;
-    expect(newForm.id).to.equal(user.id);
-    expect(newForm.fullname).to.equal(user.fullname);
+  it("should read a user", async () => {
+    const newUser = await userRepo.read({ id: user.id });
+    expect(newUser).to.be.ok;
+    expect(newUser.id).to.equal(user.id);
+    expect(newUser.fullname).to.equal(user.fullname);
   });
 
-  it("should read many forms", async () => {
-    const forms = await userRepo.readMany();
-    expect(forms).to.be.ok;
-    expect(forms.length).to.be.greaterThan(0);
+  it("should read many users", async () => {
+    const users = await userRepo.readMany();
+    expect(users).to.be.ok;
+    expect(users.length).to.be.greaterThan(0);
   });
 });

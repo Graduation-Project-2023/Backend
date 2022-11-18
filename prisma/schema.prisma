@@ -100,8 +100,8 @@ model Student {
     branch Branch? @relation(fields: [branchId], references: [id])
     enrolledClasses StudentClass[]
     grades CourseGrade[]
-    departmentId String
-    branchId String
+    departmentId String?
+    branchId String?
     englishName String
     arabicName String
     nationality String

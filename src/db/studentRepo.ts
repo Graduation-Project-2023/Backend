@@ -16,11 +16,11 @@ export class StudentRepo extends Repo<
     const { userId, ...rest } = data;
     return await this.model.create({
       data: {
-        rest,
-      },
-      user: {
-        connect: {
-          id: userId,
+        ...rest,
+        user: {
+          connect: {
+            id: userId,
+          },
         },
       },
     });

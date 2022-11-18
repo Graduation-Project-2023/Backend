@@ -6,7 +6,7 @@ export abstract class Repo<
   WhereUniqueInput,
   WhereInput
 > {
-  constructor(private model: any) {}
+  constructor(protected model: any) {}
 
   create = async (data: CreateInput) => {
     return await this.model.create({ data });

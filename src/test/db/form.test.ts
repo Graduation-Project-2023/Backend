@@ -4,10 +4,12 @@ import { expect } from "chai";
 describe("FormRepo crud", () => {
   let formRepo: FormRepo;
   let form: any;
+
   // should delete all forms after all tests are done
   after(async () => {
     await formRepo.deleteMany();
   });
+
   it("should be defined", () => {
     formRepo = new FormRepo();
     expect(formRepo).to.be.ok;
@@ -27,6 +29,7 @@ describe("FormRepo crud", () => {
       address: "Riyadh",
       contactEmail: "HamoodHabiby@gmail.com",
       contactPhone: "123456789",
+      homePhone: "064567890",
       city: "Riyadh",
     });
     expect(form).to.be.ok;

@@ -3,8 +3,8 @@ import prisma from ".";
 import { Prisma } from "@prisma/client";
 
 export class StudentRepo extends Repo<
-  Prisma.StudentUncheckedCreateInput,
-  Prisma.StudentUncheckedUpdateInput,
+  { user: Prisma.UserCreateInput; formId: string },
+  Prisma.StudentUpdateInput,
   Prisma.StudentWhereUniqueInput,
   Prisma.StudentWhereInput
 > {
@@ -12,14 +12,15 @@ export class StudentRepo extends Repo<
     super(prisma.student);
   }
 
-  create = async (data: Prisma.StudentUncheckedCreateInput) => {
-    const { userId, ...rest } = data;
+  create = async (data: { user: Prisma.UserCreateInput; formId: string }) => {
     return await this.model.create({
       data: {
-        ...rest,
         user: {
+          create: data.user,
+        },
+        studentInfo: {
           connect: {
-            id: userId,
+            id: data.formId,
           },
         },
       },
@@ -28,11 +29,8 @@ export class StudentRepo extends Repo<
 
   update = async (
     query: Prisma.StudentWhereUniqueInput,
-    data: Prisma.StudentUncheckedUpdateInput
+    data: Prisma.StudentUpdateInput
   ) => {
-    return await this.model.update({
-      where: query,
-      data,
-    });
+    throw new Error("Not implemented");
   };
 }

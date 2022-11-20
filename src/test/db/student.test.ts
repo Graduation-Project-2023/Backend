@@ -1,25 +1,39 @@
 import { StudentRepo } from "../../db/studentRepo";
 import { UserRepo } from "../../db/userRepo";
+import { FormRepo } from "../../db/formRepo";
 import { expect } from "chai";
 
 describe("studentRepo crud", () => {
   let studentRepo: StudentRepo;
+  let formRepo: FormRepo;
+  let formId: string;
   let student: any;
-  let userId: string;
 
   // should delete all forms after all tests are done
   after(async () => {
     await studentRepo.deleteMany();
+    await formRepo.deleteMany();
   });
 
   before(async () => {
-    const userRepo = new UserRepo();
-    const user = await userRepo.create({
-      email: "hamood@student.com",
-      password: "123456789",
-      role: "STUDENT",
+    formRepo = new FormRepo();
+    const form = await formRepo.create({
+      arabicName: "حمود الحمود",
+      englishName: "Hammoud Hammoud",
+      nationality: "Saudi",
+      nationalId: "123456789",
+      gender: "MALE",
+      religion: "MUSLIM",
+      birthDate: new Date("1990-01-01"),
+      birthPlace: "Riyadh",
+      guardianName: "حمود الحمود",
+      address: "Riyadh",
+      contactEmail: "HamoodElHamood@gmail.com",
+      contactPhone: "123456789",
+      homePhone: "064567890",
+      city: "Riyadh",
     });
-    userId = user.id;
+    formId = form.id;
   });
 
   it("should be defined", () => {
@@ -29,20 +43,12 @@ describe("studentRepo crud", () => {
 
   it("should create a student", async () => {
     student = await studentRepo.create({
-      userId,
-      englishName: "Hamood",
-      arabicName: "حمود",
-      nationalId: "123456789",
-      nationality: "Jordanian",
-      gender: "MALE",
-      religion: "MUSLIM",
-      birthDate: new Date("1999-01-01"),
-      birthPlace: "Amman",
-      address: "Amman",
-      contactEmail: "Hamood@student.com",
-      guardianName: "Hamood",
-      city: "Amman",
-      contactPhone: "0799999999",
+      user: {
+        email: "Hamood@gmail.com",
+        password: "123456789",
+        role: "STUDENT",
+      },
+      formId,
     });
     expect(student).to.be.ok;
     expect(student.id).to.be.ok;

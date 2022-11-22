@@ -102,8 +102,18 @@ model Student {
     grades CourseGrade[]
     departmentId String?
     branchId String?
-    studentInfo Form @relation(fields: [formId], references: [id])
-    formId String @unique
+    nationalId String @unique
+    englishName String
+    arabicName String
+    nationality String
+    gender Gender
+    religion Religion
+    birthDate DateTime
+    birthPlace String
+    guardianName String
+    address String
+    contactPhone String
+    homePhone String
     @@map("students") 
 }
 
@@ -156,24 +166,4 @@ model StudentClass {
     classWork Int
     finalExam Int
     @@map("student_classes")
-}
-
-model Form {
-    id String @id @default(uuid())
-    student Student?
-    englishName String
-    arabicName String
-    nationality String
-    gender Gender
-    religion Religion
-    nationalId String @unique
-    birthDate DateTime
-    birthPlace String
-    guardianName String
-    address String
-    contactEmail String
-    contactPhone String
-    homePhone String
-    city String
-    @@map("forms")
 }

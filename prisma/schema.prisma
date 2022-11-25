@@ -1,4 +1,3 @@
-
 generator client {
     provider="prisma-client-js"
 }
@@ -12,14 +11,6 @@ enum Role {
     ADMIN
     STUDENT
     PROFESSOR
-}
-
-enum Level {
-    FIRST
-    SECOND
-    THIRD 
-    FOURTH
-    FIFTH
 }
 
 enum Semester {
@@ -38,70 +29,45 @@ enum Gender {
     FEMALE
 }
 
-enum Grade {
-    A
-    B
-    C
-    D
-    E
-    F
+enum System {
+    CREDIT
+    SCHOOLYEAR
 }
 
+enum AllowedHrs {
+    SEMESTER 
+    CUMULATIVE
+    INCLUDESUMMER
+}
+
+enum FeesType {
+    YEARFIXED
+    SEMESTERFIXED
+    CREDITHOURS
+    COURSES
+}
+
+enum CourseType {
+    COMPULSORY
+    ELECTIVE
+}
+
+// models 
 model User {
     id String @id @default(uuid())
     student Student?
-    professor Professor?
     email String @unique
     password String
     role Role
     @@map("users")
 }
 
-model Department {
-    id String @id @default(uuid())
-    name String
-    courses Course[]
-    students Student[]
-    professors Professor[]
-    branches Branch[]
-    @@map("departments")
-}
-
-model Branch {
-    id String @id @default(uuid())
-    name String
-    department Department @relation(fields: [departmentId], references: [id])
-    departmentId String
-    courses Course[]
-    students Student[]
-    professors Professor[]
-    @@map("branches")
-}
-
-model Professor {
-    id String @id @default(uuid())
-    user User @relation(fields: [userId], references: [id])
-    userId String @unique
-    englishName String
-    arabicName String
-    department Department? @relation(fields: [departmentId], references: [id])
-    departmentId String?
-    branch Branch? @relation(fields: [branchId], references: [id])
-    branchId String?
-    courses Class[]
-    @@map("professors")
-}
-
 model Student {
     id String @id @default(uuid())
-    user User @relation(fields: [userId], references: [id])
+    user User? @relation(fields: [userId], references: [id])
     userId String @unique
-    department Department? @relation(fields: [departmentId], references: [id])
-    branch Branch? @relation(fields: [branchId], references: [id])
-    enrolledClasses StudentClass[]
-    grades CourseGrade[]
-    departmentId String?
-    branchId String?
+    Program Program? @relation(fields: [programId], references: [id])
+    programId String?
     nationalId String @unique
     englishName String
     arabicName String
@@ -114,7 +80,19 @@ model Student {
     address String
     contactPhone String
     homePhone String
+    college College? @relation(fields: [collegeId], references: [id])
+    collegeId String? 
     @@map("students") 
+}
+
+model College {
+    id String @id @default(uuid())
+    englishName String
+    arabicName String
+    students Student[]
+    programs Program[]
+    courses Course[]
+    @@map("colleges")
 }
 
 model Course {
@@ -122,48 +100,113 @@ model Course {
     englishName String
     arabicName String
     code String @unique
-    level Level
-    semester Semester
-    department Department? @relation(fields: [departmentId], references: [id])
-    departmentId String?
-    branch Branch? @relation(fields: [branchId], references: [id])
-    branchId String?
-    unlockedCourse Course? @relation("CoursePrerequisites", fields: [unlockedCourseId], references: [id])
-    unlockedCourseId String?
-    classes Class[] 
-    grades CourseGrade[]
-    prerequisites Course[] @relation("CoursePrerequisites")
+    college College? @relation(fields: [collegeId], references: [id])
+    collegeId String?
+    arabicDescription String
+    englishDescription String
+    programCourses ProgramCourse[] @relation(name: "CoursePrograms")
+    unlockedCourses ProgramCourse[] @relation(name: "PrerequisiteCourses")
     @@map("courses")
 }
+// program models
 
-model CourseGrade {
+model ProgramCourse {
     id String @id @default(uuid())
-    course Course @relation(fields: [courseId], references: [id])
-    courseId String
-    student Student @relation(fields: [studentId], references: [id])
-    studentId String
-    grade Grade
-    @@map("courses_grades")
+    program Program? @relation(fields: [programId], references: [id])
+    programId String?
+    course Course? @relation(name: "CoursePrograms", fields: [courseId], references: [id])
+    courseId String?
+    Level Level? @relation(fields: [levelId], references: [id])
+    levelId String?
+    prerequisite Course? @relation(name: "PrerequisiteCourses", fields: [prerequisiteId], references: [id])
+    prerequisiteId String?
+    semester Semester
+    creditHours Int
+    minimumHrsToRegister Int?
+    courseType CourseType
+    classWork Int?
+    finalExam Int?
+    midTerm Int?
+    oralPractical Int?
+    attendance Int?
+    @@map("program_courses")
 }
 
-model Class {
+model Level {
     id String @id @default(uuid())
-    course Course @relation(fields: [courseId], references: [id])
-    courseId String @unique
-    professor Professor @relation(fields: [professorId], references: [id])
-    professorId String
-    students StudentClass[]
-    finished Boolean
-    @@map("classes")
+    englishName String
+    arabicName String
+    Program Program? @relation(fields: [programId], references: [id])
+    programId String?
+    level Int 
+    qualifyingHrs Int
+    courses ProgramCourse[]
+    @@map("levels")
 }
 
-model StudentClass {
+model Grade {
     id String @id @default(uuid())
-    student Student @relation(fields: [studentId], references: [id])
-    studentId String
-    class Class @relation(fields: [classId], references: [id])
-    classId String
-    classWork Int
-    finalExam Int
-    @@map("student_classes")
+    name String
+    startsFrom Int
+    endsAt Int
+    equivalent String
+    gpa Float
+    Program Program? @relation(fields: [programId], references: [id])
+    programId String?
+    @@map("grades")
 }
+
+model Program {
+    id String @id @default(uuid())
+    englishName String
+    arabicName String
+    college College? @relation(fields: [collegeId], references: [id])
+    students Student[]
+    levels Level[]
+    collegeId String
+    programCode String @unique
+    degree String
+    creditHours Int
+    mandatoryHours Int?
+    optionalHours Int?
+    projectQualifyingHours Int?
+    feesType FeesType
+    summerFeesType FeesType
+    allowedHrs AllowedHrs
+    prerequisiteProgram Program? @relation(name: "prerequisites", fields: [prerequisiteProgramId], references: [id])
+    unlocksPrograms Program[] @relation(name: "prerequisites")
+    prerequisiteProgramId String?
+    levelAllowedHrs LevelAllowedHours[]
+    gpaAllowedHrs GpaAllowedHours[]
+    gradeLowering Int?
+    attemptsToLowerGrade Int?
+    failureGrade Int?
+    grades Grade[]
+    courses ProgramCourse[]
+    @@map("programs")
+}
+
+model LevelAllowedHours {
+    id String @id @default(uuid())
+    program Program? @relation(fields: [programId], references: [id])
+    programId String?
+    semester Semester
+    level Int
+    levelId String
+    minHours Int
+    maxHours Int
+    maxCourses Int
+    @@map("level_allowed_hours")
+}
+
+model GpaAllowedHours {
+    id String @id @default(uuid())
+    program Program? @relation(fields: [programId], references: [id])
+    programId String?
+    fromGpa Float
+    toGpa Float
+    minHours Int
+    maxHours Int
+    maxCourses Int
+    @@map("gpa_allowed_hours")
+} 

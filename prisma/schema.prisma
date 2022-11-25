@@ -210,3 +210,10 @@ model GpaAllowedHours {
     maxCourses Int
     @@map("gpa_allowed_hours")
 } 
+
+model Session {
+    id        String   @id
+    sid       String   @unique
+    data      String
+    expiresAt   DateTime
+}

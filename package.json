@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon src/server.ts",
     "mocha": "mocha --require  ts-node/register --parallel false src/**/*.test.ts",
     "migrate": "npx prisma migrate dev",
     "test": "npm run mocha"
@@ -13,19 +13,32 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^4.5.0",
+    "@quixo3/prisma-session-store": "^3.1.10",
+    "bcrypt": "^5.1.0",
     "chai": "^4.3.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
     "mocha": "^10.1.0",
+    "nodemailer": "^6.8.0",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "prisma": "^4.5.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/chai": "^4.3.3",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
+    "@types/express-session": "^1.17.5",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
+    "@types/nodemailer": "^6.4.6",
+    "@types/passport": "^1.0.11",
+    "@types/passport-local": "^1.0.34",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4"

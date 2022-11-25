@@ -9,21 +9,18 @@ const PEPPER = process.env.PEPPER as string;
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
-        console.log('xxxx')
         const user = await User.read({ email });
-        console.log(user);
         if (!user) {
             // no error has occurred, but the user does not exist
             return done(null, false);
         }
         else if (user) {
             const password_match = await bcrypt.compare(password+PEPPER, user.password)
-            console.log(password_match);
-            // no error has occurred, but the password is incorrect
             if (password_match)
-                return done(null, user);
+            // no error has occurred, and the user exists and the password is correct
+            return done(null, user);
         }
-        // no error has occurred, and the user exists and the password is correct
+        // no error has occurred, but the password is incorrect
         return done(null, false);
     } catch (err) {
         // an error has occurred

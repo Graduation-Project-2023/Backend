@@ -167,3 +167,10 @@ model StudentClass {
     finalExam Int
     @@map("student_classes")
 }
+
+model Session {
+    id        String   @id
+    sid       String   @unique
+    data      String
+    expiresAt   DateTime
+}

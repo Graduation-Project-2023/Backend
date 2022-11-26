@@ -2,6 +2,7 @@ POST http://localhost:8080/api/login
 Content-Type: application/json
 
 {
+<<<<<<< HEAD
     "email": "mohamsed.raafat@eng.suez.edu.eg",
     "password": "3217123"
 }
@@ -23,3 +24,15 @@ Content-Type: application/json
 
 POST http://localhost:8080/api/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkzYThmYzU4LTgwOTUtNDk1ZC1hOGYyLTdiYWE3MzFmMDFhYSIsImVtYWlsIjoibW9oYW1lZC5yYWFmYXRAZW5nLnN1ZXouZWR1LmVnIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNjY5MzU3Mjg3LCJleHAiOjE2NjkzNTgxODd9.8C7MTDSE17imMoAtk6ArMb5zzbQpMxVfy_hNFyyOtwI
 Content-Type: application/json
+=======
+    "email": "mohamed.raafat@eng.suez.edu.eg", 
+    "password": "123456"
+}
+
+### logout
+GET http://localhost:8080/api/logout
+
+
+### protected route
+GET http://localhost:8080/protected
+>>>>>>> 82d9d26a48987e55e504f47c56d28b44ba768dae

@@ -39,20 +39,33 @@ import { UserRepo } from "./db/userRepo";
 
 const user = new UserRepo();
 import bcrypt from "bcrypt";
+import isAuthed from "./utils/passportUtils";
 require("dotenv").config();
 const PEPPER = process.env.PEPPER as string;
 const passwo = 123456;
 app.get("/", (req: express.Request, res: express.Response) => {
-  const pass = bcrypt.hashSync(passwo + PEPPER, 13);
-  user.create({
-    email: "mohamed.raafat@eng.suez.edu.eg",
-    password: pass,
-    role: "ADMIN",
-  });
+  // const pass = bcrypt.hashSync(passwo + PEPPER, 13);
+  // user.create({
+  //   email: "mohamed.raafat@eng.suez.edu.eg",
+  //   password: pass,
+  //   role: "ADMIN",
+  // });
   res.send("Hello World!");
 });
 
+// app.get("/", (req: express.Request, res: express.Response) => {
+//   res.send("Hello World!");
+// });
+
 app.use("/api", router);
+
+app.get(
+  "/protected",
+  isAuthed,
+  (req: express.Request, res: express.Response) => {
+    res.send("Hello World!");
+  }
+);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

@@ -15,7 +15,7 @@ passport.use(
         const user = await User.read({ email });
         if (!user) {
           // no error has occurred, but the user does not exist
-          return done(null, false);
+          return done(null, false, { message: "Incorrect email or password" });
         } else if (user) {
           const password_match = await bcrypt.compare(
             password + PEPPER,
@@ -26,7 +26,7 @@ passport.use(
             return done(null, user);
         }
         // no error has occurred, but the password is incorrect
-        return done(null, false);
+        return done(null, false, { message: "Incorrect email or password" });
       } catch (err) {
         // an error has occurred
         return done(err);

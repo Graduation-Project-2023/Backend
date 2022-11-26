@@ -2,6 +2,13 @@ POST http://localhost:8080/api/login
 content-type: application/json
 
 {
-    "email": "mohamed.raafat@eng.suez.edu.eg",
+    "email": "mohamed.raafat@eng.suez.edu.eg", 
     "password": "123456"
 }
+
+### logout
+GET http://localhost:8080/api/logout
+
+
+### protected route
+GET http://localhost:8080/protected

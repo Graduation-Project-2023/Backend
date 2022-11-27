@@ -67,7 +67,6 @@ server.post(
           { expiresIn: "15m" }
         );
         const url = `http://localhost:8080/reset_password/${token}`;
-
         sendEmail(
           email,
           "Reset password",
@@ -76,7 +75,6 @@ server.post(
           url,
           "Reset Password"
         );
-
         console.log(url);
         res.json({ message: "Reset link sent" });
       }

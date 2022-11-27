@@ -112,8 +112,8 @@ model Course {
 
 model ProgramCourse {
     id String @id @default(uuid())
-    program Program? @relation(fields: [programId], references: [id])
-    programId String?
+    program Program @relation(fields: [programId], references: [id])
+    programId String
     course Course? @relation(name: "CoursePrograms", fields: [courseId], references: [id])
     courseId String?
     Level Level? @relation(fields: [levelId], references: [id])
@@ -136,7 +136,7 @@ model Level {
     id String @id @default(uuid())
     englishName String
     arabicName String
-    Program Program? @relation(fields: [programId], references: [id])
+    program Program? @relation(fields: [programId], references: [id])
     programId String?
     level Int 
     qualifyingHrs Int
@@ -151,7 +151,7 @@ model Grade {
     endsAt Int
     equivalent String
     gpa Float
-    Program Program? @relation(fields: [programId], references: [id])
+    program Program? @relation(fields: [programId], references: [id])
     programId String?
     @@map("grades")
 }

@@ -1,36 +1,36 @@
 import express, { NextFunction, Request, Response } from "express";
-import { CourseRepo } from "../../db/courseRepo";
+import { ProgramRepo } from "../../db/programRepo";
 
 const server = express.Router();
-const Course = new CourseRepo();
+const Program = new ProgramRepo();
 
-// get all courses in college
+// get all programs in college
 server.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const collegeId = req.query.collegeId as string;
-    const courses = await Course.readMany({ collegeId });
-    res.status(200).send(courses);
+    const programs = await Program.readMany({ collegeId });
+    res.status(200).send(programs);
   } catch (err) {
     next(err);
   }
 });
 
-// get course by id
+// get program by id
 server.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
-    const course = await Course.read({ id });
-    res.status(200).send(course);
+    const program = await Program.read({ id });
+    res.status(200).send(program);
   } catch (err) {
     next(err);
   }
 });
 
-// create course
+// create program
 server.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { collegeId, ...data } = req.body;
-    const course = await Course.create({
+    const program = await Program.create({
       ...data,
       college: {
         connect: {
@@ -38,7 +38,19 @@ server.post("/", async (req: Request, res: Response, next: NextFunction) => {
         },
       },
     });
-    res.status(201).send(course);
+    res.status(201).send(program);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// update program
+server.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const program = await Program.update({ id }, data);
+    res.status(200).send(program);
   } catch (err) {
     next(err);
   }

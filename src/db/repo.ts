@@ -12,7 +12,10 @@ export abstract class Repo<
     return await this.model.create({ data });
   };
 
-  read = async (query: WhereUniqueInput) => {
+  read = async (query: WhereUniqueInput, include: any = null) => {
+    if (include) {
+      return await this.model.findUnique({ where: query, include });
+    }
     return await this.model.findUnique({
       where: query,
     });

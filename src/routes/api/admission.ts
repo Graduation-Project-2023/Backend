@@ -5,7 +5,7 @@ import multer from 'multer';
 import path from 'path';
 import { Gender, Religion } from '@prisma/client';
 
-const adm_server = express.Router();
+const server = express.Router();
 const student = new StudentRepo();
 let HD: string[] = [];
 let studenterrs: string[] = [];
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage })
 
-adm_server.post('/csv_upload', upload.single('csv'), (req:Request, res: Response, next: NextFunction) => {
+server.post('/csv_upload', upload.single('csv'), (req:Request, res: Response, next: NextFunction) => {
     // check if file exist
     if (!req.file)
         return res.status(400).json({ error: 'File is required' });
@@ -30,8 +30,8 @@ adm_server.post('/csv_upload', upload.single('csv'), (req:Request, res: Response
     if (req.file?.mimetype !== 'text/csv') 
         return res.status(400).json({ error: 'File must be a csv' });
     try{
-        const csvFilePath= __dirname + '/users.csv'
-        console.log(csvFilePath)
+
+        const csvFilePath= `${req.file.path}`
         csv()
         .fromFile(csvFilePath)
         .then(async (jsonObj)=>{
@@ -83,11 +83,11 @@ adm_server.post('/csv_upload', upload.single('csv'), (req:Request, res: Response
     }
 })
 
-adm_server.get('/csv_upload', (req:Request, res: Response) => {
+server.get('/csv_upload', (req:Request, res: Response) => {
     res.status(200).sendFile(__dirname + '/form.html');
 })
 
-adm_server.post('/create_user', async (req: Request, res: Response, next: NextFunction) => {
+server.post('/create_user', async (req: Request, res: Response, next: NextFunction) => {
     const { 
             englishName,
             arabicName, 
@@ -140,4 +140,4 @@ adm_server.post('/create_user', async (req: Request, res: Response, next: NextFu
     }
 })
 
-export default adm_server;
+export { server as admission_server};

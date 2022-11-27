@@ -11,19 +11,6 @@ const SECRET = process.env.JWT_SECRET as string;
 const PEPPER = process.env.PEPPER as string;
 const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
 
-interface IToken {
-  [key: string]: number;
-}
-
-const errors: IToken = {
-  "Missng credentials": 401,
-  "Incorrect username or password": 401,
-  "email is required": 400,
-  "password and confirm password must match": 400,
-  "token is required": 400,
-  "Invalid token": 401,
-};
-
 server.post(
   "/login",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -127,14 +114,6 @@ server.get("/logout", (req: Request, res: Response, next: NextFunction) => {
     }
     res.sendStatus(200);
   });
-});
-
-// error handler
-server.use((err: any, req: Request, res: Response, next: any) => {
-  if (err.message && err.message in Object.keys(errors)) {
-    return res.status(errors[err.message]).json({ error: err.message });
-  }
-  next(err);
 });
 
 export default server;

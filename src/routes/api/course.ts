@@ -43,3 +43,5 @@ server.post("/", async (req: Request, res: Response, next: NextFunction) => {
     next(err);
   }
 });
+
+export default server;

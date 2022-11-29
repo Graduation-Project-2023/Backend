@@ -14,7 +14,10 @@ function verifyToken(req: ModRequest, res: Response, next: Function) {
     try {
         const decoded: JwtPayload = jwt.verify(token, SECRET) as JwtPayload
         req.userId = decoded.userId
-        req.role = decoded.role  
+        req.sid = decoded.sid
+        req.role = decoded.role
+        req.faculty = decoded.faculty
+        req.expires = decoded.expires
     } catch (err) {
         const e = err as Error
         return res.status(401).json({ err: e.message})

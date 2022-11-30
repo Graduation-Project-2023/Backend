@@ -140,4 +140,4 @@ server.post('/create_user', async (req: Request, res: Response, next: NextFuncti
     }
 })
 
-export { server as admission_server};
+export default server;

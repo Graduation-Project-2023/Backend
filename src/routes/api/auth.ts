@@ -114,4 +114,4 @@ server.get("/logout", (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-export {server as auth_server};
+export default server;

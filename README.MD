@@ -35,31 +35,31 @@
 
 ### Levels
 
-- GET `/api/levels/?program=1` - Get all levels for a program
-- GET `/api/levels/1` - Get a level by id
-- POST `/api/levels/` - Create a new level
+- GET `/api/programs/:program_id/levels/` - Get all levels for a program
+- GET `/api/programs/:program_id/levels/1` - Get a level by id
+- POST `/api/programs/:program_id//levels/` - Create a new level
   - englishName String
   - arabicName String
   - programId String?
   - level Int
   - qualifyingHrs Int
-- PUT `/api/levels/1` - Update a level
+- PUT `/api/programs/:program_id/levels/1` - Update a level
 
 ### Grades
 
-- GET `/api/grades/?program=1` - Get all grades for a program
-- POST `/api/grades/` - Create a new grade
+- GET `/api/programs/:program_id/grades/?program=1` - Get all grades for a program
+- POST `/api/programs/:program_id/grades/` - Create a new grade
   - englishName String
   - arabicName String
   - programId String?
   - level Int
   - qualifyingHrs Int
-- PUT `/api/grades/1` - Update a grade
+- PUT `/api/programs/:program_id/grades/1` - Update a grade
 
 ### Program Courses
 
-- GET `/api/program-courses/?program=1` - Get all program courses for a program
-- GET `/api/program-courses/1` - Get a program course by id
+- GET `/api/programs/:program_id/program-courses/?program=1` - Get all program courses for a program
+- GET `/api/programs/:program_id/program-courses/1` - Get a program course by id
   - programId String
   - course Course
     - code String
@@ -75,7 +75,7 @@
   - midTerm Int?
   - oralPractical Int?
   - attendance Int?
-- POST `/api/program-courses/` - Create a new program course
+- POST `/api/programs/:program_id/program-courses/` - Create a new program course
   - programId String
   - courseId String
   - levelId String?
@@ -89,12 +89,12 @@
   - midTerm Int?
   - oralPractical Int?
   - attendance Int?
-- PUT `/api/program-courses/1` - Update a program course
+- PUT `/api/programs/:program_id/program-courses/1` - Update a program course
 
 ### Level Allowed Hours (العبء بالمستوى)
 
 - GET `/api/level-allowed-hours/?program=1` - Get all level allowed hours for a program
-- POST `/api/level-allowed-hours/` - Create a new level allowed hour
+- POST `/api/programs/:program_id/level-allowed-hours/` - Create a new level allowed hour
   - programId String?
   - semester Semester
   - level Int
@@ -102,12 +102,12 @@
   - minHours Int
   - maxHours Int
   - maxCourses Int
-- PUT `/api/level-allowed-hours/1` - Update a level allowed hour
+- PUT `/api/programs/:program_id/level-allowed-hours/1` - Update a level allowed hour
 
 ### Gpa Allowed Hours (العبء بالمعدل)
 
-- GET `/api/gpa-allowed-hours/?program=1` - Get all gpa allowed hours for a program
-- POST `/api/gpa-allowed-hours/` - Create a new gpa allowed hour
+- GET `/api/programs/:program_id/gpa-allowed-hours/?program=1` - Get all gpa allowed hours for a program
+- POST `/api/programs/:program_id/gpa-allowed-hours/` - Create a new gpa allowed hour
   - programId String?
   - fromGpa Float
   - toGpa Float

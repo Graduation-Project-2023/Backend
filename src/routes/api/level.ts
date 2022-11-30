@@ -7,7 +7,7 @@ const Level = new LevelRepo();
 // get all levels in program
 server.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const programId = req.query.programId as string;
+    const programId = req.query.program_id as string;
     const levels = await Level.readMany({ programId });
     res.status(200).send(levels);
   } catch (err) {
@@ -32,6 +32,7 @@ server.get(
 // create level
 server.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const programId = req.query.program_id as string;
     const level = await Level.create({
       ...req.body,
       program: {

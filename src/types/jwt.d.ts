@@ -6,4 +6,7 @@ export interface ModRequest extends Request {
   token?: string;
   userId?: number;
   role?: string;
+  faculty?: string;
+  sid?: string;
+  expires?: string;
 }

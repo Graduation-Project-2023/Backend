@@ -19,11 +19,17 @@ server.post(
         return next(err);
       }
       if (!user) {
-        return next(info);
+        return next({
+          status: 400,
+          message: info.message,
+        });
       }
       req.logIn(user, (err) => {
         if (err) {
-          return next(err);
+          return next({
+            status: 400,
+            message: err.message,
+          });
         }
         return res.sendStatus(200);
       });
@@ -114,4 +120,4 @@ server.get("/logout", (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-export {server as auth_server};
+export default server;

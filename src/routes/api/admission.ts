@@ -3,14 +3,14 @@ import { StudentRepo } from "../../db/studentRepo";
 import csv from "csvtojson";
 import multer from "multer";
 import path from "path";
-import { Gender, Religion } from "@prisma/client";
+import { GENDER, RELIGION } from "@prisma/client";
 
 const server = express.Router();
 const student = new StudentRepo();
 let HD: string[] = [];
 const studenterrs: string[] = [];
-let G: Gender;
-let R: Religion;
+let G: GENDER;
+let R: RELIGION;
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log(file);

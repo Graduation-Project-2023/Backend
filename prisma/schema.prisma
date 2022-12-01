@@ -7,49 +7,63 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-enum Role {
+enum ROLE {
     ADMIN
     STUDENT
     PROFESSOR
+	@@map("Role")
 }
 
-enum Semester {
+enum SEMESTER {
     FIRST
     SECOND
     SUMMER
+	@@map("Semester")
 }
 
-enum Religion {
+enum RELIGION {
     MUSLIM
     CHRISTIAN
+	@@map("Religion")
 }
 
-enum Gender {
+enum DEGREE {
+    BACHELOR
+    DIPLOMA
+	@@map("Degree")
+}
+
+enum GENDER {
     MALE 
     FEMALE
+	@@map("Gender")
 }
 
-enum System {
+enum SYSTEM {
     CREDIT
     SCHOOLYEAR
+	@@map("System")
 }
 
-enum AllowedHrs {
+enum ALLOWEDHRS {
     SEMESTER 
     CUMULATIVE
     INCLUDESUMMER
+	@@map("AllowedHrs")
 }
 
-enum FeesType {
+enum FEESTYPE {
     YEARFIXED
     SEMESTERFIXED
     CREDITHOURS
     COURSES
+	@@map("FeesType")
 }
 
-enum CourseType {
+enum COURSETYPE {
     COMPULSORY
     ELECTIVE
+	@@map("CourseType")
 }
 
 // models 
@@ -58,7 +72,7 @@ model User {
     student Student?
     email String @unique
     password String
-    role Role
+    role ROLE
     @@map("users")
 }
 
@@ -72,8 +86,8 @@ model Student {
     englishName String
     arabicName String
     nationality String
-    gender Gender
-    religion Religion
+    gender GENDER
+    religion RELIGION
     birthDate DateTime
     birthPlace String
     guardianName String
@@ -102,8 +116,8 @@ model Course {
     code String @unique
     college College? @relation(fields: [collegeId], references: [id])
     collegeId String?
-    arabicDescription String
-    englishDescription String
+    arabicDescription String?
+    englishDescription String?
     programCourses ProgramCourse[] @relation(name: "CoursePrograms")
     unlockedCourses ProgramCourse[] @relation(name: "PrerequisiteCourses")
     @@map("courses")
@@ -120,10 +134,10 @@ model ProgramCourse {
     levelId String?
     prerequisite Course? @relation(name: "PrerequisiteCourses", fields: [prerequisiteId], references: [id])
     prerequisiteId String?
-    semester Semester
+    semester SEMESTER
     creditHours Int
     minimumHrsToRegister Int?
-    courseType CourseType
+    courseType COURSETYPE
     classWork Int?
     finalExam Int?
     midTerm Int?
@@ -139,7 +153,7 @@ model Level {
     program Program? @relation(fields: [programId], references: [id])
     programId String?
     level Int 
-    qualifyingHrs Int
+    qualifyingHrs Int?
     courses ProgramCourse[]
     @@map("levels")
 }
@@ -165,14 +179,15 @@ model Program {
     levels Level[]
     collegeId String
     programCode String @unique
-    degree String
-    creditHours Int
+    degree DEGREE?
+    system SYSTEM
+    creditHours Int?
+    allowedHrs ALLOWEDHRS
     mandatoryHours Int?
     optionalHours Int?
     projectQualifyingHours Int?
-    feesType FeesType
-    summerFeesType FeesType
-    allowedHrs AllowedHrs
+    feesType FEESTYPE
+    summerFeesType FEESTYPE
     prerequisiteProgram Program? @relation(name: "prerequisites", fields: [prerequisiteProgramId], references: [id])
     unlocksPrograms Program[] @relation(name: "prerequisites")
     prerequisiteProgramId String?
@@ -181,6 +196,7 @@ model Program {
     gradeLowering Int?
     attemptsToLowerGrade Int?
     failureGrade Int?
+    hasSummerSemester Boolean?
     grades Grade[]
     courses ProgramCourse[]
     @@map("programs")
@@ -190,12 +206,12 @@ model LevelAllowedHours {
     id String @id @default(uuid())
     program Program? @relation(fields: [programId], references: [id])
     programId String?
-    semester Semester
+    semester SEMESTER
     level Int
     levelId String
     minHours Int
     maxHours Int
-    maxCourses Int
+    maxCourses Int?
     @@map("level_allowed_hours")
 }
 
@@ -207,7 +223,7 @@ model GpaAllowedHours {
     toGpa Float
     minHours Int
     maxHours Int
-    maxCourses Int
+    maxCourses Int?
     @@map("gpa_allowed_hours")
 } 
 

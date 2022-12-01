@@ -8,7 +8,7 @@ import { Gender, Religion } from "@prisma/client";
 const server = express.Router();
 const student = new StudentRepo();
 let HD: string[] = [];
-let studenterrs: string[] = [];
+const studenterrs: string[] = [];
 let G: Gender;
 let R: Religion;
 const storage = multer.diskStorage({
@@ -51,7 +51,9 @@ server.post(
             HD[13] != "contactPhone" ||
             HD[14] != "homePhone"
           ) {
-            return next({ error: "File has incorrect order of data" });
+            return next({
+              error: "File has incorrect order of data",
+            });
           }
           for (let i = 0; i < jsonObj.length; i++) {
             if (!jsonObj[i].nationalId || jsonObj[i].nationalId.length != 14) {

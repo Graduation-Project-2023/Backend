@@ -83,7 +83,9 @@ server.post(
     const { token } = req.params;
     const { password, confpassword } = req.body;
     if (password !== confpassword) {
-      return next({ message: "password and confirm password must match" });
+      return next({
+        message: "password and confirm password must match",
+      });
     }
     if (!token || !password || !confpassword) {
       return next({ message: "token is required" });

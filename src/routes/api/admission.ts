@@ -3,14 +3,14 @@ import { StudentRepo } from "../../db/studentRepo";
 import csv from "csvtojson";
 import multer from "multer";
 import path from "path";
-import { Gender, Religion } from "@prisma/client";
+import { GENDER, RELIGION } from "@prisma/client";
 
 const server = express.Router();
 const student = new StudentRepo();
 let HD: string[] = [];
-let studenterrs: string[] = [];
-let G: Gender;
-let R: Religion;
+const studenterrs: string[] = [];
+let G: GENDER;
+let R: RELIGION;
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log(file);
@@ -51,7 +51,9 @@ server.post(
             HD[13] != "contactPhone" ||
             HD[14] != "homePhone"
           ) {
-            return next({ error: "File has incorrect order of data" });
+            return next({
+              error: "File has incorrect order of data",
+            });
           }
           for (let i = 0; i < jsonObj.length; i++) {
             if (!jsonObj[i].nationalId || jsonObj[i].nationalId.length != 14) {

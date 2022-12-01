@@ -6,7 +6,7 @@ import course from "./api/course";
 import grade from "./api/grade";
 import level from "./api/level";
 import programCourse from "./api/programCourse";
-import errors from "../error/errHandler";
+import errorHandler from "../middleware/errorHandler";
 
 const router = express.Router();
 
@@ -17,11 +17,12 @@ router.get("/", (req: Request, res: Response) => {
 router.use("/", server);
 router.use("/", admission);
 
-router.use((err: any, req: Request, res: Response, next: any) => {
-  if (err.message && err.message in Object.keys(errors)) {
-    return res.status(errors[err.message]).json({ error: err.message });
-  }
-  res.status(500).json({ error: "Internal Server Error" });
-});
+router.use("/program", program);
+router.use("/course", course);
+router.use("/grade", grade);
+router.use("/level", level);
+router.use("/program_course", programCourse);
+
+router.use(errorHandler);
 
 export default router;

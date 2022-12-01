@@ -7,7 +7,7 @@ const Level = new LevelRepo();
 // get all levels in program
 server.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const programId = req.query.programId as string;
+    const programId = req.query.program_id as string;
     const levels = await Level.readMany({ programId });
     res.status(200).send(levels);
   } catch (err) {
@@ -16,22 +16,25 @@ server.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // get level by id
-server.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = req.params.id;
-    const level = await Level.read({ id });
-    res.status(200).send(level);
-  } catch (err) {
-    next(err);
+server.get(
+  "/:level_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.level_id;
+      const level = await Level.read({ id });
+      res.status(200).send(level);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 // create level
 server.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { programId, ...data } = req.body;
+    const programId = req.query.program_id as string;
     const level = await Level.create({
-      ...data,
+      ...req.body,
       program: {
         connect: {
           id: programId,

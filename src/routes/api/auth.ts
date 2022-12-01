@@ -20,7 +20,7 @@ server.post(
       }
       if (!user) {
         return next({
-          status: 400,
+          status: 401,
           message: info.message,
         });
       }

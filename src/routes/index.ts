@@ -17,11 +17,11 @@ router.get("/", (req: Request, res: Response) => {
 router.use("/", server);
 router.use("/", admission);
 
-router.use("/program", program);
-router.use("/course", course);
-router.use("/grade", grade);
-router.use("/level", level);
-router.use("/program_course", programCourse);
+// router.use("/program", program);
+// router.use("/course", course);
+// router.use("/grade", grade);
+// router.use("/level", level);
+// router.use("/program_course", programCourse);
 
 router.use(errorHandler);
 

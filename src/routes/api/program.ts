@@ -1,59 +1,88 @@
 import express, { NextFunction, Request, Response } from "express";
 import { ProgramRepo } from "../../db/programRepo";
+import { CollegeAdminController } from "../controllers/collegeAdminController";
+import { ProgramAdminController } from "../controllers/programAdminController";
+import { LevelRepo } from "../../db/levelRepo";
+import { GradeRepo } from "../../db/gradeRepo";
+import { LevelAllowedHoursRepo } from "../../db/levelAllowedHoursRepo";
+import { GpaAllowedHoursRepo } from "../../db/gpaAllowedHoursRepo";
 
 const server = express.Router();
 const Program = new ProgramRepo();
+const Level = new LevelRepo();
+const Grade = new GradeRepo();
+const LevelAllowedHours = new LevelAllowedHoursRepo();
+const GpaAllowedHours = new GpaAllowedHoursRepo();
+const controller = new CollegeAdminController(Program);
+const levelController = new ProgramAdminController(Level);
+const gradeController = new ProgramAdminController(Grade);
+const levelAllowedHoursController = new ProgramAdminController(
+  LevelAllowedHours
+);
+const gpaAllowedHoursController = new ProgramAdminController(GpaAllowedHours);
 
-// get all programs in college
-server.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const collegeId = req.query.collegeId as string;
-    const programs = await Program.readMany({ collegeId });
-    res.status(200).send(programs);
-  } catch (err) {
-    next(err);
-  }
-});
+server.get("/", controller.getAll);
 
-// get program by id
-server.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = req.params.id;
-    const program = await Program.read({ id });
-    res.status(200).send(program);
-  } catch (err) {
-    next(err);
-  }
-});
+server.get("/:id", controller.get);
 
-// create program
-server.post("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { collegeId, ...data } = req.body;
-    const program = await Program.create({
-      ...data,
-      college: {
-        connect: {
-          id: collegeId,
-        },
-      },
-    });
-    res.status(201).send(program);
-  } catch (err) {
-    next(err);
-  }
-});
+server.post("/", controller.create);
 
-// update program
-server.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = req.params.id;
-    const data = req.body;
-    const program = await Program.update({ id }, data);
-    res.status(200).send(program);
-  } catch (err) {
-    next(err);
-  }
-});
+server.put("/:id", controller.update);
+
+server.delete("/:id", controller.delete);
+
+// ************************************************************************************************
+server.get("/:program_id/levels", levelController.getAll);
+
+server.post("/:program_id/levels", levelController.create);
+
+server.put("/:program_id/levels/:id", levelController.update);
+
+server.delete("/:program_id/levels/:id", levelController.delete);
+
+// ************************************************************************************************
+server.get("/:program_id/grades", gradeController.getAll);
+
+server.post("/:program_id/grades", gradeController.create);
+
+server.put("/:program_id/grades/:id", gradeController.update);
+
+server.delete("/:program_id/grades/:id", gradeController.delete);
+
+// ************************************************************************************************
+server.get(
+  "/:program_id/level_allowed_hours",
+  levelAllowedHoursController.getAll
+);
+
+server.post(
+  "/:program_id/level_allowed_hours",
+  levelAllowedHoursController.create
+);
+
+server.put(
+  "/:program_id/level_allowed_hours/:id",
+  levelAllowedHoursController.update
+);
+
+server.delete(
+  "/:program_id/level_allowed_hours/:id",
+  levelAllowedHoursController.delete
+);
+
+// ************************************************************************************************
+server.get("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.getAll);
+
+server.post("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.create);
+
+server.put(
+  "/:program_id/gpa_allowed_hours/:id",
+  gpaAllowedHoursController.update
+);
+
+server.delete(
+  "/:program_id/gpa_allowed_hours/:id",
+  gpaAllowedHoursController.delete
+);
 
 export default server;

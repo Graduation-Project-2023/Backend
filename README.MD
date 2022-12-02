@@ -1,5 +1,18 @@
 ## Endpoints
 
+### login
+
+- POST `api/login`
+  - email
+  - password
+
+- POST `api/forgot_password`
+  - email
+
+- POST `/reset_password/:token`
+  - password
+  - confpassword
+
 ### Courses
 
 - GET `/api/courses/?collegeId=1` - Get all courses for a college
@@ -115,6 +128,40 @@
   - maxHours Int
   - maxCourses Int
 
+### CSV Upload
+- POST `api/csv_upload` - Create multiple users 
+- `order doesn't matter but the csv headers must be identical to the below headers (case_sensitive), only nationalid is mandatory`
+  - multipart form data
+  - the field name of csv is expected to be `csv`
+
+
+### Create user
+
+- POST `api/create_user` - Create one user
+  - `order doesn't matter but the csv headers must be identical to the below headers, only nationalid is mandatory`
+  - englishName
+  - arabicName
+  - gender
+  - religion
+  - nationality
+  - birthDate
+  - nationalId
+  - enrollmentYear
+  - address
+  - homePhone
+  - birthPlace
+  - guardianName
+  - contactPhone
+  - PreviousQualification
+  - TotalPreviousQualification
+  - InstitutePreviousQualification
+  - schoolMarks
+  - schoolSeatId
+  - collegeCode
+  - directorate
+
+## Data relations
+=======
 # Commands
 
 - `npm run dev` - Start the development server

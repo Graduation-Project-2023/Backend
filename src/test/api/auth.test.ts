@@ -21,8 +21,8 @@ describe("testing auth routes ", () => {
     await userRepo.deleteMany();
   });
 
-  it("should reject only email", async () => {
-    await supertest(app)
+  it("should reject only email", () => {
+    supertest(app)
       .post("/api/login")
       .send({
         email: "SalemElhamood@eng.suez.edu.eg",
@@ -30,8 +30,8 @@ describe("testing auth routes ", () => {
       .expect(401);
   });
 
-  it("should reject only password", async () => {
-    await supertest(app)
+  it("should reject only password", () => {
+    supertest(app)
       .post("/api/login")
       .send({
         password: "salemHamoooood",
@@ -39,8 +39,8 @@ describe("testing auth routes ", () => {
       .expect(401);
   });
 
-  it("should reject wrong credentials (email)", async () => {
-    await supertest(app)
+  it("should reject wrong credentials (email)", () => {
+    supertest(app)
       .post("/api/login")
       .send({
         email: "SalemElhamood1@eng.suez.edu.eg",
@@ -49,8 +49,8 @@ describe("testing auth routes ", () => {
       .expect(401);
   });
 
-  it("should reject wrong credentials (password)", async () => {
-    await supertest(app)
+  it("should reject wrong credentials (password)", () => {
+    supertest(app)
       .post("/api/login")
       .send({
         email: "SalemElhamood@eng.suez.edu.eg",
@@ -59,8 +59,8 @@ describe("testing auth routes ", () => {
       .expect(401);
   });
 
-  it("should reject wrong credentials (email and password)", async () => {
-    await supertest(app)
+  it("should reject wrong credentials (email and password)", () => {
+    supertest(app)
       .post("/api/login")
       .send({
         email: "SalemElhamood1@eng.suez.edu.eg",
@@ -69,8 +69,8 @@ describe("testing auth routes ", () => {
       .expect(401);
   });
 
-  it("should login sucessfully", async () => {
-    await supertest(app)
+  it("should login sucessfully", () => {
+    supertest(app)
       .post("/api/login")
       .send({
         email: "SalemElhamood@eng.suez.edu.eg",
@@ -79,12 +79,12 @@ describe("testing auth routes ", () => {
       .expect(200);
   });
 
-  it("should reject forget without email", async () => {
-    await supertest(app).post("/api/forgot_password").send({}).expect(400);
+  it("should reject forget without email", () => {
+    supertest(app).post("/api/forgot_password").send({}).expect(400);
   });
 
-  it("should reject unregistered mail", async () => {
-    await supertest(app)
+  it("should reject unregistered mail", () => {
+    supertest(app)
       .post("/api/forgot_password")
       .send({
         email: "unregistered@eng.suez.edu.eg",
@@ -93,8 +93,8 @@ describe("testing auth routes ", () => {
   });
 
   // no need to do invalid email because i do lookup in db
-  it("should send link to the provided email", async () => {
-    await supertest(app)
+  it("should send link to the provided email", () => {
+    supertest(app)
       .post("/api/forgot_password")
       .send({
         email: "SalemElhamood@eng.suez.edu.eg",
@@ -102,8 +102,8 @@ describe("testing auth routes ", () => {
       .expect(200);
   });
 
-  it("should reject altered link", async () => {
-    await supertest(app)
+  it("should reject altered link", () => {
+    supertest(app)
       .post(
         "/api/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0MDY2MGM0LTk3MTgtNGRjYi1hNjU0LTY3NzFkYjg2ODc0MSIsImVtYWlsIjoiU2FsZW1FbGhhbW9vZEBlbmcuc3Vlei5lZHUuZWciLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Njk5NDMwNTMsImV4cCI6MTY2OTk0Mzk1M30.UbD934NyizP0YtfzP4fdv5CfbsHwbJCUodbVeyUJEbPEs"
       )
@@ -114,8 +114,8 @@ describe("testing auth routes ", () => {
       .expect(498);
   });
 
-  it("should reject non matching passwords", async () => {
-    await supertest(app)
+  it("should reject non matching passwords", () => {
+    supertest(app)
       .post(
         "/api/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0MDY2MGM0LTk3MTgtNGRjYi1hNjU0LTY3NzFkYjg2ODc0MSIsImVtYWlsIjoiU2FsZW1FbGhhbW9vZEBlbmcuc3Vlei5lZHUuZWciLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Njk5NDMwNTMsImV4cCI6MTY2OTk0Mzk1M30.UbD934NyizP0YtzP4fdv5CfbsHwbJCUodbVeyUJEbPE"
       )

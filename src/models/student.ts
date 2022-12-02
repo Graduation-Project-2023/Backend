@@ -1,18 +1,18 @@
 export interface StudentTypes {
-    id?: String;
-    userId?: String;
-    departmentId?: String;
-    branchId?: String;
-    nationalId?: String; 
-    englishName?: String;
-    arabicName?: String;
-    nationality?: String;
-    gender?: String;
-    religion?: String;
-    birthDate?: Date;
-    birthPlace?: String;
-    guardianName?: String;
-    address?: String;
-    contactPhone?: String;
-    homePhone?: String;
+  id?: string;
+  userId?: string;
+  departmentId?: string;
+  branchId?: string;
+  nationalId?: string;
+  englishName?: string;
+  arabicName?: string;
+  nationality?: string;
+  gender?: string;
+  religion?: string;
+  birthDate?: Date;
+  birthPlace?: string;
+  guardianName?: string;
+  address?: string;
+  contactPhone?: string;
+  homePhone?: string;
 }

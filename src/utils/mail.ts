@@ -1,24 +1,29 @@
-import nodemailer from 'nodemailer'
+import nodemailer from "nodemailer";
 
-async function sendEmail(email: string, subject: string, title: string, body: string, url: string, urlText: string)
-{
+async function sendEmail(
+  email: string,
+  subject: string,
+  title: string,
+  body: string,
+  url: string,
+  urlText: string
+) {
+  const transporter = nodemailer.createTransport({
+    host: "smtp-mail.outlook.com",
+    port: 587,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
 
-    let transporter = nodemailer.createTransport( {
-        host: "smtp-mail.outlook.com",
-        port: 587,
-        auth: {
-            user: process.env.MAIL_USER, 
-            pass: process.env.MAIL_PASS, 
-        },
-    });
-
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-        from: `"Suez Canal University" <${process.env.MAIL_USER}>`, // sender address
-        to: email, // list of receivers
-        subject: subject, // Subject line
-        text: `${url}`, // plain text body
-        html: `<!doctype html>
+  // send mail with defined transport object
+  const info = await transporter.sendMail({
+    from: `"Suez Canal University" <${process.env.MAIL_USER}>`, // sender address
+    to: email, // list of receivers
+    subject: subject, // Subject line
+    text: `${url}`, // plain text body
+    html: `<!doctype html>
         <html>
           <head>
             <meta name="viewport" content="width=device-width" />
@@ -182,10 +187,9 @@ async function sendEmail(email: string, subject: string, title: string, body: st
                   </div>
           </body>
         </html>`, // html body
-    });
+  });
 
-    console.log("Message sent: %s", info.messageId);
-
+  console.log("Message sent: %s", info.messageId);
 }
 
 export default sendEmail;

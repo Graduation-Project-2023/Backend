@@ -44,12 +44,12 @@ require("dotenv").config();
 const PEPPER = process.env.PEPPER as string;
 const passwo = 123456;
 app.get("/", (req: express.Request, res: express.Response) => {
-  // const pass = bcrypt.hashSync(passwo + PEPPER, 13);
-  // user.create({
-  //   email: "mohamed.raafat@eng.suez.edu.eg",
-  //   password: pass,
-  //   role: "ADMIN",
-  // });
+  const pass = bcrypt.hashSync(passwo + PEPPER, 13);
+  user.create({
+    email: "mohamed.raafat@eng.suez.edu.eg",
+    password: pass,
+    role: "ADMIN",
+  });
   res.send("Hello World!");
 });
 
@@ -70,3 +70,5 @@ app.get(
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+export default app;

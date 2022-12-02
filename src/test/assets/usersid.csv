@@ -1,0 +1,2 @@
+email,password,role,englishName,arabicName,nationality,nationalId,gender,religion,birthDate,birthPlace,guardianName,address,contactPhone,homePhone
+"HamoodElhamood@gmail.com","123456789","STUDENT","Hammoud Hammoud","حمود الحمود","Saudi","123456789","MALE","MUSLIM","1990-01-01","Riyadh","حمود الحمود","Riyadh","123456789","064567890"

@@ -20,7 +20,7 @@ server.post(
       }
       if (!user) {
         return next({
-          status: 400,
+          status: 401,
           message: info.message,
         });
       }
@@ -42,13 +42,19 @@ server.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const email = req.body.email;
     if (!email) {
-      return next({ message: "email is required" });
+      return next({
+        status: 400,
+        message: "email is required",
+      });
     }
     try {
       // check if user exists in db
       const user = await User.read({ email });
       if (!user) {
-        return;
+        return next({
+          status: 400,
+          message: "user not found",
+        });
       } else {
         const token = jwt.sign(
           {
@@ -60,14 +66,14 @@ server.post(
           { expiresIn: "15m" }
         );
         const url = `http://localhost:8080/reset_password/${token}`;
-        sendEmail(
-          email,
-          "Reset password",
-          "You have requested to reset your password",
-          "A unique link to reset your password has been generated for you. To reset your password, click the following link and follow the instructions.",
-          url,
-          "Reset Password"
-        );
+        // sendEmail(
+        //   email,
+        //   "Reset password",
+        //   "You have requested to reset your password",
+        //   "A unique link to reset your password has been generated for you. To reset your password, click the following link and follow the instructions.",
+        //   url,
+        //   "Reset Password"
+        // );
         console.log(url);
         res.json({ message: "Reset link sent" });
       }
@@ -84,6 +90,7 @@ server.post(
     const { password, confpassword } = req.body;
     if (password !== confpassword) {
       return next({
+        status: 401,
         message: "password and confirm password must match",
       });
     }
@@ -93,20 +100,29 @@ server.post(
     try {
       const obj = jwt.decode(token) as JwtPayload;
       if (!obj) {
-        return next({ message: "Invalid token" });
+        return next({
+          status: 498,
+          message: "Invalid token",
+        });
       }
       const user = await User.read({ email: obj.email });
       if (!user) {
-        return next({ message: "Invalid token" });
+        return next({
+          status: 498,
+          message: "Invalid token",
+        });
       }
       jwt.verify(token, SECRET + user.password, async (err, decoded) => {
         if (err) {
-          return next({ message: "Invalid token" });
+          return next({
+            status: 498,
+            message: "Invalid token",
+          });
         }
         const pass = bcrypt.hashSync(password + PEPPER, Number(SALT_ROUNDS));
         await User.update({ email: user.email }, { password: pass });
+        return res.json({ message: "Password updated" });
       });
-      return res.json({ message: "Password updated" });
     } catch (err) {
       next(err);
     }

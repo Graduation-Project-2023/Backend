@@ -13,14 +13,18 @@ function isAuthed(req: Request, res: Response, next: NextFunction) {
 }
 
 // use the verifyToken middleware to check if the user is logged in before usage
-const  isAuthorized = async (req: ModRequest, res: Response, next: NextFunction) => {
+const isAuthorized = async (
+  req: ModRequest,
+  res: Response,
+  next: NextFunction
+) => {
   // decode the jwt token
-  const sid = req.sid
-  const id = req.userId
-  const role = req.role
-  const faculty = req.faculty
+  const sid = req.sid;
+  const id = req.userId;
+  const role = req.role;
+  const faculty = req.faculty;
   try {
-    const sn = await session.read({ sid })
+    const sn = await session.read({ sid });
     // check if the session is not expired
     if (new Date() > new Date(sn.expires)) {
       return res.status(401).json({ error: "Session expired" });
@@ -41,11 +45,9 @@ const  isAuthorized = async (req: ModRequest, res: Response, next: NextFunction)
     if (faculty != sn.faculty) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-
   } catch (err) {
     res.status(401).json({ error: err });
   }
-}
-
+};
 
 export default isAuthed;

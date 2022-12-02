@@ -115,7 +115,39 @@
   - maxHours Int
   - maxCourses Int
 
-# Commands
+### CSV Upload
+- POST `api/csv_upload` - Create multiple users 
+- `order doesn't matter but the csv headers must be identical to the below headers (case_sensitive), only nationalid is mandatory`
+  - multipart form data
+  - the field name of csv is expected to be `csv`
+
+
+### Create user
+
+- POST `api/create_user` - Create one user
+  - `order doesn't matter but the csv headers must be identical to the below headers, only nationalid is mandatory`
+  - englishName
+  - arabicName
+  - gender
+  - religion
+  - nationality
+  - birthDate
+  - nationalId
+  - enrollmentYear
+  - address
+  - homePhone
+  - birthPlace
+  - guardianName
+  - contactPhone
+  - PreviousQualification
+  - TotalPreviousQualification
+  - InstitutePreviousQualification
+  - schoolMarks
+  - schoolSeatId
+  - collegeCode
+  - directorate
+
+## Data relations
 
 - `npm run dev` - Start the development server
 - `npm run build` - Build the app for production

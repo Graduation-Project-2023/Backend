@@ -13,3 +13,13 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: password
       POSTGRES_DB: tests
+  dev_db:
+    image: postgres:13
+    restart: always
+    container_name: dev_postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: devs

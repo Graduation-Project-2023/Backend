@@ -1,0 +1,24 @@
+# deploy to digital ocean on push to main
+name: Deploy
+on:
+  push:
+    branches:
+      - publish
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd server
+            git pull origin main
+            npm install
+            npm run test
+            npm run build
+            pm2 restart all

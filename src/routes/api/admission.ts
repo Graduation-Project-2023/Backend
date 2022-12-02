@@ -28,16 +28,16 @@ server.post(
   upload.single("csv"),
   (req: Request, res: Response, next: NextFunction) => {
     // check if file exist
-    if (!req.file)
-      return next({
-        status: 400,
-        message: "File is required",
-      });
+    if (!req.file) 
+    return next({ 
+      status: 400,
+      message: "File is required" 
+    });
     // check if file is csv
     if (req.file?.mimetype !== "text/csv")
-      return next({
+      return next({ 
         status: 400,
-        message: "File must be a csv",
+        message: "File must be a csv" 
       });
     try {
       const csvFilePath = `${req.file.path}`;
@@ -45,25 +45,25 @@ server.post(
         .fromFile(csvFilePath)
         .then(async (jsonObj) => {
           HD = Object.keys(jsonObj[0]);
-          if (
-            HD[3] != "englishName" ||
-            HD[4] != "arabicName" ||
-            HD[5] != "nationality" ||
-            HD[6] != "nationalId" ||
-            HD[7] != "gender" ||
-            HD[8] != "religion" ||
-            HD[9] != "birthDate" ||
-            HD[10] != "birthPlace" ||
-            HD[11] != "guardianName" ||
-            HD[12] != "address" ||
-            HD[13] != "contactPhone" ||
-            HD[14] != "homePhone"
-          ) {
-            return next({
-              status: 400,
-              message: "File has incorrect order of data",
-            });
-          }
+          // if (
+          //   HD[3] != "englishName" ||
+          //   HD[4] != "arabicName" ||
+          //   HD[5] != "nationality" ||
+          //   HD[6] != "nationalId" ||
+          //   HD[7] != "gender" ||
+          //   HD[8] != "religion" ||
+          //   HD[9] != "birthDate" ||
+          //   HD[10] != "birthPlace" ||
+          //   HD[11] != "guardianName" ||
+          //   HD[12] != "address" ||
+          //   HD[13] != "contactPhone" ||
+          //   HD[14] != "homePhone"
+          // ) {
+          //   return next({
+          //     status: 400,
+          //     message: "File has incorrect order of data"
+          //   });
+          // }
           for (let i = 0; i < jsonObj.length; i++) {
             if (!jsonObj[i].nationalId || jsonObj[i].nationalId.length != 14) {
               studenterrs.push(`Student ${i + 1} has invalid national id`);
@@ -76,10 +76,7 @@ server.post(
                 user: {
                   create: {
                     email: `${jsonObj[i].nationalId}@eng.suez.edu.com`,
-                    password: bcrypt.hashSync(
-                      "123456789" + process.env.PEPPER,
-                      13
-                    ),
+                    password: bcrypt.hashSync("123456789" + process.env.PEPPER, 13),
                     role: "STUDENT",
                   },
                 },
@@ -98,19 +95,23 @@ server.post(
               });
             }
           }
-          return next({
-            status: 200,
-            message: studenterrs,
+          return next({ 
+            status: 200, 
+            message: studenterrs 
           });
         });
     } catch (err) {
-      next({
+      next({ 
         status: 400,
-        message: err,
+        message: err
       });
     }
   }
 );
+
+server.get("/csv_upload", (req: Request, res: Response) => {
+  res.status(200).sendFile(__dirname + "/form.html");
+});
 
 server.post(
   "/create_user",
@@ -130,9 +131,9 @@ server.post(
       homePhone,
     } = req.body;
     if (!nationalId || nationalId.length != 14)
-      next({
+      next({ 
         status: 400,
-        message: "missing or invalid nationalId",
+        message: "missing or invalid nationalId" 
       });
     try {
       if (gender == "ذكر") G = "MALE";
@@ -160,14 +161,14 @@ server.post(
         contactPhone,
         homePhone,
       });
-      return next({
-        status: 200,
-        message: "Students created successfully",
+      return next({ 
+        status: 200, 
+        message: "Students created successfully" 
       });
     } catch (err) {
-      next({
+      next({ 
         status: 400,
-        message: err,
+        message: err
       });
     }
   }

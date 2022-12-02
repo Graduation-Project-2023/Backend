@@ -66,14 +66,14 @@ server.post(
           { expiresIn: "15m" }
         );
         const url = `http://localhost:8080/reset_password/${token}`;
-        sendEmail(
-          email,
-          "Reset password",
-          "You have requested to reset your password",
-          "A unique link to reset your password has been generated for you. To reset your password, click the following link and follow the instructions.",
-          url,
-          "Reset Password"
-        );
+        // sendEmail(
+        //   email,
+        //   "Reset password",
+        //   "You have requested to reset your password",
+        //   "A unique link to reset your password has been generated for you. To reset your password, click the following link and follow the instructions.",
+        //   url,
+        //   "Reset Password"
+        // );
         console.log(url);
         res.json({ message: "Reset link sent" });
       }

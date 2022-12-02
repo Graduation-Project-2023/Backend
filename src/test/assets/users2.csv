@@ -1,2 +1,2 @@
-nationalId,gender,religion,birthDate,birthPlace,guardianName,address,contactPhone,homePhone,englishName,arabicName,nationality
-"12195678912342","MALE","MUSLIM","1990-01-01","Riyadh","حمود الحمود","Riyadh","123456789","064567890","salem Hammoud","سالم الحمود","Saudi"
+Student ID,Student Name,Gender,Religion ,Nationality ,Birthdate ,National ID,Passport  ,Enrollment Year ,Address ,Home Phone ,Mobile  ,Email  ,Previous Qualification,Institute Previous Qualification,Total Previous Qualification,Seat Number,Previous Qualification
+38297465,ذكر,مسلم,سعودي,16/06/2000,30006161900454,,2023,Ismailia,643217123,1010931887,,,,,750754,

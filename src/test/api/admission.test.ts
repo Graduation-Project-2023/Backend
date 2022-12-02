@@ -22,19 +22,26 @@ describe("test the admission routes", () => {
       .expect(400);
   });
 
-  it("reject students with invalid nationalId", async () => {
-    const res = supertest(app)
-      .post("/api/csv_upload")
-      .attach("csv", "src/test/assets/usersid.csv");
-    expect((await res).body.message[0]).to.be.equal(
-      "Student 1 has invalid national id"
-    );
-  });
+  // it("reject students with invalid nationalId", async (done) => {
+  //     supertest(app)
+  //     .post("/api/csv_upload")
+  //     .attach("csv", "src/test/assets/usersid.csv")
+  //     .expect((await res).body.message[0]).to.be.equal(
+  //     "Student 1 has invalid national id"
+  //   ).catch(done)
+  // });
 
   it("should create legit users from csv", () => {
     supertest(app)
       .post("/api/csv_upload")
       .attach("csv", "src/test/assets/users1.csv")
+      .expect(200);
+  });
+
+  it("should create legit users from full csv", () => {
+    supertest(app)
+      .post("/api/csv_upload")
+      .attach("csv", "src/test/assets/right.csv")
       .expect(200);
   });
 

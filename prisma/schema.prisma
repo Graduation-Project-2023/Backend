@@ -83,17 +83,26 @@ model Student {
     Program Program? @relation(fields: [programId], references: [id])
     programId String?
     nationalId String @unique
-    englishName String
-    arabicName String
-    nationality String
-    gender GENDER
-    religion RELIGION
-    birthDate DateTime
-    birthPlace String
-    guardianName String
-    address String
-    contactPhone String
-    homePhone String
+    englishName String?
+    arabicName String?
+    nationality String?
+    gender GENDER?
+    religion RELIGION?
+    birthDate DateTime?
+    birthPlace String?
+    guardianName String?
+    address String?
+    contactPhone String?
+    homePhone String?
+    SeatId Int?  @unique @default(autoincrement())
+    enrollmentYear DateTime?
+    PreviousQualification String?
+    TotalPreviousQualification String?
+    InstitutePreviousQualification String?
+    schoolMarks String?
+    schoolSeatId String?
+    collegeCode String?
+    directorate String?
     college College? @relation(fields: [collegeId], references: [id])
     collegeId String? 
     @@map("students") 

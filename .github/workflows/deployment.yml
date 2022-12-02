@@ -3,8 +3,10 @@ name: deployment
 # deploy to digital ocean on push to main with tag release
 on:
   push:
-    branches: [main]
-    tags: ["release-*"]
+    branches:
+      - main
+    tags:
+      - release
 
 jobs:
   deploy:
@@ -21,5 +23,6 @@ jobs:
             cd server/
             git pull origin main
             npm install
+            npm run test
             npm run build
             pm2 restart all

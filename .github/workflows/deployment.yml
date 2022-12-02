@@ -1,0 +1,28 @@
+name: deployment
+
+# deploy to digital ocean on push to main with tag release
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'release-*' ]
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to Digital Ocean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          key: ${{ secrets.DIGITAL_OCEAN_KEY }}
+          port: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          script: |
+            cd /var/www/html
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart all
+

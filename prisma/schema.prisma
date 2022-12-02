@@ -83,7 +83,7 @@ model Student {
     Program Program? @relation(fields: [programId], references: [id])
     programId String?
     nationalId String @unique
-    englishName String
+    englishName String?
     arabicName String
     nationality String
     gender GENDER

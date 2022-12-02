@@ -28,16 +28,16 @@ server.post(
   upload.single("csv"),
   (req: Request, res: Response, next: NextFunction) => {
     // check if file exist
-    if (!req.file) 
-    return next({ 
-      status: 400,
-      message: "File is required" 
-    });
+    if (!req.file)
+      return next({
+        status: 400,
+        message: "File is required",
+      });
     // check if file is csv
     if (req.file?.mimetype !== "text/csv")
-      return next({ 
+      return next({
         status: 400,
-        message: "File must be a csv" 
+        message: "File must be a csv",
       });
     try {
       const csvFilePath = `${req.file.path}`;
@@ -76,34 +76,48 @@ server.post(
                 user: {
                   create: {
                     email: `${jsonObj[i].nationalId}@eng.suez.edu.com`,
-                    password: bcrypt.hashSync("123456789" + process.env.PEPPER, 13),
+                    password: bcrypt.hashSync(
+                      "123456789" + process.env.PEPPER,
+                      13
+                    ),
                     role: "STUDENT",
                   },
                 },
                 englishName: jsonObj[i].englishName,
                 arabicName: jsonObj[i].arabicName,
-                nationality: jsonObj[i].nationality,
-                nationalId: jsonObj[i].nationalId,
                 gender: jsonObj[i].gender,
                 religion: jsonObj[i].religion,
+                nationality: jsonObj[i].nationality,
                 birthDate: new Date(jsonObj[i].birthDate),
+                nationalId: jsonObj[i].nationalId,
+                enrollmentYear: new Date(jsonObj[i].enrollmentYear),
+                address: jsonObj[i].address,
+                homePhone: jsonObj[i].homePhone,
                 birthPlace: jsonObj[i].birthPlace,
                 guardianName: jsonObj[i].guardianName,
-                address: jsonObj[i].address,
                 contactPhone: jsonObj[i].contactPhone,
-                homePhone: jsonObj[i].homePhone,
+                PreviousQualification: jsonObj[i].PreviousQualification,
+                TotalPreviousQualification:
+                  jsonObj[i].TotalPreviousQualification,
+                InstitutePreviousQualification:
+                  jsonObj[i].InstitutePreviousQualification,
+                schoolMarks: jsonObj[i].schoolMarks,
+                schoolSeatId: jsonObj[i].schoolSeatId,
+                collegeCode: jsonObj[i].collegeCode,
+                directorate: jsonObj[i].directorate,
               });
             }
           }
-          return next({ 
-            status: 200, 
-            message: studenterrs 
+          return next({
+            status: 200,
+            message: studenterrs,
           });
         });
+      studenterrs.length = 0;
     } catch (err) {
-      next({ 
+      next({
         status: 400,
-        message: err
+        message: err,
       });
     }
   }
@@ -129,11 +143,19 @@ server.post(
       address,
       contactPhone,
       homePhone,
+      enrollmentYear,
+      PreviousQualification,
+      TotalPreviousQualification,
+      InstitutePreviousQualification,
+      schoolMarks,
+      schoolSeatId,
+      collegeCode,
+      directorate,
     } = req.body;
     if (!nationalId || nationalId.length != 14)
-      next({ 
+      next({
         status: 400,
-        message: "missing or invalid nationalId" 
+        message: "missing or invalid nationalId",
       });
     try {
       if (gender == "ذكر") G = "MALE";
@@ -160,15 +182,23 @@ server.post(
         address,
         contactPhone,
         homePhone,
+        enrollmentYear,
+        PreviousQualification,
+        TotalPreviousQualification,
+        InstitutePreviousQualification,
+        schoolMarks,
+        schoolSeatId,
+        collegeCode,
+        directorate,
       });
-      return next({ 
-        status: 200, 
-        message: "Students created successfully" 
+      return next({
+        status: 200,
+        message: "Students created successfully",
       });
     } catch (err) {
-      next({ 
+      next({
         status: 400,
-        message: err
+        message: err,
       });
     }
   }

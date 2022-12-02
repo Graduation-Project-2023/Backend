@@ -1,5 +1,18 @@
 ## Endpoints
 
+### login
+
+- POST `api/login`
+  - email
+  - password
+
+- POST `api/forgot_password`
+  - email
+
+- POST `/reset_password/:token`
+  - password
+  - confpassword
+
 ### Courses
 
 - GET `/api/courses/?collegeId=1` - Get all courses for a college

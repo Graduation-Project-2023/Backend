@@ -9,20 +9,25 @@ on:
       - release
 
 jobs:
-  deploy:
+  echo:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Deploy to Digital Ocean
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd server/
-            git pull origin main
-            npm install
-            npm run test
-            npm run build
-            pm2 restart all
+      - name: Echo
+        run: echo ${{ secrets.SSH_KEY }}
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Deploy to Digital Ocean
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         key: ${{ secrets.SSH_KEY }}
+  #         script: |
+  #           cd server/
+  #           git pull origin main
+  #           npm install
+  #           npm run test
+  #           npm run build
+  #           pm2 restart all

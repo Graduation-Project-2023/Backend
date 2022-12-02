@@ -40,7 +40,7 @@ describe("test the admission routes", () => {
 
   it("test the create route with invalidId", () => {
     supertest(app)
-      .post("/api/admission")
+      .post("api/create_user")
       .send({
         englishName: "Salem El Hamood",
         arabicName: "سالم الحمود",
@@ -60,7 +60,7 @@ describe("test the admission routes", () => {
 
   it("test the create route with validId", () => {
     supertest(app)
-      .post("/api/admission")
+      .post("api/create_user")
       .send({
         englishName: "Salem El Hamood",
         arabicName: "سالم الحمود",

@@ -1,8 +1,10 @@
-# echo on pushes to main
+#echo on pushes with tags release-*
 on:
   push:
     tags:
-      - "release-*"
+      - release-*
+    branches:
+      - main
 
 jobs:
   integration:

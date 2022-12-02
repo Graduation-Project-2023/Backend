@@ -4,6 +4,7 @@ import csv from "csvtojson";
 import multer from "multer";
 import path from "path";
 import { GENDER, RELIGION } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const server = express.Router();
 const student = new StudentRepo();
@@ -13,7 +14,7 @@ let G: GENDER;
 let R: RELIGION;
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log(file);
+    // console.log(file);
     cb(null, "uploads");
   },
   filename: (req, file, cb) => {
@@ -27,10 +28,17 @@ server.post(
   upload.single("csv"),
   (req: Request, res: Response, next: NextFunction) => {
     // check if file exist
-    if (!req.file) return res.status(400).json({ error: "File is required" });
+    if (!req.file)
+      return next({
+        status: 400,
+        message: "File is required",
+      });
     // check if file is csv
     if (req.file?.mimetype !== "text/csv")
-      return res.status(400).json({ error: "File must be a csv" });
+      return next({
+        status: 400,
+        message: "File must be a csv",
+      });
     try {
       const csvFilePath = `${req.file.path}`;
       csv()
@@ -52,7 +60,8 @@ server.post(
             HD[14] != "homePhone"
           ) {
             return next({
-              error: "File has incorrect order of data",
+              status: 400,
+              message: "File has incorrect order of data",
             });
           }
           for (let i = 0; i < jsonObj.length; i++) {
@@ -66,8 +75,11 @@ server.post(
               await student.create({
                 user: {
                   create: {
-                    email: `keep.hard.coded${i + 56}@fornow.com`,
-                    password: "cbhbdhd",
+                    email: `${jsonObj[i].nationalId}@eng.suez.edu.com`,
+                    password: bcrypt.hashSync(
+                      "123456789" + process.env.PEPPER,
+                      13
+                    ),
                     role: "STUDENT",
                   },
                 },
@@ -77,7 +89,7 @@ server.post(
                 nationalId: jsonObj[i].nationalId,
                 gender: jsonObj[i].gender,
                 religion: jsonObj[i].religion,
-                birthDate: new Date(jsonObj[i].date),
+                birthDate: new Date(jsonObj[i].birthDate),
                 birthPlace: jsonObj[i].birthPlace,
                 guardianName: jsonObj[i].guardianName,
                 address: jsonObj[i].address,
@@ -86,17 +98,19 @@ server.post(
               });
             }
           }
-          res.status(200).send(studenterrs);
+          return next({
+            status: 200,
+            message: studenterrs,
+          });
         });
     } catch (err) {
-      next(err);
+      next({
+        status: 400,
+        message: err,
+      });
     }
   }
 );
-
-server.get("/csv_upload", (req: Request, res: Response) => {
-  res.status(200).sendFile(__dirname + "/form.html");
-});
 
 server.post(
   "/create_user",
@@ -116,7 +130,10 @@ server.post(
       homePhone,
     } = req.body;
     if (!nationalId || nationalId.length != 14)
-      next({ error: "missing or invalid nationalId" });
+      next({
+        status: 400,
+        message: "missing or invalid nationalId",
+      });
     try {
       if (gender == "ذكر") G = "MALE";
       else G = "FEMALE";
@@ -125,8 +142,8 @@ server.post(
       await student.create({
         user: {
           create: {
-            email: "keep.hard.codedde4e3@fornow.com",
-            password: "dummy",
+            email: `${nationalId}@eng.suez.edu.com`,
+            password: bcrypt.hashSync("123456789" + process.env.PEPPER, 13),
             role: "STUDENT",
           },
         },
@@ -143,9 +160,15 @@ server.post(
         contactPhone,
         homePhone,
       });
-      return res.status(200).json({ message: "user created" });
+      return next({
+        status: 200,
+        message: "Students created successfully",
+      });
     } catch (err) {
-      next({ message: err });
+      next({
+        status: 400,
+        message: err,
+      });
     }
   }
 );

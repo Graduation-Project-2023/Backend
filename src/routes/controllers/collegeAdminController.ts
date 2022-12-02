@@ -20,13 +20,21 @@ export class CollegeAdminController extends Controller {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { collegeId, ...data } = req.body;
+      const { collegeId, prerequisiteProgramId, ...data } = req.body;
+      let prerequisiteConnection = null;
+      // prerequisite program object if it exists
+      if (prerequisiteProgramId) {
+        prerequisiteConnection = {
+          connect: { id: data.prerequisiteProgramId },
+        };
+      }
       const newData = await this.repo.create({
         ...data,
         college: {
           connect: {
             id: collegeId,
           },
+          prerequisiteProgram: prerequisiteConnection,
         },
       });
       res.status(201).send(newData);

@@ -11,7 +11,7 @@ describe("test the admission routes", () => {
   it("reject wrong extension", () => {
     supertest(app)
       .post("/api/csv_upload")
-      .attach("csv", "src/test/api/users.txt")
+      .attach("csv", "src/test/assets/users.txt")
       .expect(400);
   });
 

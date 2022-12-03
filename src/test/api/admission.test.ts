@@ -37,6 +37,27 @@ describe("test the admission routes", () => {
     expect(response.text).to.equal("OK");
   });
 
+  it("tests the create student route", async () => {
+    const response = await request.post("/api/create_student").send({
+      email: "Hamood@eng.suez.edu.eg",
+      password: "123456",
+      englishName: "Salem El Hamood",
+      arabicName: "سالم الحمود",
+      nationality: "Saudi",
+      nationalId: "12345278901234",
+      gender: "MALE",
+      religion: "MUSLIM",
+      birthDate: new Date("1999-01-01"),
+      birthPlace: "Riyadh",
+      collegeId: "1",
+      guardianName: "Hamood El Hamood",
+      address: "Hamood El Hamood street, Riyadh, Saudi Arabia",
+      contactPhone: "+964 770 123 4567",
+      homePhone: "0643217123",
+    });
+    expect(response.status).to.equal(500);
+  });
+
   // it("reject request without csv", () => {
   //   supertest(app).post("/api/csv_upload").attach("csv", "").expect(400);
   // });

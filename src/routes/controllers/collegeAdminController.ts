@@ -25,7 +25,7 @@ export class CollegeAdminController extends Controller {
       // prerequisite program object if it exists
       if (prerequisiteProgramId) {
         prerequisiteConnection = {
-          connect: { id: data.prerequisiteProgramId },
+          connect: { id: prerequisiteProgramId },
         };
       }
       const newData = await this.repo.create({
@@ -34,7 +34,6 @@ export class CollegeAdminController extends Controller {
           connect: {
             id: collegeId,
           },
-          prerequisiteProgram: prerequisiteConnection,
         },
       });
       res.status(201).send(newData);

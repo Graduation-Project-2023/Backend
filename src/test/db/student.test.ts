@@ -1,7 +1,6 @@
 import { StudentRepo } from "../../db/studentRepo";
 import { UserRepo } from "../../db/userRepo";
 import { expect } from "chai";
-import { prisma } from "@prisma/client";
 
 describe("studentRepo crud", () => {
   let studentRepo: StudentRepo;

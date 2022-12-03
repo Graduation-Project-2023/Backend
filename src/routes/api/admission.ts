@@ -1,8 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 import { StudentRepo } from "../../db/studentRepo";
-import csv from "csvtojson";
-import multer from "multer";
-import path from "path";
 import { GENDER, Prisma, RELIGION, Student } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { uploadSingle, validateCsv, csvToJson } from "../../middleware/csv";
@@ -12,9 +9,9 @@ const studentRepo = new StudentRepo();
 let G: GENDER;
 let R: RELIGION;
 
-const mapCsvRowToStudentCreateInput = (
+const mapCsvRowToStudentCreateInput = async (
   obj: any
-): Prisma.StudentCreateInput | null => {
+): Promise<Prisma.StudentCreateInput | null> => {
   if (!obj.nationalId || obj.nationalId.length !== 14) {
     return null;
   }
@@ -31,7 +28,7 @@ const mapCsvRowToStudentCreateInput = (
   studentInput.user = {
     create: {
       email: `${obj.nationalId}@eng.suez.edu.com`,
-      password: bcrypt.hashSync("123456789" + process.env.PEPPER, 13),
+      password: await bcrypt.hash(obj.nationalId + process.env.PEPPER, 10),
       role: "STUDENT",
     },
   };
@@ -69,10 +66,13 @@ server.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { jsonData } = req.body;
-      const students = jsonData.map(mapCsvRowToStudentCreateInput);
+      // map csv data to student create input in parallel due to async nature of bcrypt
+      const studentInputs = await Promise.all(
+        jsonData.map(mapCsvRowToStudentCreateInput)
+      );
       // create all students in parallel
       await Promise.all(
-        students.map(async (student: Prisma.StudentCreateInput) => {
+        studentInputs.map(async (student: Prisma.StudentCreateInput) => {
           if (!student) {
             return;
           }

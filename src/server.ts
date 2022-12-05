@@ -6,6 +6,7 @@ import session from "express-session";
 import router from "./routes/index";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { PrismaClient } from "@prisma/client";
+import { isAdmin, isAuthed, isStudent } from "./utils/passportUtils";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -39,16 +40,16 @@ import { UserRepo } from "./db/userRepo";
 
 const user = new UserRepo();
 import bcrypt from "bcrypt";
-import isAuthed from "./utils/passportUtils";
+// import isAuthed from "./utils/passportUtils";
 require("dotenv").config();
 const PEPPER = process.env.PEPPER as string;
 const passwo = 123456;
 app.get("/", (req: express.Request, res: express.Response) => {
   const pass = bcrypt.hashSync(passwo + PEPPER, 13);
   user.create({
-    email: "mohamed.raafat@eng.suez.edu.eg",
+    email: "321@eng.suez.edu.eg",
     password: pass,
-    role: "ADMIN",
+    role: "STUDENT",
   });
   res.send("Hello World!");
 });
@@ -61,8 +62,8 @@ app.use("/api", router);
 
 app.get(
   "/protected",
-  isAuthed,
-  (req: express.Request, res: express.Response) => {
+  isStudent,
+  (req: express.Request, res: express.Response, next) => {
     res.send("Hello World!");
   }
 );

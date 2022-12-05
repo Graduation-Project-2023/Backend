@@ -6,16 +6,20 @@ import { LevelRepo } from "../../db/levelRepo";
 import { GradeRepo } from "../../db/gradeRepo";
 import { LevelAllowedHoursRepo } from "../../db/levelAllowedHoursRepo";
 import { GpaAllowedHoursRepo } from "../../db/gpaAllowedHoursRepo";
+import { ProgramCourseController } from "../controllers/programCourseController";
+import { ProgramCourseRepo } from "../../db/programCourseRepo";
 
 const server = express.Router();
 const Program = new ProgramRepo();
 const Level = new LevelRepo();
 const Grade = new GradeRepo();
+const programCourse = new ProgramCourseRepo();
 const LevelAllowedHours = new LevelAllowedHoursRepo();
 const GpaAllowedHours = new GpaAllowedHoursRepo();
 const controller = new CollegeAdminController(Program);
 const levelController = new ProgramAdminController(Level);
 const gradeController = new ProgramAdminController(Grade);
+const programCourseController = new ProgramCourseController(programCourse);
 const levelAllowedHoursController = new ProgramAdminController(
   LevelAllowedHours
 );
@@ -83,6 +87,18 @@ server.put(
 server.delete(
   "/:program_id/gpa_allowed_hours/:id",
   gpaAllowedHoursController.delete
+);
+
+// ************************************************************************************************
+server.get("/:program_id/program_courses", programCourseController.getAll);
+
+server.post("/:program_id/program_courses", programCourseController.create);
+
+server.put("/:program_id/program_courses/:id", programCourseController.update);
+
+server.delete(
+  "/:program_id/program_courses/:id",
+  programCourseController.delete
 );
 
 export default server;

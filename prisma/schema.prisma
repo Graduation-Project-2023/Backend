@@ -1,245 +1,276 @@
 generator client {
-    provider="prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider="postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-enum ROLE {
-    ADMIN
-    STUDENT
-    PROFESSOR
-	@@map("Role")
-}
-
-enum SEMESTER {
-    FIRST
-    SECOND
-    SUMMER
-	@@map("Semester")
-}
-
-enum RELIGION {
-    MUSLIM
-    CHRISTIAN
-	@@map("Religion")
-}
-
-enum DEGREE {
-    BACHELOR
-    DIPLOMA
-	@@map("Degree")
-}
-
-enum GENDER {
-    MALE 
-    FEMALE
-	@@map("Gender")
-}
-
-enum SYSTEM {
-    CREDIT
-    SCHOOLYEAR
-	@@map("System")
-}
-
-enum ALLOWEDHRS {
-    SEMESTER 
-    CUMULATIVE
-    INCLUDESUMMER
-	@@map("AllowedHrs")
-}
-
-enum FEESTYPE {
-    YEARFIXED
-    SEMESTERFIXED
-    CREDITHOURS
-    COURSES
-	@@map("FeesType")
-}
-
-enum COURSETYPE {
-    COMPULSORY
-    ELECTIVE
-	@@map("CourseType")
-}
-
-// models 
 model User {
-    id String @id @default(uuid())
-    student Student?
-    email String @unique
-    password String
-    role ROLE
-    @@map("users")
+  id       String   @id @default(uuid())
+  email    String   @unique
+  password String
+  role     ROLE
+  student  Student?
+
+  @@map("users")
 }
 
 model Student {
-    id String @id @default(uuid())
-    user User? @relation(fields: [userId], references: [id])
-    userId String @unique
-    Program Program? @relation(fields: [programId], references: [id])
-    programId String?
-    nationalId String @unique
-    englishName String?
-    arabicName String?
-    nationality String?
-    gender GENDER?
-    religion RELIGION?
-    birthDate DateTime?
-    birthPlace String?
-    guardianName String?
-    address String?
-    contactPhone String?
-    homePhone String?
-    SeatId Int?  @unique @default(autoincrement())
-    enrollmentYear DateTime?
-    PreviousQualification String?
-    TotalPreviousQualification String?
-    InstitutePreviousQualification String?
-    schoolMarks String?
-    schoolSeatId String?
-    collegeCode String?
-    directorate String?
-    college College? @relation(fields: [collegeId], references: [id])
-    collegeId String? 
-    @@map("students") 
+  id                             String    @id @default(uuid())
+  userId                         String    @unique
+  address                        String?
+  arabicName                     String?
+  birthDate                      DateTime?
+  birthPlace                     String?
+  contactPhone                   String?
+  englishName                    String?
+  gender                         GENDER?
+  guardianName                   String?
+  homePhone                      String?
+  nationalId                     String    @unique
+  nationality                    String?
+  religion                       RELIGION?
+  collegeId                      String?
+  programId                      String?
+  InstitutePreviousQualification String?
+  PreviousQualification          String?
+  SeatId                         Int?      @unique @default(autoincrement())
+  TotalPreviousQualification     String?
+  collegeCode                    String?
+  directorate                    String?
+  enrollmentYear                 DateTime?
+  schoolMarks                    String?
+  schoolSeatId                   String?
+  college                        College?  @relation(fields: [collegeId], references: [id])
+  Program                        Program?  @relation(fields: [programId], references: [id])
+  user                           User      @relation(fields: [userId], references: [id])
+
+  @@map("students")
 }
 
 model College {
-    id String @id @default(uuid())
-    englishName String
-    arabicName String
-    students Student[]
-    programs Program[]
-    courses Course[]
-    @@map("colleges")
+  id          String    @id @default(uuid())
+  englishName String
+  arabicName  String
+  courses     Course[]
+  programs    Program[]
+  students    Student[]
+
+  @@map("colleges")
 }
 
 model Course {
-    id String @id @default(uuid())
-    englishName String
-    arabicName String
-    code String @unique
-    college College? @relation(fields: [collegeId], references: [id])
-    collegeId String?
-    arabicDescription String?
-    englishDescription String?
-    programCourses ProgramCourse[] @relation(name: "CoursePrograms")
-    unlockedCourses ProgramCourse[] @relation(name: "PrerequisiteCourses")
-    @@map("courses")
+  englishName        String
+  arabicName         String
+  arabicDescription  String?
+  collegeId          String?
+  englishDescription String?
+  id                 String          @id @default(uuid())
+  courseCode         String          @unique
+  college            College?        @relation(fields: [collegeId], references: [id])
+  programCourses     ProgramCourse[]
+
+  @@map("courses")
 }
-// program models
 
 model ProgramCourse {
-    id String @id @default(uuid())
-    program Program @relation(fields: [programId], references: [id])
-    programId String
-    course Course? @relation(name: "CoursePrograms", fields: [courseId], references: [id])
-    courseId String?
-    Level Level? @relation(fields: [levelId], references: [id])
-    levelId String?
-    prerequisite Course? @relation(name: "PrerequisiteCourses", fields: [prerequisiteId], references: [id])
-    prerequisiteId String?
-    semester SEMESTER
-    creditHours Int
-    minimumHrsToRegister Int?
-    courseType COURSETYPE
-    classWork Int?
-    finalExam Int?
-    midTerm Int?
-    oralPractical Int?
-    attendance Int?
-    @@map("program_courses")
+  programId                                                          String
+  semester                                                           SEMESTER?
+  creditHours                                                        Int
+  minimumHrsToRegister                                               Int?
+  courseType                                                         COURSETYPE
+  classWork                                                          Int?
+  finalExam                                                          Int?
+  midTerm                                                            Int?
+  oralPractical                                                      Int?
+  attendance                                                         Int?
+  arabicName                                                         String?
+  code                                                               String
+  englishName                                                        String?
+  level                                                              Int?
+  course                                                             Course         @relation(fields: [code], references: [courseCode], onDelete: Cascade)
+  program                                                            Program        @relation(fields: [programId], references: [id])
+  Level                                                              Level?         @relation(fields: [programId, level], references: [programId, level])
+  prerequisites                                                      Prerequisite[] @relation("CoursePrerequisites")
+  unlocks Prerequisite[] @relation("unlocks")
+
+  @@id([programId, code])
+  @@map("program_courses")
+}
+
+model Prerequisite {
+  programId                                                            String
+  courseCode                                                           String
+  prerequisiteCode                                                     String
+  prerequisiteCourse                                                   ProgramCourse @relation("unlocks", fields: [prerequisiteCode, programId], references: [code, programId], onDelete: Cascade)
+  course ProgramCourse @relation("CoursePrerequisites", fields: [courseCode, programId], references: [code, programId], onDelete: Cascade)
+
+  @@id([courseCode , prerequisiteCode])
+  @@map("prerequisites")
 }
 
 model Level {
-    id String @id @default(uuid())
-    englishName String
-    arabicName String
-    program Program? @relation(fields: [programId], references: [id])
-    programId String?
-    level Int 
-    qualifyingHrs Int?
-    courses ProgramCourse[]
-    @@map("levels")
+  englishName   String
+  arabicName    String
+  programId     String
+  level         Int
+  qualifyingHrs Int?
+  program       Program         @relation(fields: [programId], references: [id])
+  courses       ProgramCourse[]
+
+  @@id([programId, level])
+  @@map("levels")
 }
 
 model Grade {
-    id String @id @default(uuid())
-    name String
-    startsFrom Int
-    endsAt Int
-    equivalent String
-    gpa Float
-    program Program? @relation(fields: [programId], references: [id])
-    programId String?
-    @@map("grades")
+  name       String
+  startsFrom Int
+  endsAt     Int
+  equivalent String
+  gpa        Float
+  programId  String
+  program    Program @relation(fields: [programId], references: [id])
+
+  @@id([programId, gpa])
+  @@map("grades")
 }
 
 model Program {
-    id String @id @default(uuid())
-    englishName String
-    arabicName String
-    college College? @relation(fields: [collegeId], references: [id])
-    students Student[]
-    levels Level[]
-    collegeId String
-    programCode String @unique
-    degree DEGREE?
-    system SYSTEM
-    creditHours Int?
-    allowedHrs ALLOWEDHRS
-    mandatoryHours Int?
-    optionalHours Int?
-    projectQualifyingHours Int?
-    feesType FEESTYPE
-    summerFeesType FEESTYPE
-    prerequisiteProgram Program? @relation(name: "prerequisites", fields: [prerequisiteProgramId], references: [id])
-    unlocksPrograms Program[] @relation(name: "prerequisites")
-    prerequisiteProgramId String?
-    levelAllowedHrs LevelAllowedHours[]
-    gpaAllowedHrs GpaAllowedHours[]
-    gradeLowering Int?
-    attemptsToLowerGrade Int?
-    failureGrade Int?
-    hasSummerSemester Boolean?
-    grades Grade[]
-    courses ProgramCourse[]
-    @@map("programs")
+  id                     String              @id @default(uuid())
+  englishName            String
+  arabicName             String
+  collegeId              String
+  programCode            String              @unique
+  creditHours            Int?
+  mandatoryHours         Int?
+  optionalHours          Int?
+  projectQualifyingHours Int?
+  feesType               FEESTYPE
+  summerFeesType         FEESTYPE
+  allowedHrs             ALLOWEDHRS
+  prerequisiteProgramId  String?
+  gradeLowering          Int?
+  attemptsToLowerGrade   Int?
+  failureGrade           Int?
+  degree                 DEGREE?
+  hasSummerSemester      Boolean?
+  system                 SYSTEM
+  maxGrade               Int?
+  college                College             @relation(fields: [collegeId], references: [id])
+  prerequisiteProgram    Program?            @relation("prerequisites", fields: [prerequisiteProgramId], references: [id])
+  gpaAllowedHrs          GpaAllowedHours[]
+  grades                 Grade[]
+  levelAllowedHrs        LevelAllowedHours[]
+  levels                 Level[]
+  courses                ProgramCourse[]
+  unlocksPrograms        Program[]           @relation("prerequisites")
+  students               Student[]
+
+  @@map("programs")
 }
 
 model LevelAllowedHours {
-    id String @id @default(uuid())
-    program Program? @relation(fields: [programId], references: [id])
-    programId String?
-    semester SEMESTER
-    level Int
-    levelId String
-    minHours Int
-    maxHours Int
-    maxCourses Int?
-    @@map("level_allowed_hours")
+  id         String   @id @default(uuid())
+  programId  String?
+  semester   SEMESTER
+  level      Int
+  levelId    String
+  minHours   Int
+  maxHours   Int
+  maxCourses Int?
+  program    Program? @relation(fields: [programId], references: [id])
+
+  @@map("level_allowed_hours")
 }
 
 model GpaAllowedHours {
-    id String @id @default(uuid())
-    program Program? @relation(fields: [programId], references: [id])
-    programId String?
-    fromGpa Float
-    toGpa Float
-    minHours Int
-    maxHours Int
-    maxCourses Int?
-    @@map("gpa_allowed_hours")
-} 
+  id         String   @id @default(uuid())
+  programId  String?
+  fromGpa    Float
+  toGpa      Float
+  minHours   Int
+  maxHours   Int
+  maxCourses Int?
+  program    Program? @relation(fields: [programId], references: [id])
+
+  @@map("gpa_allowed_hours")
+}
 
 model Session {
-    id        String   @id
-    sid       String   @unique
-    data      String
-    expiresAt   DateTime
-    @@map("sessions")
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+
+  @@map("sessions")
+}
+
+enum ROLE {
+  ADMIN
+  STUDENT
+  PROFESSOR
+
+  @@map("Role")
+}
+
+enum SEMESTER {
+  FIRST
+  SECOND
+  SUMMER
+
+  @@map("Semester")
+}
+
+enum RELIGION {
+  MUSLIM
+  CHRISTIAN
+
+  @@map("Religion")
+}
+
+enum DEGREE {
+  BACHELOR
+  DIPLOMA
+
+  @@map("Degree")
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+
+  @@map("Gender")
+}
+
+enum SYSTEM {
+  CREDIT
+  SCHOOLYEAR
+
+  @@map("System")
+}
+
+enum ALLOWEDHRS {
+  SEMESTER
+  CUMULATIVE
+  INCLUDESUMMER
+
+  @@map("AllowedHrs")
+}
+
+enum FEESTYPE {
+  YEARFIXED
+  SEMESTERFIXED
+  CREDITHOURS
+  COURSES
+
+  @@map("FeesType")
+}
+
+enum COURSETYPE {
+  COMPULSORY
+  ELECTIVE
+
+  @@map("CourseType")
 }

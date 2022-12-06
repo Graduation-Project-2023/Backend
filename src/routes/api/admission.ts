@@ -13,7 +13,7 @@ const mapCsvRowToStudentCreateInput = async (
   if (!obj.nationalId || obj.nationalId.length !== 14) {
     return null;
   }
-  let studentInput: any = {
+  const studentInput: any = {
     nationalId: obj.nationalId,
   };
   if (obj.collegeId) {

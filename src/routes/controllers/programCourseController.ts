@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Repo } from "../../db/repo";
 import { Controller } from "./controller";
-import { ProgramCourseRepo } from "../../db/programCourseRepo";
-
-const programRepo = new ProgramCourseRepo();
+import prisma from "../../db";
 
 export class ProgramCourseController extends Controller {
   constructor(repo: Repo<any, any, any, any>) {
@@ -14,9 +12,40 @@ export class ProgramCourseController extends Controller {
     try {
       const programId = req.params.program_id as string;
       if (!programId) throw new Error("program_id is required");
-      const data = await this.repo.readMany({
-        program: {
-          id: programId,
+      const data = await prisma.programCourse.findMany({
+        where: {
+          programId,
+        },
+        select: {
+          code: true,
+          englishName: true,
+          arabicName: true,
+        },
+      });
+      res.status(200).send(data);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  get = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const code = req.params.code as string;
+      const programId = req.params.program_id as string;
+      const programId_code = {
+        programId,
+        code,
+      };
+      const data = await prisma.programCourse.findUnique({
+        where: {
+          programId_code,
+        },
+        include: {
+          prerequisites: {
+            select: {
+              prerequisiteCode: true,
+            },
+          },
         },
       });
       res.status(200).send(data);
@@ -40,7 +69,7 @@ export class ProgramCourseController extends Controller {
         data.prerequisites = {
           createMany: {
             data: prerequisites.map((prerequisite: string) => ({
-              courseCode: prerequisite,
+              prerequisiteCode: prerequisite,
             })),
           },
         };

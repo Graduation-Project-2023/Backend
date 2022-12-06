@@ -62,7 +62,7 @@ app.use("/api", router);
 
 app.get(
   "/protected",
-  isStudent,
+  isAdmin,
   (req: express.Request, res: express.Response, next) => {
     res.send("Hello World!");
   }

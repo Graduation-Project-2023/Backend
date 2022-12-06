@@ -53,50 +53,40 @@ function isAuthed(req: Request, res: Response, next: NextFunction) {
 
 declare module "express-session" {
   export interface SessionData {
-    passport: { user?: string };
+    passport: { user: string };
   }
 }
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
-  // console.log(req.session.passport?.user);
-  if (req.session.passport?.user == undefined) {
+  if (!req.session.passport?.user) {
     return res.status(401).json({ message: "Unauthorized" });
     //   return next({
     //     status: 401,
     //     message: "Unauthorized"
     // })
-  } else {
-    try {
-      const usr = await User.read({ id: req.session.passport?.user });
-      if (!usr) {
-        return res.status(401).json({ message: "Unauthorized" });
-        // return next({
-        //   status: 401,
-        //   message: "Unauthorized"
-        // })
-      }
-      if (usr.role != "ADMIN") {
-        return res.status(401).json({ message: "Unauthorized" });
-        // return next({
-        //   status: 401,
-        //   message: "Unauthorized"
-        // })
-      }
-      next();
-    } catch (error) {
-      return next({
-        status: 401,
-        message: error,
-      });
-    }
   }
-
+  const usr = await User.read({ id: req.session.passport?.user });
+  if (!usr) {
+    return res.status(401).json({ message: "Unauthorized" });
+    // return next({
+    //   status: 401,
+    //   message: "Unauthorized"
+    // })
+  }
+  if (usr.role != "ADMIN") {
+    return res.status(401).json({ message: "Unauthorized" });
+    // return next({
+    //   status: 401,
+    //   message: "Unauthorized"
+    // })
+  }
   // if (usr.faculty != req.body.faculty) {
   //   next({
   //     status: 401,
   //     message: "Unauthorized"
   //   })
   // }
+  next();
 };
 
 const isStudent = async (req: Request, res: Response, next: NextFunction) => {

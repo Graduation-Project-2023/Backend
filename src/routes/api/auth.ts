@@ -4,9 +4,13 @@ import sendEmail from "../../utils/mail";
 import { UserRepo } from "../../db/userRepo";
 import passport from "../../middleware/passport";
 import bcrypt from "bcrypt";
+import { SessionRepo } from "../../db/sessionRepo";
+// import { session } from "passport";
+import {isAdmin} from "../../utils/passportUtils";
 
 const server = express.Router();
 const User = new UserRepo();
+const Session = new SessionRepo();
 const SECRET = process.env.JWT_SECRET as string;
 const PEPPER = process.env.PEPPER as string;
 const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
@@ -34,6 +38,25 @@ server.post(
         return res.sendStatus(200);
       });
     })(req, res, next);
+    // console.log(req.session);
+    // console.log(req.sessionID);
+    // const user = await User.read({ email: req.body.email });
+    // console.log(req.user);
+    // const session = await Session.read({ sid: req.sessionID });
+    // console.log(session);  
+    // // console.log(req.user.role);  
+    // const token = jwt.sign(
+    //   {
+    //     userId: req.session.passport?.user,
+    //     role: req.user,
+    //     sid: req.sessionID,
+    //     expires: req.session.cookie.expires
+    //   },
+    //   "dfdfd", { expiresIn: "30d" }
+    //   );
+    // console.log(req.session.cookie.expires);
+    // res.status(200).json({ token });
+    // return res.sendStatus(200);
   }
 );
 

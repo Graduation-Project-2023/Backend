@@ -21,6 +21,7 @@ export class CollegeAdminController extends Controller {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { collegeId, prerequisiteProgramId, ...data } = req.body;
+
       if (!collegeId) throw new Error("college_id is required");
 
       if (prerequisiteProgramId) {
@@ -31,12 +32,14 @@ export class CollegeAdminController extends Controller {
         };
       }
 
+
       const newData = await this.repo.create({
         ...data,
         college: {
           connect: {
             id: collegeId,
           },
+          prerequisiteProgram: prerequisiteConnection,
         },
       });
       res.status(201).send(newData);

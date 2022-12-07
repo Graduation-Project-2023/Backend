@@ -85,7 +85,7 @@ server.delete(
 // ************************************************************************************************
 server.get("/:program_id/program_courses", programCourseController.getAll);
 
-server.get("/:program_id/program_courses/:code", programCourseController.get);
+server.get("/:program_id/program_courses/:id", programCourseController.get);
 
 server.post("/:program_id/program_courses", programCourseController.create);
 

@@ -1,10 +1,9 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import { UserRepo } from "../db/userRepo";
 import { UserTypes } from "../models/user";
+import prisma from "../db";
 
-const User = new UserRepo();
 const PEPPER = process.env.PEPPER as string;
 
 passport.use(
@@ -12,7 +11,11 @@ passport.use(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const user = await User.read({ email });
+        const user = await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        });
         if (!user) {
           // no error has occurred, but the user does not exist
           return done(null, false, { message: "Incorrect email or password" });
@@ -41,7 +44,11 @@ passport.serializeUser((user: UserTypes, done) => {
 
 passport.deserializeUser(async (id: string, done) => {
   try {
-    const user = await User.read({ id });
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!user) {
       return done(null, false);
     }

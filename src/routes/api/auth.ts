@@ -1,10 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import sendEmail from "../../utils/mail";
-import { UserRepo } from "../../db/userRepo";
 import passport from "../../middleware/passport";
 import bcrypt from "bcrypt";
-import { SessionRepo } from "../../db/sessionRepo";
 import prisma from "../../db";
 // import { session } from "passport";
 import { isAdmin } from "../../utils/passportUtils";
@@ -100,7 +98,6 @@ server.post(
         //   url,
         //   "Reset Password"
         // );
-        console.log(url);
         res.json({ message: "Reset link sent" });
       }
     } catch (err) {

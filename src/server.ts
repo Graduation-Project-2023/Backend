@@ -4,15 +4,14 @@ import cors from "cors";
 import passport from "passport";
 import session from "express-session";
 import router from "./routes/index";
+import prisma from "./db";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { PrismaClient } from "@prisma/client";
 import { isAdmin, isAuthed, isStudent } from "./utils/passportUtils";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
 
 const app = express();
-const prisma = new PrismaClient();
 app.use(express.json());
 
 // mandatory for passport in order to work
@@ -36,9 +35,7 @@ app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 // delete
-import { UserRepo } from "./db/userRepo";
 
-const user = new UserRepo();
 import bcrypt from "bcrypt";
 // import isAuthed from "./utils/passportUtils";
 require("dotenv").config();
@@ -46,10 +43,12 @@ const PEPPER = process.env.PEPPER as string;
 const passwo = 123456;
 app.get("/", (req: express.Request, res: express.Response) => {
   const pass = bcrypt.hashSync(passwo + PEPPER, 13);
-  user.create({
-    email: "321@eng.suez.edu.eg",
-    password: pass,
-    role: "STUDENT",
+  prisma.user.create({
+    data: {
+      email: "321@eng.suez.edu.eg",
+      password: pass,
+      role: "STUDENT",
+    },
   });
   res.send("Hello World!");
 });

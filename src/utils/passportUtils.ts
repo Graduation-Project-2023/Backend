@@ -1,9 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { SessionRepo } from "../db/sessionRepo";
-import { UserRepo } from "../db/userRepo";
-
-const session = new SessionRepo();
-const User = new UserRepo();
+import prisma from "../db";
 
 function isAuthed(req: Request, res: Response, next: NextFunction) {
   if (req.isAuthenticated()) {
@@ -65,7 +61,9 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
     //     message: "Unauthorized"
     // })
   }
-  const usr = await User.read({ id: req.session.passport?.user });
+  const usr = await prisma.user.findUnique({
+    where: { id: req.session.passport?.user },
+  });
   if (!usr) {
     return res.status(401).json({ message: "Unauthorized" });
     // return next({
@@ -98,7 +96,9 @@ const isStudent = async (req: Request, res: Response, next: NextFunction) => {
     //   message: "Unauthorized"
     // })
   }
-  const usr = await User.read({ id: req.session.passport?.user });
+  const usr = await prisma.user.findUnique({
+    where: { id: req.session.passport?.user },
+  });
   if (!usr) {
     return res.status(401).json({ message: "Unauthorized" });
     // return next({

@@ -1,39 +1,32 @@
-import express, { NextFunction, Request, Response } from "express";
-import { ProgramRepo } from "../../db/programRepo";
-import { CollegeAdminController } from "../controllers/collegeAdminController";
-import { ProgramAdminController } from "../controllers/programAdminController";
-import { LevelRepo } from "../../db/levelRepo";
-import { GradeRepo } from "../../db/gradeRepo";
-import { LevelAllowedHoursRepo } from "../../db/levelAllowedHoursRepo";
-import { GpaAllowedHoursRepo } from "../../db/gpaAllowedHoursRepo";
-import { ProgramCourseController } from "../controllers/programCourseController";
-import { ProgramCourseRepo } from "../../db/programCourseRepo";
+import express from "express";
+import { CollegeAdminController } from "../../controllers/collegeAdminController";
+import { ProgramAdminController } from "../../controllers/programAdminController";
+import { ProgramCourseController } from "../../controllers/programCourseController";
+import prisma from "../../db";
 
 const server = express.Router();
-const Program = new ProgramRepo();
-const Level = new LevelRepo();
-const Grade = new GradeRepo();
-const programCourse = new ProgramCourseRepo();
-const LevelAllowedHours = new LevelAllowedHoursRepo();
-const GpaAllowedHours = new GpaAllowedHoursRepo();
-const controller = new CollegeAdminController(Program);
-const levelController = new ProgramAdminController(Level);
-const gradeController = new ProgramAdminController(Grade);
-const programCourseController = new ProgramCourseController(programCourse);
-const levelAllowedHoursController = new ProgramAdminController(
-  LevelAllowedHours
+const programController = new CollegeAdminController(prisma.program);
+const programCourseController = new ProgramCourseController(
+  prisma.programCourse
 );
-const gpaAllowedHoursController = new ProgramAdminController(GpaAllowedHours);
+const levelController = new ProgramAdminController(prisma.level);
+const gradeController = new ProgramAdminController(prisma.grade);
+const levelAllowedHoursController = new ProgramAdminController(
+  prisma.levelAllowedHours
+);
+const gpaAllowedHoursController = new ProgramAdminController(
+  prisma.gpaAllowedHours
+);
 
-server.get("/", controller.getAll);
+server.get("/", programController.getAll);
 
-server.get("/:id", controller.get);
+server.get("/:id", programController.get);
 
-server.post("/", controller.create);
+server.post("/", programController.create);
 
-server.put("/:id", controller.update);
+server.put("/:id", programController.update);
 
-server.delete("/:id", controller.delete);
+server.delete("/:id", programController.delete);
 
 // ************************************************************************************************
 server.get("/:program_id/levels", levelController.getAll);
@@ -96,14 +89,14 @@ server.get("/:program_id/program_courses/:code", programCourseController.get);
 
 server.post("/:program_id/program_courses", programCourseController.create);
 
-server.put(
-  "/:program_id/program_courses/:code",
-  programCourseController.update
-);
+// server.put(
+//   "/:program_id/program_courses/:code",
+//   programCourseController.update
+// );
 
-server.delete(
-  "/:program_id/program_courses/:id",
-  programCourseController.delete
-);
+// server.delete(
+//   "/:program_id/program_courses/:id",
+//   programCourseController.delete
+// );
 
 export default server;

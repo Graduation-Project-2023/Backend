@@ -5,12 +5,11 @@ import { UserRepo } from "../../db/userRepo";
 import passport from "../../middleware/passport";
 import bcrypt from "bcrypt";
 import { SessionRepo } from "../../db/sessionRepo";
+import prisma from "../../db";
 // import { session } from "passport";
-import {isAdmin} from "../../utils/passportUtils";
+import { isAdmin } from "../../utils/passportUtils";
 
 const server = express.Router();
-const User = new UserRepo();
-const Session = new SessionRepo();
 const SECRET = process.env.JWT_SECRET as string;
 const PEPPER = process.env.PEPPER as string;
 const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
@@ -43,8 +42,8 @@ server.post(
     // const user = await User.read({ email: req.body.email });
     // console.log(req.user);
     // const session = await Session.read({ sid: req.sessionID });
-    // console.log(session);  
-    // // console.log(req.user.role);  
+    // console.log(session);
+    // // console.log(req.user.role);
     // const token = jwt.sign(
     //   {
     //     userId: req.session.passport?.user,
@@ -72,7 +71,11 @@ server.post(
     }
     try {
       // check if user exists in db
-      const user = await User.read({ email });
+      const user = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
       if (!user) {
         return next({
           status: 400,
@@ -128,7 +131,11 @@ server.post(
           message: "Invalid token",
         });
       }
-      const user = await User.read({ email: obj.email });
+      const user = await prisma.user.findUnique({
+        where: {
+          email: obj.email,
+        },
+      });
       if (!user) {
         return next({
           status: 498,
@@ -143,7 +150,14 @@ server.post(
           });
         }
         const pass = bcrypt.hashSync(password + PEPPER, Number(SALT_ROUNDS));
-        await User.update({ email: user.email }, { password: pass });
+        await prisma.user.update({
+          where: {
+            email: user.email,
+          },
+          data: {
+            password: pass,
+          },
+        });
         return res.json({ message: "Password updated" });
       });
     } catch (err) {

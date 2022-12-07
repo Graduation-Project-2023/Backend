@@ -1,24 +1,24 @@
 import supertest from "supertest";
 import app from "../../server";
-import { UserRepo } from "../../db/userRepo";
+import prisma from "../../db";
 import bcrypt from "bcrypt";
 
 describe("testing auth routes ", () => {
-  let userRepo: UserRepo;
-  let user: UserRepo;
+  let user: any;
 
   before(async () => {
-    userRepo = new UserRepo();
     const pass = bcrypt.hashSync("salemHamoooood" + process.env.PEPPER, 13);
-    user = await userRepo.create({
-      email: "SalemElhamood@eng.suez.edu.eg",
-      password: pass,
-      role: "ADMIN",
+    user = await prisma.user.create({
+      data: {
+        email: "SalemElhamood@eng.suez.edu.eg",
+        password: pass,
+        role: "ADMIN",
+      },
     });
   });
 
   after(async () => {
-    await userRepo.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   it("should reject only email", () => {

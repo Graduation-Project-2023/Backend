@@ -17,7 +17,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd server
-            git pull origin main
+            git pull origin publish
+            npm run migrate
+            npm run migrate:test
             npm install
             npm run test
             npm run build

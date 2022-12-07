@@ -1,11 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
-import { StudentRepo } from "../../db/studentRepo";
 import { Prisma } from "@prisma/client";
+import prisma from "../../db";
 import bcrypt from "bcrypt";
 import { uploadSingle, validateCsv, csvToJson } from "../../middleware/csv";
 
 const server = express.Router();
-const studentRepo = new StudentRepo();
 
 const mapCsvRowToStudentCreateInput = async (
   obj: any
@@ -75,8 +74,8 @@ server.post(
             return;
           }
           try {
-            await studentRepo.create({
-              ...student,
+            await prisma.student.create({
+              data: student,
             });
           } catch (err) {
             console.error(err);
@@ -98,20 +97,22 @@ server.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password, collegeId, ...student } = req.body;
-      await studentRepo.create({
-        user: {
-          create: {
-            email,
-            password: await bcrypt.hash(password + process.env.PEPPER, 10),
-            role: "STUDENT",
+      await prisma.student.create({
+        data: {
+          user: {
+            create: {
+              email,
+              password: await bcrypt.hash(password + process.env.PEPPER, 10),
+              role: "STUDENT",
+            },
           },
-        },
-        college: {
-          connect: {
-            id: collegeId,
+          college: {
+            connect: {
+              id: collegeId,
+            },
           },
+          ...student,
         },
-        ...student,
       });
       res.status(201).send("OK");
     } catch (error) {

@@ -1,18 +1,15 @@
 import supertest from "supertest";
 import app from "../../server";
 import { expect } from "chai";
-import { StudentRepo } from "../../db/studentRepo";
-import { UserRepo } from "../../db/userRepo";
+import prisma from "../../db";
 
 const request = supertest(app);
 const csvApi = "/api/csv_upload";
-const studentRepo = new StudentRepo();
-const userRepo = new UserRepo();
 
 describe("test the admission routes", () => {
   after(async () => {
-    await studentRepo.deleteMany();
-    await userRepo.deleteMany();
+    await prisma.student.deleteMany();
+    await prisma.user.deleteMany();
   });
 
   it("rejects a request with no file", async () => {

@@ -1,10 +1,9 @@
-import express, { NextFunction, Request, Response } from "express";
-import { CourseRepo } from "../../db/courseRepo";
-import { CollegeAdminController } from "../controllers/collegeAdminController";
+import express from "express";
+import { Controller } from "../../controllers/controller";
+import prisma from "../../db";
 
 const server = express.Router();
-const Course = new CourseRepo();
-const controller = new CollegeAdminController(Course);
+const controller = new Controller(prisma.course);
 
 server.get("/", controller.getAll);
 

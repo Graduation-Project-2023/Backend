@@ -15,11 +15,9 @@ export class ProgramCourseController extends Controller {
       }
       if (prerequisites) {
         data.prerequisites = {
-          createMany: {
-            data: prerequisites.map((prerequisite: string) => ({
-              prerequisiteCode: prerequisite,
-            })),
-          },
+          connect: prerequisites.map((prerequisite: string) => ({
+            id: prerequisite,
+          })),
         };
       }
       const newData = await this.model.create({
@@ -45,26 +43,22 @@ export class ProgramCourseController extends Controller {
 
   get = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const code = req.params.code as string;
-      const programId = req.params.program_id as string;
-      const programId_code = {
-        programId,
-        code,
-      };
+      const id = req.params.id as string;
       const data = await this.model.findUnique({
         where: {
-          programId_code,
+          id,
         },
         include: {
           prerequisites: {
             select: {
-              prerequisiteCode: true,
+              code: true,
             },
           },
         },
       });
       res.status(200).send(data);
     } catch (err) {
+      console.log(err);
       next(err);
     }
   };

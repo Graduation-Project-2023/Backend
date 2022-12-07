@@ -100,6 +100,7 @@ describe("test programs routes", () => {
         creditHours: 3,
       });
     expect(res1.status).to.equal(201);
+    const prereqId = res1.body.id;
     const res2 = await request
       .post(`/api/programs/${programId}/program_courses`)
       .send({
@@ -108,8 +109,9 @@ describe("test programs routes", () => {
         semester: "SECOND",
         courseType: "COMPULSORY",
         creditHours: 3,
-        prerequisites: [`${course1Id}`],
+        prerequisites: [`${prereqId}`],
       });
+    course2Id = res2.body.id;
     expect(res2.status).to.equal(201);
   });
 

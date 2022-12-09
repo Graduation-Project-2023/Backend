@@ -118,7 +118,10 @@ server.post(
       });
     }
     if (!token || !password || !confpassword) {
-      return next({ message: "token is required" });
+      return next({
+        status: 401,
+        message: "token is required",
+      });
     }
     try {
       const obj = jwt.decode(token) as JwtPayload;
@@ -155,7 +158,7 @@ server.post(
             password: pass,
           },
         });
-        return res.json({ message: "Password updated" });
+        return res.status(200).json({ message: "Password updated" });
       });
     } catch (err) {
       next(err);

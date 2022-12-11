@@ -58,6 +58,7 @@ export class ProgramCourse {
         code: true,
         englishName: true,
         arabicName: true,
+        semester: true,
         level: {
           select: {
             level: true,

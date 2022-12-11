@@ -21,6 +21,6 @@ jobs:
             npm run migrate
             npm run migrate:test
             npm install
-            npm run test
+            npm run test:api
             npm run build
             pm2 restart all

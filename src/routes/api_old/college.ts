@@ -1,8 +1,9 @@
-import { CollegeController } from "../../controllers/collegeController";
 import express from "express";
+import { Controller } from "../../controllers_old/controller";
+import prisma from "../../db";
 
 const router = express.Router();
-const collegeController = new CollegeController();
+const collegeController = new Controller(prisma.college);
 
 router.get("/", collegeController.getAll);
 

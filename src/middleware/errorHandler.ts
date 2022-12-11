@@ -6,8 +6,13 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const status = err.status || 500;
-  const message = err.message || "Internal Server Error";
+  let status = err.status || 500;
+  let message = err.message || "Internal Server Error";
+  if (err.code?.startsWith("P20")) {
+    status = 400;
+    message = err.meta;
+  }
+
   res.status(status).json({
     success: false,
     status,

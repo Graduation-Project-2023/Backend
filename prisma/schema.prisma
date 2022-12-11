@@ -309,15 +309,16 @@ model GpaAllowedHours {
 
 model AcademicSemester {
   id               String           @id @default(uuid())
-  year             Int
+  academicYear     String
   semester         SEMESTER
-  startDate        DateTime
-  endDate          DateTime
+  startDate        DateTime?
+  endDate          DateTime?
   enrolledStudents Student[]        @relation("enrollmentSemester")
   courseInstances  CourseInstance[]
   tables           CourseTable[]
   studentTables     StudentTable[]
 
+  @@unique([academicYear, semester])
   @@map("academic_semesters")
 }
 

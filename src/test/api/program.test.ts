@@ -109,7 +109,7 @@ describe("test programs routes", () => {
         semester: "SECOND",
         courseType: "COMPULSORY",
         creditHours: 3,
-        prerequisites: [`${course2Id}`],
+        prerequisites: [`${prereqId}`],
       });
     course2Id = res2.body.id;
     expect(res2.status).to.equal(201);

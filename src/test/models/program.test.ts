@@ -91,6 +91,7 @@ describe("test program models", () => {
       levelId,
     });
     expect(programCourse1.code).to.equal(course1Id);
+    course1Id = programCourse1.id;
     const programCourse2 = await ProgramCourse.create({
       programId,
       semester: "SECOND",

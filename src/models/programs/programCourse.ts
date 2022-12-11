@@ -1,13 +1,10 @@
 import prisma from "../../db";
 import { Course } from "../course";
 
-const connectManyPrerequisites = (prerequisites: any, programId: any) => {
+const connectManyPrerequisites = (prerequisites: any) => {
   return {
-    connect: prerequisites?.map((code: string) => ({
-      programId_code: {
-        code,
-        programId,
-      },
+    connect: prerequisites?.map((id: string) => ({
+      id,
     })),
   };
 };
@@ -15,6 +12,7 @@ const connectManyPrerequisites = (prerequisites: any, programId: any) => {
 const prerequisitesInclude = {
   prerequisites: {
     select: {
+      id: true,
       code: true,
       englishName: true,
       arabicName: true,
@@ -93,7 +91,7 @@ export class ProgramCourse {
         course,
         level,
         program,
-        prerequisites: connectManyPrerequisites(prerequisites, programId),
+        prerequisites: connectManyPrerequisites(prerequisites),
         ...rest,
       },
     });
@@ -102,7 +100,6 @@ export class ProgramCourse {
 
   static update = async (id: string, data: any) => {
     const { levelId, prerequisites, ...rest } = data;
-    if (!data.programId) throw new Error("Program not found");
     const level = levelId ? { connect: { id: levelId } } : undefined;
 
     // if prerequisites are provided, disconnect all and connect new ones
@@ -122,7 +119,7 @@ export class ProgramCourse {
       data: {
         ...rest,
         level,
-        prerequisites: connectManyPrerequisites(prerequisites, data.programId),
+        prerequisites: connectManyPrerequisites(prerequisites),
       },
     });
     return programCourse;

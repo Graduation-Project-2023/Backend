@@ -1,18 +1,17 @@
+import { CourseController } from "../../controllers/courseController";
 import express from "express";
-import { Controller } from "../../controllers/controller";
-import prisma from "../../db";
 
-const server = express.Router();
-const controller = new Controller(prisma.course);
+const router = express.Router();
+const courseController = new CourseController();
 
-server.get("/", controller.getAll);
+router.get("/", courseController.getAll);
 
-server.get("/:id", controller.get);
+router.get("/:id", courseController.get);
 
-server.post("/", controller.create);
+router.post("/", courseController.create);
 
-server.put("/:id", controller.update);
+router.put("/:id", courseController.update);
 
-server.delete("/:id", controller.delete);
+router.delete("/:id", courseController.delete);
 
-export default server;
+export default router;

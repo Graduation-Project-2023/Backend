@@ -1,102 +1,123 @@
+import { ProgramController } from "../../controllers/programController";
 import express from "express";
-import { CollegeAdminController } from "../../controllers/collegeAdminController";
-import { ProgramAdminController } from "../../controllers/programAdminController";
+import { ProgramRelationsController } from "../../controllers/programRelationsController";
+import {
+  Level,
+  Grade,
+  LevelAllowedHours,
+  GpaAllowedHours,
+} from "../../models/programs/programRelations";
 import { ProgramCourseController } from "../../controllers/programCourseController";
-import prisma from "../../db";
 
-const server = express.Router();
-const programController = new CollegeAdminController(prisma.program);
-const programCourseController = new ProgramCourseController(
-  prisma.programCourse
+const router = express.Router();
+const programController = new ProgramController();
+
+router.get("/", programController.getAll);
+
+router.get("/:id", programController.get);
+
+router.post("/", programController.create);
+
+router.put("/:id", programController.update);
+
+router.delete("/:id", programController.delete);
+
+// **************************************************
+
+const programCourseController = new ProgramCourseController();
+
+router.get("/:program_id/program_courses", programCourseController.getAll);
+
+router.get("/:program_id/program_courses/:id", programCourseController.get);
+
+router.post("/:program_id/program_courses", programCourseController.create);
+
+router.put("/:program_id/program_courses/:id", programCourseController.update);
+
+router.delete(
+  "/:program_id/program_courses/:id",
+  programCourseController.delete
 );
-const levelController = new ProgramAdminController(prisma.level);
-const gradeController = new ProgramAdminController(prisma.grade);
-const levelAllowedHoursController = new ProgramAdminController(
-  prisma.levelAllowedHours
+
+// **************************************************
+
+const levelController = new ProgramRelationsController(new Level());
+
+router.get("/:program_id/levels", levelController.getAll);
+
+router.get("/:program_id/levels/:id", levelController.get);
+
+router.post("/:program_id/levels", levelController.create);
+
+router.put("/:program_id/levels/:id", levelController.update);
+
+router.delete("/:program_id/levels/:id", levelController.delete);
+
+// **************************************************
+
+const gradeController = new ProgramRelationsController(new Grade());
+
+router.get("/:program_id/grades", gradeController.getAll);
+
+router.get("/:program_id/grades/:id", gradeController.get);
+
+router.post("/:program_id/grades", gradeController.create);
+
+router.put("/:program_id/grades/:id", gradeController.update);
+
+router.delete("/:program_id/grades/:id", gradeController.delete);
+
+// **************************************************
+
+const levelAllowedHourseController = new ProgramRelationsController(
+  new LevelAllowedHours()
 );
-const gpaAllowedHoursController = new ProgramAdminController(
-  prisma.gpaAllowedHours
-);
 
-server.get("/", programController.getAll);
-
-server.get("/:id", programController.get);
-
-server.post("/", programController.create);
-
-server.put("/:id", programController.update);
-
-server.delete("/:id", programController.delete);
-
-// ************************************************************************************************
-server.get("/:program_id/levels", levelController.getAll);
-
-server.post("/:program_id/levels", levelController.create);
-
-server.put("/:program_id/levels/:id", levelController.update);
-
-server.delete("/:program_id/levels/:id", levelController.delete);
-
-// ************************************************************************************************
-server.get("/:program_id/grades", gradeController.getAll);
-
-server.post("/:program_id/grades", gradeController.create);
-
-server.put("/:program_id/grades/:id", gradeController.update);
-
-server.delete("/:program_id/grades/:id", gradeController.delete);
-
-// ************************************************************************************************
-server.get(
+router.get(
   "/:program_id/level_allowed_hours",
-  levelAllowedHoursController.getAll
+  levelAllowedHourseController.getAll
 );
 
-server.post(
+router.get(
+  "/:program_id/level_allowed_hours/:id",
+  levelAllowedHourseController.get
+);
+
+router.post(
   "/:program_id/level_allowed_hours",
-  levelAllowedHoursController.create
+  levelAllowedHourseController.create
 );
 
-server.put(
+router.put(
   "/:program_id/level_allowed_hours/:id",
-  levelAllowedHoursController.update
+  levelAllowedHourseController.update
 );
 
-server.delete(
+router.delete(
   "/:program_id/level_allowed_hours/:id",
-  levelAllowedHoursController.delete
+  levelAllowedHourseController.delete
 );
 
-// ************************************************************************************************
-server.get("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.getAll);
+// **************************************************
 
-server.post("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.create);
+const gpaAllowedHoursController = new ProgramRelationsController(
+  new GpaAllowedHours()
+);
 
-server.put(
+router.get("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.getAll);
+
+router.get("/:program_id/gpa_allowed_hours/:id", gpaAllowedHoursController.get);
+
+router.post("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.create);
+
+router.put(
   "/:program_id/gpa_allowed_hours/:id",
   gpaAllowedHoursController.update
 );
 
-server.delete(
+router.delete(
   "/:program_id/gpa_allowed_hours/:id",
   gpaAllowedHoursController.delete
 );
 
-// ************************************************************************************************
-server.get("/:program_id/program_courses", programCourseController.getAll);
-
-server.get("/:program_id/program_courses/:id", programCourseController.get);
-
-server.post("/:program_id/program_courses", programCourseController.create);
-
-// server.put(
-//   "/:program_id/program_courses/:code",
-//   programCourseController.update
-// );
-
-// server.delete(
-//   "/:program_id/program_courses/:id",
-//   programCourseController.delete
-// );
-
-export default server;
+export default router;

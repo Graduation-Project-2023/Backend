@@ -1,6 +1,6 @@
 import prisma from "../../db";
 
-abstract class ProgramAdminModel {
+export class ProgramRelationModel {
   constructor(private model: any) {}
 
   get = async (id: string) => {
@@ -51,25 +51,25 @@ abstract class ProgramAdminModel {
   };
 }
 
-export class Level extends ProgramAdminModel {
+export class Level extends ProgramRelationModel {
   constructor() {
     super(prisma.level);
   }
 }
 
-export class Grade extends ProgramAdminModel {
+export class Grade extends ProgramRelationModel {
   constructor() {
     super(prisma.grade);
   }
 }
 
-export class LevelAllowedHours extends ProgramAdminModel {
+export class LevelAllowedHours extends ProgramRelationModel {
   constructor() {
     super(prisma.levelAllowedHours);
   }
 }
 
-export class GpaAllowedHours extends ProgramAdminModel {
+export class GpaAllowedHours extends ProgramRelationModel {
   constructor() {
     super(prisma.gpaAllowedHours);
   }

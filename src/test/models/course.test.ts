@@ -1,24 +1,7 @@
 import { Course } from "../../models/course";
-import { College } from "../../models/college";
 import { expect } from "chai";
-import prisma from "../../db";
 
 describe("Course Model", () => {
-  let collegeId: string;
-
-  after(async () => {
-    await prisma.course.deleteMany();
-    await prisma.college.deleteMany();
-  });
-
-  before(async () => {
-    const college = await College.create({
-      englishName: "Arts",
-      arabicName: "الفنون",
-    });
-    collegeId = college.id;
-  });
-
   it("tests create course", async () => {
     const course = await Course.create({
       englishName: "Computer Science",

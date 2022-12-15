@@ -1,8 +1,8 @@
 {
   "package": "./package.json",
   "require": "ts-node/register",
-  "spec": "src/test/**/*.test.ts",
   "parallel": false,
+  "spec": "src/test/**/*.test.ts",
   "timeout": 1500000,
   "exit": true
 }

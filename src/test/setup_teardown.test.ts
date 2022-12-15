@@ -1,4 +1,5 @@
 import prisma from "../db";
+import { AcademicSemester } from "../models/academicSemester";
 import { College } from "../models/college";
 import { Course } from "../models/course";
 import { Program } from "../models/programs/program";
@@ -12,7 +13,9 @@ declare global {
   var course2Id: string;
   var programId: string;
   var levelId: string;
-  var programCourseId: string;
+  var programCourse1Id: string;
+  var programCourse2Id: string;
+  var academicSemesterId: string;
 }
 
 // run before any test
@@ -80,16 +83,37 @@ before(async () => {
     code: course1Id,
     levelId,
   });
-  global.programCourseId = programCourse.id;
+  global.programCourse1Id = programCourse.id;
+
+  const programCourse2 = await ProgramCourse.create({
+    programId,
+    semester: "FIRST",
+    creditHours: 3,
+    minimumHrsToRegister: 3,
+    courseType: "COMPULSORY",
+    code: course2Id,
+    levelId,
+  });
+  global.programCourse2Id = programCourse2.id;
+
+  const academicSemester = await AcademicSemester.create({
+    academicYear: "2022/2023",
+    semester: "FIRST",
+  });
+  global.academicSemesterId = academicSemester.id;
 });
 
 after(async () => {
+  await prisma.class.deleteMany();
+  await prisma.classesTable.deleteMany();
+  await prisma.courseInstance.deleteMany();
   await prisma.programCourse.deleteMany();
   await prisma.levelAllowedHours.deleteMany();
-  await prisma.level.deleteMany();
   await prisma.course.deleteMany();
+  await prisma.gpaAllowedHours.deleteMany();
+  await prisma.level.deleteMany();
   await prisma.program.deleteMany();
   await prisma.college.deleteMany();
-  await prisma.gpaAllowedHours.deleteMany();
+  await prisma.academicSemester.deleteMany();
   await prisma.$disconnect();
 });

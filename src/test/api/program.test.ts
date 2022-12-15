@@ -1,7 +1,6 @@
 import supertest from "supertest";
 import server from "../../server";
 import { expect } from "chai";
-import prisma from "../../db";
 
 const request = supertest(server);
 
@@ -76,7 +75,7 @@ describe("test programs routes", () => {
         semester: "SECOND",
         courseType: "COMPULSORY",
         creditHours: 3,
-        prerequisites: [`${programCourseId}`],
+        prerequisites: [`${programCourse1Id}`],
       });
     programCourse3 = res2.body.id;
     expect(res2.status).to.equal(201);

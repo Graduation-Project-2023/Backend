@@ -38,8 +38,8 @@ const createClassesTable = async (
   return await ClassesTable.create(classesTable);
 };
 
-const getClassesTable = async (id: string) => {
-  return await ClassesTable.get(id);
+const getClassesTable = async (filter: Prisma.ClassesTableWhereUniqueInput) => {
+  return await ClassesTable.get(filter);
 };
 
 const getAllClassesTables = async (filter: Prisma.ClassesTableWhereInput) => {

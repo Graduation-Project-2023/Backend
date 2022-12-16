@@ -7,6 +7,22 @@ export class ClassesTableController extends Controller {
     super(ClassesTableService);
   }
 
+  get = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const semesterId = req.params.semester_id;
+      const levelId = req.params.level_id;
+      const data = await this.model.get({
+        levelId_semesterId: {
+          levelId,
+          semesterId,
+        },
+      });
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const programId = req.query.program_id as string;

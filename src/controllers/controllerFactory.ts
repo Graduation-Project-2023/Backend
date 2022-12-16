@@ -10,6 +10,7 @@ import {
   LevelAllowedHours,
   GpaAllowedHours,
 } from "../models/programs/programRelations";
+import { ClassesTableController } from "./classesTableController";
 
 export class ControllerFactory {
   static getController = (controller: string): Controller => {
@@ -30,6 +31,8 @@ export class ControllerFactory {
         return new ProgramRelationsController(new LevelAllowedHours());
       case "gpaAllowedHours":
         return new ProgramRelationsController(new GpaAllowedHours());
+      case "classesTable":
+        return new ClassesTableController();
       default:
         throw new Error("Invalid controller");
     }

@@ -15,7 +15,7 @@ const createManyClasses = (classes: any) => {
   };
 };
 
-const getClassesWithNames = async (classes: any) => {
+const addCourseNamesToClasses = async (classes: any) => {
   return await Promise.all(
     classes.map(async (classData: any) => {
       const { courseInstanceId, ...rest } = classData;
@@ -82,7 +82,7 @@ export class ClassesTable {
     const { levelId, programId, classes, academicSemesterId, ...rest } = data;
 
     // add englishName and arabicName from courseInstance to each class
-    const classesWithNames = await getClassesWithNames(classes);
+    const classesWithNames = await addCourseNamesToClasses(classes);
 
     const level = levelId ? { connect: { id: levelId } } : undefined;
     const program = programId ? { connect: { id: programId } } : undefined;
@@ -104,17 +104,18 @@ export class ClassesTable {
 
   static update = async (id: string, data: any) => {
     const { classes, ...rest } = data;
-    await prisma.class.deleteMany({
-      where: {
-        tableId: id,
-      },
-    });
-    const classesWithNames = await getClassesWithNames(classes);
+    const classesWithNames = await addCourseNamesToClasses(classes);
     const classesTable = await prisma.classesTable.update({
       where: { id },
       data: {
         ...rest,
-        classes: createManyClasses(classesWithNames),
+        // delete all classes and create new ones
+        classes: {
+          deleteMany: {
+            tableId: id,
+          },
+          ...createManyClasses(classesWithNames),
+        },
       },
       include: {
         classes: classesSelect,

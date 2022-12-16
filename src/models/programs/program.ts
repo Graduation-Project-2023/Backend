@@ -13,6 +13,22 @@ export class Program {
       where: {
         collegeId,
       },
+      select: {
+        id: true,
+        englishName: true,
+        arabicName: true,
+        programCode: true,
+        system: true,
+        maxGrade: true,
+        levels: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            level: true,
+          },
+        },
+      },
     });
     return data;
   };

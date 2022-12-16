@@ -50,9 +50,9 @@ const classesSelect = {
 };
 
 export class ClassesTable {
-  static get = async (id: string) => {
+  static get = async (filter: Prisma.ClassesTableWhereUniqueInput) => {
     const data = await prisma.classesTable.findUnique({
-      where: { id },
+      where: filter,
       include: {
         classes: classesSelect,
       },

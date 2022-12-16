@@ -57,12 +57,7 @@ export class ProgramCourse {
         englishName: true,
         arabicName: true,
         semester: true,
-        level: {
-          select: {
-            id: true,
-            level: true,
-          },
-        },
+        levelId: true,
       },
     });
     return data;

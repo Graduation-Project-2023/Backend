@@ -8,6 +8,7 @@ const request = supertest(server);
 describe("test classes table routes", () => {
   let courseInstance1Id: string;
   let courseInstance2Id: string;
+  let classesTableId: string;
 
   before(async () => {
     await prisma.courseInstance.createMany({
@@ -76,6 +77,35 @@ describe("test classes table routes", () => {
       });
     expect(res.status).to.equal(201);
     expect(res.body.levelId).to.equal(levelId);
+    classesTableId = res.body.id;
+  });
+
+  it("tests get classes table api", async () => {
+    const res = await request.get(
+      `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${levelId}`
+    );
+    expect(res.status).to.equal(200);
+    expect(res.body.classes.length).to.equal(2);
+  });
+
+  it("tests update classes table api", async () => {
+    const res = await request
+      .put(
+        `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${classesTableId}`
+      )
+      .send({
+        classes: [
+          {
+            courseInstanceId: courseInstance1Id,
+            classType: "LECTURE",
+            day: "MONDAY",
+            startPeriod: 1,
+            endPeriod: 2,
+          },
+        ],
+      });
+    expect(res.status).to.equal(200);
+    expect(res.body.classes.length).to.equal(1);
   });
 
   it("tests create invalid classesTable api", async () => {

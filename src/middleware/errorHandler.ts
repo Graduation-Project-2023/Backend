@@ -10,7 +10,7 @@ const errorHandler = (
   let message = err.message || "Internal Server Error";
   if (err.code?.startsWith("P20")) {
     status = 400;
-    message = err.cause.meta;
+    message = err.meta;
   }
   if (err.message.startsWith("Invalid")) {
     status = 400;

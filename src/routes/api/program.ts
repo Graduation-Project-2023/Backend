@@ -1,16 +1,13 @@
 import { ProgramController } from "../../controllers/programController";
 import express from "express";
 import { ProgramRelationsController } from "../../controllers/programRelationsController";
-import {
-  Level,
-  Grade,
-  LevelAllowedHours,
-  GpaAllowedHours,
-} from "../../models/programs/programRelations";
 import { ProgramCourseController } from "../../controllers/programCourseController";
+import { ControllerFactory } from "../../controllers/controllerFactory";
 
 const router = express.Router();
-const programController = new ProgramController();
+const programController = ControllerFactory.getController(
+  "program"
+) as ProgramController;
 
 router.get("/", programController.getAll);
 
@@ -24,7 +21,9 @@ router.delete("/:id", programController.delete);
 
 // **************************************************
 
-const programCourseController = new ProgramCourseController();
+const programCourseController = ControllerFactory.getController(
+  "programCourse"
+) as ProgramCourseController;
 
 router.get("/:program_id/program_courses", programCourseController.getAll);
 
@@ -41,7 +40,9 @@ router.delete(
 
 // **************************************************
 
-const levelController = new ProgramRelationsController(new Level());
+const levelController = ControllerFactory.getController(
+  "level"
+) as ProgramRelationsController;
 
 router.get("/:program_id/levels", levelController.getAll);
 
@@ -55,7 +56,9 @@ router.delete("/:program_id/levels/:id", levelController.delete);
 
 // **************************************************
 
-const gradeController = new ProgramRelationsController(new Grade());
+const gradeController = ControllerFactory.getController(
+  "grade"
+) as ProgramRelationsController;
 
 router.get("/:program_id/grades", gradeController.getAll);
 
@@ -69,9 +72,9 @@ router.delete("/:program_id/grades/:id", gradeController.delete);
 
 // **************************************************
 
-const levelAllowedHourseController = new ProgramRelationsController(
-  new LevelAllowedHours()
-);
+const levelAllowedHourseController = ControllerFactory.getController(
+  "levelAllowedHours"
+) as ProgramRelationsController;
 
 router.get(
   "/:program_id/level_allowed_hours",
@@ -100,9 +103,9 @@ router.delete(
 
 // **************************************************
 
-const gpaAllowedHoursController = new ProgramRelationsController(
-  new GpaAllowedHours()
-);
+const gpaAllowedHoursController = ControllerFactory.getController(
+  "gpaAllowedHours"
+) as ProgramRelationsController;
 
 router.get("/:program_id/gpa_allowed_hours", gpaAllowedHoursController.getAll);
 

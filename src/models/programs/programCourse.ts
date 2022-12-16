@@ -59,6 +59,7 @@ export class ProgramCourse {
         semester: true,
         level: {
           select: {
+            id: true,
             level: true,
           },
         },

@@ -1,18 +1,18 @@
 import { Controller } from "./controller";
 import { Request, Response, NextFunction } from "express";
-import { ClassesTableService } from "../services/classesTable";
+import { CourseInstance } from "../models/courseInstance";
 
-export class ClassesTableController extends Controller {
+export class CourseInstanceController extends Controller {
   constructor() {
-    super(ClassesTableService);
+    super(CourseInstance);
   }
 
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const programId = req.query.program_id as string;
-      const semesterId = req.query.semester_id as string;
+      const programId = req.params.program_id as string;
+      const levelId = req.params.level_id as string;
       const data = await this.model.getAll({
-        AND: [{ programId }, { semesterId }],
+        AND: [{ programId }, { levelId }],
       });
       res.status(200).json(data);
     } catch (error) {

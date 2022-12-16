@@ -1,4 +1,5 @@
 import prisma from "../db";
+import { Prisma } from "@prisma/client";
 
 const createManyClasses = (classes: any) => {
   return {
@@ -59,12 +60,9 @@ export class ClassesTable {
     return data;
   };
 
-  static getAll = async (programId: string, semesterId: string) => {
+  static getAll = async (filter: Prisma.ClassesTableWhereInput) => {
     const data = await prisma.classesTable.findMany({
-      where: {
-        programId,
-        semesterId,
-      },
+      where: filter,
       select: {
         level: {
           select: {

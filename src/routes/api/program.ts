@@ -1,12 +1,6 @@
 import { ProgramController } from "../../controllers/programController";
 import express from "express";
 import { ProgramRelationsController } from "../../controllers/programRelationsController";
-import {
-  Level,
-  Grade,
-  LevelAllowedHours,
-  GpaAllowedHours,
-} from "../../models/programs/programRelations";
 import { ProgramCourseController } from "../../controllers/programCourseController";
 import { ControllerFactory } from "../../controllers/controllerFactory";
 

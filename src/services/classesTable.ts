@@ -35,17 +35,15 @@ const createClassesTable = async (
   if (!validateClassesTable(classes)) {
     throw new Error("Invalid classes table");
   }
-  return await ClassesTable.create({
-    data: classesTable,
-  });
+  return await ClassesTable.create(classesTable);
 };
 
 const getClassesTable = async (id: string) => {
   return await ClassesTable.get(id);
 };
 
-const getAllClassesTables = async (programId: string, semesterId: string) => {
-  return await ClassesTable.getAll(programId, semesterId);
+const getAllClassesTables = async (filter: Prisma.ClassesTableWhereInput) => {
+  return await ClassesTable.getAll(filter);
 };
 
 const updateClassesTable = async (

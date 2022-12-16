@@ -1,5 +1,6 @@
 import prisma from "../db";
 import { ProgramCourse } from "./programs/programCourse";
+import { Prisma } from "@prisma/client";
 
 export class CourseInstance {
   static get = async (id: string) => {
@@ -9,11 +10,9 @@ export class CourseInstance {
     return data;
   };
 
-  static getAll = async (levelId: string) => {
+  static getAll = async (filter: Prisma.CourseInstanceWhereInput) => {
     const data = await prisma.courseInstance.findMany({
-      where: {
-        levelId,
-      },
+      where: filter,
       select: {
         id: true,
         englishName: true,
@@ -24,9 +23,15 @@ export class CourseInstance {
   };
 
   static create = async (data: any) => {
-    const { semesterId, programCourseId, levelId, professorId, ...rest } = data;
-    const academicSemester = semesterId
-      ? { connect: { id: semesterId } }
+    const {
+      academicSemesterId,
+      programCourseId,
+      levelId,
+      professorId,
+      ...rest
+    } = data;
+    const academicSemester = academicSemesterId
+      ? { connect: { id: academicSemesterId } }
       : undefined;
     const programCourse = programCourseId
       ? { connect: { id: programCourseId } }

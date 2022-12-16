@@ -1,3 +1,4 @@
+import prisma from "../../db";
 import { expect } from "chai";
 import { ClassesTable } from "../../models/classesTable";
 import { CourseInstance } from "../../models/courseInstance";
@@ -10,20 +11,26 @@ describe("tests classTable models", () => {
   before(async () => {
     const courseInstance1 = await CourseInstance.create({
       levelId,
-      semesterId: academicSemesterId,
+      academicSemesterId: academicSemesterId,
       programCourseId: programCourse1Id,
     });
     expect(courseInstance1.levelId).to.equal(levelId);
-    expect(courseInstance1.semesterId).to.equal(academicSemesterId);
+    expect(courseInstance1.academicSemesterId).to.equal(academicSemesterId);
     courseInstance1Id = courseInstance1.id;
     const courseInstance2 = await CourseInstance.create({
       levelId,
-      semesterId: academicSemesterId,
+      academicSemesterId: academicSemesterId,
       programCourseId: programCourse2Id,
     });
     expect(courseInstance2.levelId).to.equal(levelId);
-    expect(courseInstance2.semesterId).to.equal(academicSemesterId);
+    expect(courseInstance2.academicSemesterId).to.equal(academicSemesterId);
     courseInstance2Id = courseInstance2.id;
+  });
+
+  after(async () => {
+    await prisma.class.deleteMany();
+    await prisma.classesTable.deleteMany();
+    await prisma.courseInstance.deleteMany();
   });
 
   it("tests create classesTable model", async () => {
@@ -59,10 +66,9 @@ describe("tests classTable models", () => {
   });
 
   it("tests getAll classesTable model", async () => {
-    const classesTables = await ClassesTable.getAll(
-      programId,
-      academicSemesterId
-    );
+    const classesTables = await ClassesTable.getAll({
+      AND: [{ programId }, { levelId }],
+    });
     expect(classesTables.length).to.be.greaterThan(0);
     expect(classesTables[0].level.englishName).to.be.a("string");
   });

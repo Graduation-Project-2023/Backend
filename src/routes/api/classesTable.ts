@@ -13,7 +13,7 @@ router.get(
 );
 
 router.get(
-  "/semesters/:semester_id/programs/:program_id/:id",
+  "/semesters/:semester_id/programs/:program_id/:level_id",
   classesTableController.get
 );
 

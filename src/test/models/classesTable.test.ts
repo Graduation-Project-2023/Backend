@@ -60,7 +60,12 @@ describe("tests classTable models", () => {
   });
 
   it("tests get classesTable model", async () => {
-    const classesTable = await ClassesTable.get(classesTableId);
+    const classesTable = await ClassesTable.get({
+      levelId_semesterId: {
+        levelId,
+        semesterId: academicSemesterId,
+      },
+    });
     expect(classesTable?.levelId).to.equal(levelId);
     expect(classesTable?.classes.length).to.be.greaterThan(0);
   });

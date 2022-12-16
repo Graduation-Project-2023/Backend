@@ -12,6 +12,9 @@ const errorHandler = (
     status = 400;
     message = err.meta;
   }
+  if (err.message.startsWith("Invalid")) {
+    status = 400;
+  }
 
   res.status(status).json({
     success: false,

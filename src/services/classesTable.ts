@@ -16,7 +16,10 @@ export const validateClassesTable = (classes: Class[]) => {
   for (let i = 0; i < sortedClasses.length - 1; i++) {
     const currentClass = sortedClasses[i];
     const nextClass = sortedClasses[i + 1];
-    if (currentClass.day === nextClass.day) {
+    if (
+      currentClass.day === nextClass.day &&
+      currentClass.classType === "LECTURE"
+    ) {
       if (
         currentClass.endPeriod >= nextClass.startPeriod ||
         currentClass.startPeriod >= nextClass.endPeriod

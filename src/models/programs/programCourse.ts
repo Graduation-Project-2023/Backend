@@ -58,6 +58,7 @@ export class ProgramCourse {
         arabicName: true,
         semester: true,
         levelId: true,
+        creditHours: true,
       },
     });
     return data;

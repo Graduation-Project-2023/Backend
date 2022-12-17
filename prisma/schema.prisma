@@ -177,9 +177,12 @@ model CourseInstance {
   programCourse      ProgramCourse           @relation(fields: [programCourseId], references: [id])
   // normalized data from program course
   levelId            String?
+  code               String?
+  programId          String?
   englishName        String?
   arabicName         String?
   level             Level?                   @relation(fields: [levelId], references: [id])
+  program           Program?                 @relation(fields: [programId], references: [id])
   academicSemester   AcademicSemester        @relation(fields: [academicSemesterId], references: [id])
   professor          Professor?               @relation(fields: [professorId], references: [id])
   registeredStudents StudentCourseInstance[]
@@ -289,6 +292,7 @@ model Program {
   levelAllowedHrs        LevelAllowedHours[]
   levels                 Level[]
   courses                ProgramCourse[]
+  courseInstances        CourseInstance[]
   unlocksPrograms        Program[]           @relation("prerequisites")
   students               Student[]
   tables                 ClassesTable[]

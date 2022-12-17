@@ -17,6 +17,7 @@ describe("test classes table routes", () => {
           programCourseId: programCourse1Id,
           academicSemesterId,
           levelId: levelId,
+          programId: programId,
           englishName: "English Name",
           arabicName: "Arabic Name",
         },
@@ -24,6 +25,7 @@ describe("test classes table routes", () => {
           programCourseId: programCourse2Id,
           academicSemesterId,
           levelId: levelId,
+          programId: programId,
           englishName: "English Name",
           arabicName: "Arabic Name",
         },
@@ -46,6 +48,15 @@ describe("test classes table routes", () => {
     expect(res.body.length).to.equal(2);
     courseInstance1Id = res.body[0].id;
     courseInstance2Id = res.body[1].id;
+  });
+
+  // get all course instances by program
+  it("tests get all course instances by program", async () => {
+    const res = await request.get(
+      `/api/course_instances/semesters/${academicSemesterId}/programs/${programId}`
+    );
+    expect(res.status).to.equal(200);
+    expect(res.body.length).to.equal(2);
   });
 
   // create classes table

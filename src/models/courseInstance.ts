@@ -1,6 +1,19 @@
 import prisma from "../db";
 import { ProgramCourse } from "./programs/programCourse";
-import { Prisma } from "@prisma/client";
+import { Prisma, ProgramCourse as prismaProgramCourse } from "@prisma/client";
+
+const getNormalizedDataFromProgramCourse = (
+  programCourse: prismaProgramCourse
+) => {
+  const { englishName, arabicName, code, programId } = programCourse;
+  const program = { connect: { id: programId } };
+  return {
+    englishName,
+    arabicName,
+    code,
+    program,
+  };
+};
 
 export class CourseInstance {
   static get = async (id: string) => {
@@ -30,6 +43,12 @@ export class CourseInstance {
       professorId,
       ...rest
     } = data;
+    // get normalized data from program course
+    const programCourseData = await ProgramCourse.get(programCourseId);
+    if (!programCourseData) throw new Error("Program Course is required");
+    const normalizedData =
+      getNormalizedDataFromProgramCourse(programCourseData);
+    const level = levelId ? { connect: { id: levelId } } : undefined;
     const academicSemester = academicSemesterId
       ? { connect: { id: academicSemesterId } }
       : undefined;
@@ -39,20 +58,11 @@ export class CourseInstance {
     const professor = professorId
       ? { connect: { id: professorId } }
       : undefined;
-    // get normalized data from program course
-    const programCourseData = await ProgramCourse.get(programCourseId);
-    if (!programCourseData) throw new Error("Program Course is required");
-    rest.englishName = rest.englishName
-      ? rest.englishName
-      : programCourseData.englishName;
-    rest.arabicName = rest.arabicName
-      ? rest.arabicName
-      : programCourseData.arabicName;
-    const level = levelId ? { connect: { id: levelId } } : undefined;
 
     const courseInstance = await prisma.courseInstance.create({
       data: {
         ...rest,
+        ...normalizedData,
         academicSemester,
         programCourse,
         level,

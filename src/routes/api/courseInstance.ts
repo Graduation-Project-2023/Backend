@@ -13,6 +13,11 @@ router.get(
 );
 
 router.get(
+  "/semesters/:semester_id/programs/:program_id",
+  courseInstanceController.getAllByProgram
+);
+
+router.get(
   "/semesters/:semester_id/levels/:level_id/:id",
   courseInstanceController.get
 );

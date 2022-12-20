@@ -4,8 +4,28 @@ import {
   Class,
   ClassesTable as prismaClassesTable,
 } from "@prisma/client";
+import { CourseInstance } from "../models/courseInstance";
 
-export const validateClassesTable = (classes: Class[]) => {
+const getCourseInstances = async (classes: Class[], programId: any) => {
+  const courseInstanceIds = Array.from(
+    new Set(classes.map((c) => c.courseInstanceId))
+  );
+  const courseInstances = await CourseInstance.getAll({
+    AND: [
+      {
+        programId: programId,
+      },
+      {
+        id: {
+          in: courseInstanceIds,
+        },
+      },
+    ],
+  });
+  return courseInstances;
+};
+
+export const checkOverlapping = (classes: Class[]) => {
   const sortedClasses = classes.sort((a, b) => {
     if (a.day < b.day) return -1;
     if (a.day > b.day) return 1;
@@ -31,38 +51,98 @@ export const validateClassesTable = (classes: Class[]) => {
   return true;
 };
 
-const createClassesTable = async (
-  classesTable: Prisma.Without<prismaClassesTable, "id"> & { classes: Class[] }
-) => {
-  const classes = classesTable.classes;
-  if (!validateClassesTable(classes)) {
-    throw new Error("Invalid classes table");
+const checkSingleCourseCount = (
+  classes: Class[],
+  courseInstance: {
+    id: string;
+    lectureCount: number | null;
+    labCount: number | null;
   }
-  return await ClassesTable.create(classesTable);
-};
-
-const getClassesTable = async (filter: Prisma.ClassesTableWhereUniqueInput) => {
-  return await ClassesTable.get(filter);
-};
-
-const getAllClassesTables = async (filter: Prisma.ClassesTableWhereInput) => {
-  return await ClassesTable.getAll(filter);
-};
-
-const updateClassesTable = async (
-  id: string,
-  classesTable: Prisma.Without<prismaClassesTable, "id"> & { classes: Class[] }
 ) => {
-  const classes = classesTable.classes;
-  if (!validateClassesTable(classes)) {
-    throw new Error("Invalid classes table");
+  const foundClassesCount = classes.reduce(
+    (acc, curr) => {
+      if (curr.courseInstanceId === courseInstance.id) {
+        if (curr.classType === "LECTURE") {
+          acc.lectureCount++;
+        } else if (curr.classType === "LAB" || curr.classType === "SECTION") {
+          acc.labCount++;
+        }
+      }
+      return acc;
+    },
+    { lectureCount: 0, labCount: 0 }
+  );
+  return (
+    foundClassesCount.lectureCount === courseInstance.lectureCount &&
+    foundClassesCount.labCount === courseInstance.labCount
+  );
+};
+
+export const checkClassCount = (
+  classes: Class[],
+  courseInstances: {
+    id: string;
+    lectureCount: number | null;
+    labCount: number | null;
+  }[]
+) => {
+  for (const courseInstance of courseInstances) {
+    if (!checkSingleCourseCount(classes, courseInstance)) {
+      return false;
+    }
   }
-  return await ClassesTable.update(id, classesTable);
+  return true;
+};
+
+export const validateClassesTable = (
+  classesTable: Class[],
+  courseInstances: {
+    id: string;
+    lectureCount: number | null;
+    labCount: number | null;
+  }[]
+) => {
+  return (
+    checkOverlapping(classesTable) &&
+    checkClassCount(classesTable, courseInstances)
+  );
 };
 
 export class ClassesTableService {
-  static get = getClassesTable;
-  static getAll = getAllClassesTables;
-  static create = createClassesTable;
-  static update = updateClassesTable;
+  static create = async (
+    classesTable: Prisma.Without<prismaClassesTable, "id"> & {
+      classes: Class[];
+    }
+  ) => {
+    const classes = classesTable.classes;
+    const courseInstances = await getCourseInstances(
+      classes,
+      classesTable.programId
+    );
+    if (!validateClassesTable(classes, courseInstances)) {
+      throw new Error("Invalid classes table");
+    }
+    return await ClassesTable.create(classesTable);
+  };
+
+  static get = async (filter: Prisma.ClassesTableWhereUniqueInput) => {
+    return await ClassesTable.get(filter);
+  };
+
+  static getAll = async (filter: Prisma.ClassesTableWhereInput) => {
+    return await ClassesTable.getAll(filter);
+  };
+
+  static update = async (
+    id: string,
+    classesTable: Prisma.Without<prismaClassesTable, "id"> & {
+      classes: Class[];
+    }
+  ) => {
+    const classes = classesTable.classes;
+    if (!checkOverlapping(classes)) {
+      throw new Error("Invalid classes table");
+    }
+    return await ClassesTable.update(id, classesTable);
+  };
 }

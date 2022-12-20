@@ -5,12 +5,14 @@ import { Prisma, ProgramCourse as prismaProgramCourse } from "@prisma/client";
 const getNormalizedDataFromProgramCourse = (
   programCourse: prismaProgramCourse
 ) => {
-  const { englishName, arabicName, code, programId } = programCourse;
+  const { englishName, arabicName, code, programId, creditHours } =
+    programCourse;
   const program = { connect: { id: programId } };
   return {
     englishName,
     arabicName,
     code,
+    creditHours,
     program,
   };
 };
@@ -30,6 +32,8 @@ export class CourseInstance {
         id: true,
         englishName: true,
         arabicName: true,
+        lectureCount: true,
+        labCount: true,
       },
     });
     return data;

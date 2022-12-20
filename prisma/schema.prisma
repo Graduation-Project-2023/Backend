@@ -189,15 +189,23 @@ model StudentTable {
 
 model CourseInstance {
   id                 String                  @id @default(uuid())
+  lectureCount      Int?                    @default(1)
+  lectureHrs        Int?                    @default(2)
+  labCount          Int?                    @default(0)
+  labHrs            Int?                    @default(0)
   programCourseId           String 
   academicSemesterId         String
   professorId        String?
-  programCourse      ProgramCourse           @relation(fields: [programCourseId], references: [id])
   // normalized data from program course
   levelId            String?
+  code               String?
+  programId          String?
   englishName        String?
   arabicName         String?
+  creditHours        Int?
   level             Level?                   @relation(fields: [levelId], references: [id])
+  programCourse      ProgramCourse           @relation(fields: [programCourseId], references: [id])
+  program           Program?                 @relation(fields: [programId], references: [id])
   academicSemester   AcademicSemester        @relation(fields: [academicSemesterId], references: [id])
   professor          Professor?               @relation(fields: [professorId], references: [id])
   registeredStudents StudentCourseInstance[]
@@ -307,6 +315,7 @@ model Program {
   levelAllowedHrs        LevelAllowedHours[]
   levels                 Level[]
   courses                ProgramCourse[]
+  courseInstances        CourseInstance[]
   unlocksPrograms        Program[]           @relation("prerequisites")
   students               Student[]
   tables                 ClassesTable[]

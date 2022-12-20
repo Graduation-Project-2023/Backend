@@ -17,6 +17,9 @@ describe("test classes table routes", () => {
           programCourseId: programCourse1Id,
           academicSemesterId,
           levelId: levelId,
+          programId: programId,
+          lectureCount: 1,
+          labCount: 0,
           englishName: "English Name",
           arabicName: "Arabic Name",
         },
@@ -24,6 +27,9 @@ describe("test classes table routes", () => {
           programCourseId: programCourse2Id,
           academicSemesterId,
           levelId: levelId,
+          lectureCount: 0,
+          labCount: 1,
+          programId: programId,
           englishName: "English Name",
           arabicName: "Arabic Name",
         },
@@ -48,6 +54,15 @@ describe("test classes table routes", () => {
     courseInstance2Id = res.body[1].id;
   });
 
+  // get all course instances by program
+  it("tests get all course instances by program", async () => {
+    const res = await request.get(
+      `/api/course_instances/semesters/${academicSemesterId}/programs/${programId}`
+    );
+    expect(res.status).to.equal(200);
+    expect(res.body.length).to.equal(2);
+  });
+
   // create classes table
   it("tests create valid classesTable api", async () => {
     const res = await request
@@ -68,10 +83,10 @@ describe("test classes table routes", () => {
           },
           {
             courseInstanceId: courseInstance2Id,
-            classType: "LAB",
+            classType: "SECTION",
             day: "TUESDAY",
-            startPeriod: 3,
-            endPeriod: 4,
+            startPeriod: 5,
+            endPeriod: 6,
           },
         ],
       });

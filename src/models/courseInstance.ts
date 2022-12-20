@@ -32,6 +32,8 @@ export class CourseInstance {
         id: true,
         englishName: true,
         arabicName: true,
+        lectureCount: true,
+        labCount: true,
       },
     });
     return data;

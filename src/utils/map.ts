@@ -8,7 +8,6 @@ const mapCsvRowToStudentCreateInput = async (
   };
   studentInput.email = `${obj.nationalId}@eng.suez.edu.eg` || obj.email;
   studentInput.password = obj.nationalId;
-  studentInput.role = "STUDENT";
   studentInput.englishName = obj.englishName;
   studentInput.arabicName = obj.arabicName;
   studentInput.nationality = obj.nationality;

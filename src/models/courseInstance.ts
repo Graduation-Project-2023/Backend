@@ -32,6 +32,7 @@ export class CourseInstance {
         id: true,
         englishName: true,
         arabicName: true,
+        levelId: true,
         lectureCount: true,
         labCount: true,
       },

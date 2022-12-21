@@ -21,7 +21,6 @@ export class Student {
     const {
       email,
       password,
-      role,
       collegeId,
       birthDate,
       recruitmentDate,
@@ -36,7 +35,7 @@ export class Student {
           create: {
             email,
             password: await bcrypt.hash(password + process.env.PEPPER, 10),
-            role: role,
+            role: "STUDENT",
           },
         },
         college: {

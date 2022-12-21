@@ -50,8 +50,13 @@ describe("test classes table routes", () => {
     );
     expect(res.status).to.equal(200);
     expect(res.body.length).to.equal(2);
-    courseInstance1Id = res.body[0].id;
-    courseInstance2Id = res.body[1].id;
+    if (res.body[0].lectureCount === 1) {
+      courseInstance1Id = res.body[0].id;
+      courseInstance2Id = res.body[1].id;
+    } else {
+      courseInstance1Id = res.body[1].id;
+      courseInstance2Id = res.body[0].id;
+    }
   });
 
   // get all course instances by program

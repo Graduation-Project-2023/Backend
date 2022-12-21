@@ -23,3 +23,5 @@ services:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: password
       POSTGRES_DB: devs
+    volumes:
+      - ./data:/var/lib/postgresql/data

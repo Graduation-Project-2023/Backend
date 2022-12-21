@@ -5,3 +5,4 @@ build
 req.rest
 test.rest
 uploads/*
+data/

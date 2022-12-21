@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-// import { UserTypes } from "../models/user";
 import prisma from "../db";
 
 const PEPPER = process.env.PEPPER as string;

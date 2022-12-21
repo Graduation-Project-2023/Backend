@@ -1,0 +1,38 @@
+import { Prisma } from "@prisma/client";
+
+const mapCsvRowToStudentCreateInput = async (
+  obj: any
+): Promise<Prisma.StudentCreateInput | null> => {
+  const studentInput: any = {
+    nationalId: obj.nationalId,
+  };
+  studentInput.email = `${obj.nationalId}@eng.suez.edu.eg` || obj.email;
+  studentInput.password = obj.nationalId;
+  studentInput.englishName = obj.englishName;
+  studentInput.arabicName = obj.arabicName;
+  studentInput.nationality = obj.nationality;
+  studentInput.gender = obj.gender?.includes("ذ") ? "MALE" : "FEMALE";
+  studentInput.religion = obj.religion?.includes("مسلم")
+    ? "MUSLIM"
+    : "CHRISTIAN";
+  studentInput.birthDate = obj.birthDate ? new Date(obj.birthDate) : undefined;
+  studentInput.birthPlace = obj.birthPlace;
+  studentInput.guardianName = obj.guardianName;
+  studentInput.contactPhone = obj.contactPhone;
+  studentInput.homePhone = obj.homePhone;
+  studentInput.address = obj.address;
+  studentInput.schoolSeatId = obj.schoolSeatId;
+  studentInput.schoolMarks = obj.schoolMarks;
+  studentInput.enrollmentYear = obj.enrollmentYear
+    ? new Date(obj.enrollmentYear)
+    : undefined;
+  studentInput.PreviousQualification = obj.PreviousQualification;
+  studentInput.TotalPreviousQualification = obj.TotalPreviousQualification;
+  studentInput.InstitutePreviousQualification =
+    obj.InstitutePreviousQualification;
+  studentInput.directorate = obj.directorate;
+
+  return studentInput;
+};
+
+export default mapCsvRowToStudentCreateInput;

@@ -42,15 +42,15 @@ require("dotenv").config();
 const PEPPER = process.env.PEPPER as string;
 const passwo = 123456;
 app.get("/", (req: express.Request, res: express.Response) => {
-  const pass = bcrypt.hashSync(passwo + PEPPER, 13);
-  prisma.user.create({
-    data: {
-      email: "321@eng.suez.edu.eg",
-      password: pass,
-      role: "STUDENT",
-    },
-  });
-  res.send("Hello World!");
+  // const pass = bcrypt.hashSync(passwo + PEPPER, 13);
+  // prisma.user.create({
+  //   data: {
+  //     email: "321@eng.suez.edu.eg",
+  //     password: pass,
+  //     role: "STUDENT",
+  //   },
+  // });
+  res.status(418).send("Hello World!");
 });
 
 // app.get("/", (req: express.Request, res: express.Response) => {

@@ -15,8 +15,7 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.use("/", server);
-router.use("/", admission);
-
+router.use("/student", admission);
 router.use("/colleges", college);
 router.use("/programs", program);
 router.use("/courses", course);

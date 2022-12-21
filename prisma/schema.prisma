@@ -35,29 +35,47 @@ model Professor {
 model Student {
   id                             String                  @id @default(uuid())
   userId                         String                  @unique
-  address                        String?
+  //personal details
   arabicName                     String?
+  englishName                    String?
+  SeatId                         Int?                    @unique @default(autoincrement())
+  gender                         GENDER?
+  religion                       RELIGION?
   birthDate                      DateTime?
   birthPlace                     String?
-  contactPhone                   String?
-  englishName                    String?
-  gender                         GENDER?
-  guardianName                   String?
-  homePhone                      String?
   nationalId                     String                  @unique
   nationality                    String?
-  religion                       RELIGION?
-  collegeId                      String?
-  programId                      String?
+  maritalStatus                  MARITALSTATUS?
+  otherNationality               String?
+  // Contact details
+  address                        String?
+  contactPhone                   String?
+  homePhone                      String?
+  // Family details
+  guardianName                   String?
+  guardianAddress                String?
+  guardianNationality            String?
+  guardianPhone                  String?
+  // academic details
   InstitutePreviousQualification String?
   PreviousQualification          String?
-  SeatId                         Int?                    @unique @default(autoincrement())
   TotalPreviousQualification     String?
-  collegeCode                    String?
-  directorate                    String?
-  enrollmentYear                 DateTime?
   schoolMarks                    String?
   schoolSeatId                   String?
+  // Army details
+  recruitmentState               String?
+  armyNumber                     String?
+  recruitmentNumber              String?
+  recruitmentDate                DateTime?
+  enrollmentYear                 DateTime?
+  enrollmentYearEndDate          DateTime?
+  reserveEndDate                 DateTime?
+  // Other details
+  collegeId                      String?
+  programId                      String?
+  directorate                    String?
+  collegeCode                    String?
+  // _________________________
   college                        College?                @relation(fields: [collegeId], references: [id])
   Program                        Program?                @relation(fields: [programId], references: [id])
   user                           User                    @relation(fields: [userId], references: [id])
@@ -393,6 +411,16 @@ enum GENDER {
   FEMALE
 
   @@map("Gender")
+}
+
+enum MARITALSTATUS {
+  SINGLE
+  MARRIED
+  DIVORCED
+  SEPARATED
+  WIDOWED
+
+  @@map("MaritalStatus")
 }
 
 enum SYSTEM {

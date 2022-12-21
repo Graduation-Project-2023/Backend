@@ -38,6 +38,7 @@ const addCourseNamesToClasses = async (classes: any) => {
 
 const classesSelect = {
   select: {
+    id: true,
     englishName: true,
     arabicName: true,
     startDate: true,

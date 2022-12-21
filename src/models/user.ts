@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import prisma from "../db";
 
 export class User {
@@ -7,9 +6,9 @@ export class User {
     return data;
   };
 
-  static get = async (id: string) => {
+  static get = async (email: string) => {
     const data = await prisma.user.findUnique({
-      where: { id },
+      where: { email },
     });
     return data;
   };
@@ -23,10 +22,12 @@ export class User {
     return user;
   };
 
-  static update = async (id: string, data: Prisma.UserCreateInput) => {
+  static update = async (email: string, password: string) => {
     const user = await prisma.user.update({
-      where: { id },
-      data,
+      where: { email },
+      data: {
+        password,
+      },
     });
     return user;
   };

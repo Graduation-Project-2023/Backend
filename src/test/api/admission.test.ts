@@ -10,42 +10,42 @@ let college: any;
 let student: any;
 
 describe("test the admission routes", () => {
-    before(async () => {
-      college = await prisma.college.create({
-        data: {
-          englishName: "Faculty of Engineering",
-          arabicName: "هندسة",
-        },
-      });
+  before(async () => {
+    college = await prisma.college.create({
+      data: {
+        englishName: "Faculty of Engineering",
+        arabicName: "هندسة",
+      },
     });
-    
-    after(async () => {
-      await prisma.student.deleteMany();
-      await prisma.user.deleteMany();
-    });
+  });
 
-    it("rejects a request with no file", async () => {
-      const response = await request.post(csvApi);
-      expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal("Invalid file");
-    });
+  after(async () => {
+    await prisma.student.deleteMany();
+    await prisma.user.deleteMany();
+  });
 
-    it("rejects a request with a non-csv file", async () => {
-      const response = await request
-        .post(csvApi)
-        .attach("csv", `${__dirname}/../assets/users.txt`);
-      expect(response.status).to.equal(400);
-      expect(response.body.message).to.equal("Invalid file");
-    });
+  it("rejects a request with no file", async () => {
+    const response = await request.post(csvApi);
+    expect(response.status).to.equal(400);
+    expect(response.body.message).to.equal("Invalid file");
+  });
 
-    it("accepts a request with a csv file and correct headers", async () => {    
-      const response = await request
-        .post(`${csvApi}?collegeId=${college.id}`)
-        .attach("csv", "src/test/assets/right.csv");
-        
-        expect(response.status).to.equal(201);
-        expect(response.text).to.equal('[]');
-    });
+  it("rejects a request with a non-csv file", async () => {
+    const response = await request
+      .post(csvApi)
+      .attach("csv", `${__dirname}/../assets/users.txt`);
+    expect(response.status).to.equal(400);
+    expect(response.body.message).to.equal("Invalid file");
+  });
+
+  it("accepts a request with a csv file and correct headers", async () => {
+    const response = await request
+      .post(`${csvApi}?collegeId=${college.id}`)
+      .attach("csv", "src/test/assets/right.csv");
+
+    expect(response.status).to.equal(201);
+    expect(response.text).to.equal("[]");
+  });
 
   it("tests the create student route", async () => {
     student = await request.post("/api/student").send({
@@ -64,7 +64,7 @@ describe("test the admission routes", () => {
       address: "Hamood El Hamood street, Riyadh, Saudi Arabia",
       contactPhone: "+964 770 123 4567",
       homePhone: "0643217123",
-      collegeId: college.id
+      collegeId: college.id,
     });
     // console.log(student.body);
     expect(student.status).to.equal(201);
@@ -83,7 +83,7 @@ describe("test the admission routes", () => {
 
   it("tests the update route", async () => {
     const response = await request.put(`/api/student/${student.id}`).send({
-      englishName: "Hamooooooooooooooooooooooooooooooooooooooood"
+      englishName: "Hamooooooooooooooooooooooooooooooooooooooood",
     });
     expect(response.status).to.equal(200);
   });
@@ -92,5 +92,4 @@ describe("test the admission routes", () => {
     const response = await request.delete(`/api/student/${student.id}`);
     expect(response.status).to.equal(200);
   });
-
 });

@@ -23,11 +23,11 @@ export class admissionController extends Controller {
       const { jsonData } = req.body;
       if (!req.query.collegeId) {
         return next({
-            status: 400,
-            message: "College id is required",
-            });
-        }
-      let failed: any[] = [];
+          status: 400,
+          message: "College id is required",
+        });
+      }
+      const failed: any[] = [];
       // map csv data to student create input in parallel due to async nature of bcrypt
       const studentInputs = await Promise.all(
         jsonData.map(mapCsvRowToStudentCreateInput)

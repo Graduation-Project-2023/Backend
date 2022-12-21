@@ -46,7 +46,7 @@ describe("test classes table routes", () => {
   // get all course instances
   it("tests get all course instances", async () => {
     const res = await request.get(
-      `/api/course_instances/semesters/${academicSemesterId}/levels/${levelId}`
+      `/api/course_instances/semesters/${academicSemesterId}/programs/${programId}`
     );
     expect(res.status).to.equal(200);
     expect(res.body.length).to.equal(2);
@@ -57,15 +57,6 @@ describe("test classes table routes", () => {
       courseInstance1Id = res.body[1].id;
       courseInstance2Id = res.body[0].id;
     }
-  });
-
-  // get all course instances by program
-  it("tests get all course instances by program", async () => {
-    const res = await request.get(
-      `/api/course_instances/semesters/${academicSemesterId}/programs/${programId}`
-    );
-    expect(res.status).to.equal(200);
-    expect(res.body.length).to.equal(2);
   });
 
   // create classes table

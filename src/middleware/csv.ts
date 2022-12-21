@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import csv from "csvtojson";
 import multer from "multer";
-import path from "path";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

@@ -151,7 +151,7 @@ ________________________________
 
  ## Create users
 
- ### Upload CSV route `/api/csv_upload`
+ ### Upload CSV route `/api/students/csv_upload`
 
  #### Request
 ```
@@ -163,7 +163,7 @@ working on it
 working on it
 ```
 
-### Create user route `/api/create_student`
+### Create user route `/api/students`
 
  #### Request `POST`
 ```
@@ -199,6 +199,8 @@ working on it
 ```
 201 ok
 ```
+
+
 
 _______________________________
 

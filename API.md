@@ -151,46 +151,49 @@ ________________________________
 
  ## Create users
 
- ### Upload CSV route `/api/students/csv_upload`
+ ### Upload CSV route `/api/students/bulk?collegeId=xxxx`
 
- #### Request
+ #### Request `query param` `POST`
 ```
-working on it
+the input name must be "csv" **case sensetive
+don't forget the collegeId as a query parameter
+the only constraint is the nationalId
+uncreated students are returned in an array
 ```
 
 #### Response
 ```
-working on it
+201 on sucess with an array of failed students
+400 on failure
 ```
 
-### Create user route `/api/students`
+### Create user route `/api/student`
 
  #### Request `POST`
 ```
 {
-    "englishName": "Salem El Hamood",               
-    "arabicName": "سالم الحمود",
-    "address": "Hamood El Hamood street, Riyadh, Saudi Arabia",
-    "birthDate": "1999-01-01",
-    "birthPlace": "Riyadh",                 
-    "contactPhone": "+964 770 123 4567",
-    "gender": "MALE",
-    "guardianName": "Hamood El Hamood",
-    "homePhone": "0643217123",
-    "nationalId": "30006161588373",
-    "nationality": "Saudi",
-    "religion": "MUSLIM",
-    "collegeId": "81521f18-76e6-41fb-81a6-34e8076cd684",
-    "programId": "IDK", 
-    "InstitutePreviousQualification": "IDK",
-    "PreviousQualification": "IDK",
-    "SeatId": "181600299",
-    "TotalPreviousQualification": "IDK",
-    "collegeCode": "32",    
-    "directorate": "Ismailia",                
-    "enrollmentYear": "2023"
-    "schoolMarks": "294.5"        
-    "schoolSeatId": "743751"                  
+  "email": "raaafat@eng.suez.edu.eg",
+  "englishName": "Salem El Hamood",               
+  "arabicName": "سالم الحمود",
+  "address": "Hamood El Hamood street, Riyadh, Saudi Arabia",
+  "birthDate": "1999-01-01",
+  "birthPlace": "Riyadh",                 
+  "contactPhone": "+964 770 123 4567",
+  "gender": "MALE",
+  "guardianName": "Hamood El Hamood",
+  "homePhone": "0643217123",
+  "nationalId": "30006161588373",
+  "nationality": "Saudi",
+  "religion": "MUSLIM",
+  "collegeId": "032a81cd-ac05-438b-841e-037e92cc5fe5",
+  "InstitutePreviousQualification": "IDK",
+  "PreviousQualification": "IDK",
+  "TotalPreviousQualification": "IDK",
+  "collegeCode": "32",    
+  "directorate": "Ismailia",                
+  "enrollmentYear": "2023",
+  "schoolMarks": "294.5",     
+  "schoolSeatId": "743751"                  
 }
 ** nationalId is the only mandatory field, the rest are optional
 ```
@@ -198,9 +201,166 @@ working on it
 #### Response
 ```
 201 ok
+{
+  "id": "4a45e167-afa0-41f1-aad4-40ffea093b72",
+  "userId": "e6970756-98a7-4b73-bd8e-66917fa5654a",
+  "arabicName": "سالم الحمود",
+  "englishName": "Salem El Hamood",
+  "SeatId": 102,
+  "gender": "MALE",
+  "religion": "MUSLIM",
+  "birthDate": "1999-01-01T00:00:00.000Z",
+  "birthPlace": "Riyadh",
+  "nationalId": "30006161288373",
+  "nationality": "Saudi",
+  "maritalStatus": null,
+  "otherNationality": null,
+  "address": "Hamood El Hamood street, Riyadh, Saudi Arabia",
+  "contactPhone": "+964 770 123 4567",
+  "homePhone": "0643217123",
+  "guardianName": "Hamood El Hamood",
+  "guardianAddress": null,
+  "guardianNationality": null,
+  "guardianPhone": null,
+  "InstitutePreviousQualification": "IDK",
+  "PreviousQualification": "IDK",
+  "TotalPreviousQualification": "IDK",
+  "schoolMarks": "294.5",
+  "schoolSeatId": "743751",
+  "recruitmentState": null,
+  "armyNumber": null,
+  "recruitmentNumber": null,
+  "recruitmentDate": "1970-01-01T00:00:00.000Z",
+  "enrollmentYear": "2023-01-01T00:00:00.000Z",
+  "enrollmentYearEndDate": "1970-01-01T00:00:00.000Z",
+  "reserveEndDate": "1970-01-01T00:00:00.000Z",
+  "collegeId": "032a81cd-ac05-438b-841e-037e92cc5fe5",
+  "programId": null,
+  "directorate": "Ismailia",
+  "collegeCode": "32",
+  "enrollmentSemesterId": null
+}
 ```
 
+### Get user route `/api/student/:id`
 
+ #### Request `GET`
+```
+GET http://localhost:8080/api/student/031e323d-d4d0-414e-9551-be688970738c
+```
+
+### Get all users route `/api/student/all/:collegeId`
+
+#### Request `GET`
+
+```
+GET http://localhost:8080/api/student/all/0ca30298-090c-45f2-b765-cc9b11a67c1d
+```
+
+### Update user route `/api/student/:id`
+
+#### Request `PUT`
+
+```
+{
+  "englishName": "Hamooooooooooooooooooooooooooooooooooooooood"
+}
+```
+
+#### Response
+```
+{
+  "id": "4e8ca890-f40e-4bb2-b8d7-c9c6759083cb",
+  "userId": "5fe3dccf-f664-4284-b6e1-f37de954c7ab",
+  "arabicName": "سالم الحمود",
+  "englishName": "Hamooooooooooooooooooooooooooooooooooooooood",
+  "SeatId": 101,
+  "gender": "MALE",
+  "religion": "MUSLIM",
+  "birthDate": "1999-01-01T00:00:00.000Z",
+  "birthPlace": "Riyadh",
+  "nationalId": "30006161588373",
+  "nationality": "Saudi",
+  "maritalStatus": null,
+  "otherNationality": null,
+  "address": "Hamood El Hamood street, Riyadh, Saudi Arabia",
+  "contactPhone": "+964 770 123 4567",
+  "homePhone": "0643217123",
+  "guardianName": "Hamood El Hamood",
+  "guardianAddress": null,
+  "guardianNationality": null,
+  "guardianPhone": null,
+  "InstitutePreviousQualification": "IDK",
+  "PreviousQualification": "IDK",
+  "TotalPreviousQualification": "IDK",
+  "schoolMarks": "294.5",
+  "schoolSeatId": "743751",
+  "recruitmentState": null,
+  "armyNumber": null,
+  "recruitmentNumber": null,
+  "recruitmentDate": "1970-01-01T00:00:00.000Z",
+  "enrollmentYear": "2023-01-01T00:00:00.000Z",
+  "enrollmentYearEndDate": "1970-01-01T00:00:00.000Z",
+  "reserveEndDate": "1970-01-01T00:00:00.000Z",
+  "collegeId": "032a81cd-ac05-438b-841e-037e92cc5fe5",
+  "programId": null,
+  "directorate": "Ismailia",
+  "collegeCode": "32",
+  "enrollmentSemesterId": null
+}
+```
+
+### Delete user route `/api/student/:id`
+
+#### Request `DELETE`
+
+```
+DELETE http://localhost:8080/api/student/6521e1d0-1721-4442-a4f8-3082e87e9e24
+```
+
+#### Response
+```
+
+{
+  "id": "4e8ca890-f40e-4bb2-b8d7-c9c6759083cb",
+  "userId": "5fe3dccf-f664-4284-b6e1-f37de954c7ab",
+  "arabicName": "سالم الحمود",
+  "englishName": "Hamooooooooooooooooooooooooooooooooooooooood",
+  "SeatId": 101,
+  "gender": "MALE",
+  "religion": "MUSLIM",
+  "birthDate": "1999-01-01T00:00:00.000Z",
+  "birthPlace": "Riyadh",
+  "nationalId": "30006161588373",
+  "nationality": "Saudi",
+  "maritalStatus": null,
+  "otherNationality": null,
+  "address": "Hamood El Hamood street, Riyadh, Saudi Arabia",
+  "contactPhone": "+964 770 123 4567",
+  "homePhone": "0643217123",
+  "guardianName": "Hamood El Hamood",
+  "guardianAddress": null,
+  "guardianNationality": null,
+  "guardianPhone": null,
+  "InstitutePreviousQualification": "IDK",
+  "PreviousQualification": "IDK",
+  "TotalPreviousQualification": "IDK",
+  "schoolMarks": "294.5",
+  "schoolSeatId": "743751",
+  "recruitmentState": null,
+  "armyNumber": null,
+  "recruitmentNumber": null,
+  "recruitmentDate": "1970-01-01T00:00:00.000Z",
+  "enrollmentYear": "2023-01-01T00:00:00.000Z",
+  "enrollmentYearEndDate": "1970-01-01T00:00:00.000Z",
+  "reserveEndDate": "1970-01-01T00:00:00.000Z",
+  "collegeId": "032a81cd-ac05-438b-841e-037e92cc5fe5",
+  "programId": null,
+  "directorate": "Ismailia",
+  "collegeCode": "32",
+  "enrollmentSemesterId": null
+}
+```
 
 _______________________________
 

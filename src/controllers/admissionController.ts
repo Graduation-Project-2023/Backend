@@ -36,7 +36,7 @@ export class admissionController extends Controller {
       await Promise.all(
         studentInputs.map(async (student) => {
           student.collegeId = req.query.collegeId;
-          if (student.nationalId.length != 14 || !student.nationalId) {
+          if (!student.nationalId || student.nationalId.length != 14) {
             failed.push(student);
             return;
           }

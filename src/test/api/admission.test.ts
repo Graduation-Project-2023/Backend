@@ -51,7 +51,6 @@ describe("test the admission routes", () => {
     student = await request.post("/api/student").send({
       email: "raafat@eng.suez.edu.eg",
       password: "123456",
-      role: "STUDENT",
       englishName: "Raafat El Hamood",
       arabicName: "سالم الحمود",
       nationality: "Saudi",

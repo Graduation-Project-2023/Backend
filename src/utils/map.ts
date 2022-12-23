@@ -1,5 +1,8 @@
 import { Prisma } from "@prisma/client";
-
+// 2:35 for 10000 students 
+// 2:46 for 10000 students with full data
+// 1:15 for 5000 students with full data
+// 0:14 for 1000 students with full data
 const mapCsvRowToStudentCreateInput = async (
   obj: any
 ): Promise<Prisma.StudentCreateInput | null> => {
@@ -8,7 +11,7 @@ const mapCsvRowToStudentCreateInput = async (
   };
   studentInput.email = `${obj.nationalId}@eng.suez.edu.eg` || obj.email;
   studentInput.password = obj.nationalId;
-  studentInput.role = "STUDENT";
+  // studentInput.role = "STUDENT";
   studentInput.englishName = obj.englishName;
   studentInput.arabicName = obj.arabicName;
   studentInput.nationality = obj.nationality;

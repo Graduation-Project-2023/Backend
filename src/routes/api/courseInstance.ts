@@ -8,32 +8,27 @@ const courseInstanceController = ControllerFactory.getController(
 ) as CourseInstanceController;
 
 router.get(
-  "/semesters/:semester_id/levels/:level_id",
-  courseInstanceController.getAll
-);
-
-router.get(
   "/semesters/:semester_id/programs/:program_id",
   courseInstanceController.getAllByProgram
 );
 
 router.get(
-  "/semesters/:semester_id/levels/:level_id/:id",
+  "/semesters/:semester_id/programs/:program_id/:id",
   courseInstanceController.get
 );
 
 router.post(
-  "/semesters/:semester_id/levels/:level_id",
+  "/semesters/:semester_id/programs/:program_id",
   courseInstanceController.create
 );
 
 router.put(
-  "/semesters/:semester_id/levels/:level_id/:id",
+  "/semesters/:semester_id/programs/:program_id/:id",
   courseInstanceController.update
 );
 
 router.delete(
-  "/semesters/:semester_id/levels/:level_id/:id",
+  "/semesters/:semester_id/programs/:program_id/:id",
   courseInstanceController.delete
 );
 

@@ -5,13 +5,15 @@ import express from "express";
 const router = express.Router();
 const ac = new admissionController();
 
-router.get("/all/:collegeId", ac.getAll);
+// router.get("/all/:collegeId", ac.getAll);
 
 router.get("/:id", ac.get);
 
 router.post("/", ac.create);
 
-router.post("/bulk", uploadSingle, validateCsv, csvToJson, ac.bulk);
+// router.post("/bulk", uploadSingle, validateCsv, csvToJson, ac.bulk);
+
+router.post("/many", uploadSingle, validateCsv, csvToJson, ac.createMany);
 
 router.put("/:id", ac.update);
 

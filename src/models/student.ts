@@ -17,6 +17,13 @@ export class Student {
     return data;
   };
 
+  static createMany = async (data: Prisma.StudentCreateManyInput[]) => {
+    const students = await prisma.student.createMany({
+      data,
+    });
+    return students;
+  };
+
   static create = async (data: any) => {
     const {
       email,
@@ -34,7 +41,7 @@ export class Student {
         user: {
           create: {
             email,
-            password: await bcrypt.hash(password + process.env.PEPPER, 10),
+            password,
             role: "STUDENT",
           },
         },

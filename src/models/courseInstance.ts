@@ -17,6 +17,19 @@ const getNormalizedDataFromProgramCourse = (
   };
 };
 
+const getAllSelect = {
+  select: {
+    id: true,
+    englishName: true,
+    arabicName: true,
+    levelId: true,
+    lectureCount: true,
+    labCount: true,
+    lectureHrs: true,
+    labHrs: true,
+  },
+};
+
 export class CourseInstance {
   static get = async (id: string) => {
     const data = await prisma.courseInstance.findUnique({
@@ -28,14 +41,7 @@ export class CourseInstance {
   static getAll = async (filter: Prisma.CourseInstanceWhereInput) => {
     const data = await prisma.courseInstance.findMany({
       where: filter,
-      select: {
-        id: true,
-        englishName: true,
-        arabicName: true,
-        levelId: true,
-        lectureCount: true,
-        labCount: true,
-      },
+      ...getAllSelect,
     });
     return data;
   };

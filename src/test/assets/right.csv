@@ -1,3 +1,3 @@
-﻿StudentID,englishName,gender,religion,nationality,nationalId,birthDate,Passport,EnrollmentYear,address,HomePhone,Mobile,Previous Qualification,Institute Previous Qualification,Total Previous Qualification,Seat Number,Previous Qualification
-"181600299","Hammoud Hammoud","MALE","MUSLIM","Saudi","00120000001000","01-01-1999",,"2023","Riyadh","064567890","123456789",,,,750754,
+﻿englishName, arabicName, gender, religion, birthDate, birthPlace, guardianName, contactPhone, homePhone, address, schoolSeatId, schoolMarks, enrollmentYear, nationalId
+Hamoood Hamoood, سالم الحمود سالم الحمود, MALE, MUSLIM, 06-16-2000, Ismailia, raafat adbel aziz ayoub, 01010931887, 3237034, Abdel aziz ali ghait, 940233, 398, 2020, 9000866199934
 

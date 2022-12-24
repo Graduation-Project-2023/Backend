@@ -43,7 +43,7 @@ export class admissionController extends Controller {
           try {
             await this.model.create(student);
           } catch (err) {
-            console.error(err);
+            // console.error(err);
             next({
               status: 400,
               message: "Unique constraint/s failed",

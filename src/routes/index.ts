@@ -6,6 +6,7 @@ import server from "./api/auth";
 import classesTable from "./api/classesTable";
 import courseIntance from "./api/courseInstance";
 import admission from "./api/admission";
+import professor from "./api/professor";
 import errorHandler from "../middleware/errorHandler";
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.use("/student", admission);
 router.use("/colleges", college);
 router.use("/programs", program);
 router.use("/courses", course);
+router.use("/professor", professor);
 router.use("/classes_tables", classesTable);
 router.use("/course_instances", courseIntance);
 

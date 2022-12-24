@@ -18,14 +18,7 @@ export class Professor {
   };
 
   static create = async (data: any) => {
-    const {
-      email,
-      password,
-      collegeId,
-      birthDate,
-      recruitmentDate,
-      ...professorData
-    } = data;
+    const { email, password, collegeId, ...professorData } = data;
     const professor = await prisma.professor.create({
       data: {
         user: {
@@ -40,8 +33,6 @@ export class Professor {
             id: collegeId,
           },
         },
-        birthDate: new Date(birthDate || null),
-        recruitmentDate: new Date(recruitmentDate || null),
         ...professorData,
       },
     });

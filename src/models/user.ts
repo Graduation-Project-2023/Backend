@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../db";
 
 export class User {
@@ -20,6 +21,13 @@ export class User {
       },
     });
     return user;
+  };
+
+  static createMany = async (data: Prisma.UserCreateManyInput[]) => {
+    const users = await prisma.user.createMany({
+      data,
+    });
+    return users;
   };
 
   static update = async (email: string, password: string) => {

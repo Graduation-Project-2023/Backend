@@ -11,6 +11,7 @@ model User {
   id        String     @id @default(uuid())
   email     String     @unique
   password  String
+  nationalId String?   @unique
   role      ROLE
   student   Student?
   professor Professor?
@@ -34,7 +35,6 @@ model Professor {
 
 model Student {
   id                             String                  @id @default(uuid())
-  userId                         String                  @unique
   //personal details
   arabicName                     String?
   englishName                    String?
@@ -78,7 +78,7 @@ model Student {
   // _________________________
   college                        College?                @relation(fields: [collegeId], references: [id])
   Program                        Program?                @relation(fields: [programId], references: [id])
-  user                           User                    @relation(fields: [userId], references: [id])
+  user                           User                    @relation(fields: [nationalId], references: [nationalId])
   enrollmentSemester             AcademicSemester?       @relation(fields: [enrollmentSemesterId], references: [id], name: "enrollmentSemester")
   enrollmentSemesterId           String?
   courses                        StudentCourseInstance[]

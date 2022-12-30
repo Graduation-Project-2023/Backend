@@ -193,6 +193,11 @@ model CourseInstance {
   lectureHrs        Int?                    @default(2)
   labCount          Int?                    @default(0)
   labHrs            Int?                    @default(0)
+  sectionHrs        Int?                    @default(0)
+  hasLectureGroups   Boolean?
+  lectureGroupCount      Int?
+  labGroupCount          Int?
+  sectionGroupCount      Int?
   programCourseId           String 
   academicSemesterId         String
   professorId        String?
@@ -229,6 +234,7 @@ model Class {
   day        DAY
   startDate  DateTime?
   endDate    DateTime? 
+  group     GROUP?
   table      ClassesTable    @relation(fields: [tableId], references: [id])
   courseInstance   CourseInstance @relation(fields: [courseInstanceId], references: [id])
   professor  Professor?      @relation(fields: [professorId], references: [id])
@@ -473,4 +479,21 @@ enum CLASSTYPE {
   SECTION
 
   @@map("ClassType")
+}
+
+enum GROUP {
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+  H
+  I
+  J
+  K
+  L
+
+  @@map("Group")  
 }

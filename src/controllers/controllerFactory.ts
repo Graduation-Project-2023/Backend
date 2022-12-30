@@ -4,6 +4,7 @@ import { ProgramController } from "./programController";
 import { CollegeController } from "./collegeController";
 import { ProgramCourseController } from "./programCourseController";
 import { ProgramRelationsController } from "./programRelationsController";
+import { AdmissionController } from "./admissionController";
 import {
   Level,
   Grade,
@@ -36,6 +37,8 @@ export class ControllerFactory {
         return new ClassesTableController();
       case "courseInstance":
         return new CourseInstanceController();
+      case "admission":
+        return new AdmissionController();
       default:
         throw new Error("Invalid controller");
     }

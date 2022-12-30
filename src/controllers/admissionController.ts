@@ -10,7 +10,7 @@ import {
 } from "../utils/mapAdmissionData";
 import { AdmissionService } from "../services/admissionService";
 
-export class admissionController extends Controller {
+export class AdmissionController extends Controller {
   constructor() {
     super(AdmissionService);
   }

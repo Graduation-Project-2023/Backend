@@ -6,3 +6,5 @@ req.rest
 test.rest
 uploads/*
 data/
+erd/
+requests/

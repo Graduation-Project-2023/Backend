@@ -7,7 +7,7 @@ import {
   mapCsvRowToUserCreateInput,
   getUserInputs,
   getStudentInputs,
-} from "../utils/map";
+} from "../utils/mapAdmissionData";
 import { AdmissionService } from "../services/admissionService";
 
 export class admissionController extends Controller {

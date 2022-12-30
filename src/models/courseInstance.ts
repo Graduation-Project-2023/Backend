@@ -25,7 +25,12 @@ const getAllSelect = {
     levelId: true,
     lectureCount: true,
     labCount: true,
+    sectionGroupCount: true,
+    labGroupCount: true,
+    hasLectureGroups: true,
+    lectureGroupCount: true,
     lectureHrs: true,
+    sectionHrs: true,
     labHrs: true,
   },
 };

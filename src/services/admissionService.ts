@@ -1,6 +1,6 @@
 import { Student } from "../models/student";
 import { User } from "../models/user";
-import { getStudentInputs, getUserInputs } from "../utils/map";
+import { getStudentInputs, getUserInputs } from "../utils/mapAdmissionData";
 
 const entryFilter = (obj: any) => {
   if (!obj.nationalId || obj.nationalId.length != 14) {

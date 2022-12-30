@@ -3,6 +3,7 @@ import {
   Prisma,
   Class,
   ClassesTable as prismaClassesTable,
+  GROUP,
 } from "@prisma/client";
 import { CourseInstance } from "../models/courseInstance";
 
@@ -51,61 +52,145 @@ export const checkOverlapping = (classes: Class[]) => {
   return true;
 };
 
-const checkSingleCourseCount = (
+const checkLabAndSectionCount = (
   classes: Class[],
   courseInstance: {
     id: string;
-    lectureCount: number | null;
-    labCount: number | null;
+    sectionGroupCount: number | null;
+    labGroupCount: number | null;
   }
 ) => {
   const foundClassesCount = classes.reduce(
     (acc, curr) => {
       if (curr.courseInstanceId === courseInstance.id) {
-        if (curr.classType === "LECTURE") {
-          acc.lectureCount++;
-        } else if (curr.classType === "LAB" || curr.classType === "SECTION") {
+        if (curr.classType === "SECTION") {
+          acc.sectionCount++;
+        } else if (curr.classType === "LAB") {
           acc.labCount++;
         }
       }
       return acc;
     },
-    { lectureCount: 0, labCount: 0 }
+    { sectionCount: 0, labCount: 0 }
   );
   return (
-    foundClassesCount.lectureCount === courseInstance.lectureCount &&
-    foundClassesCount.labCount === courseInstance.labCount
+    (foundClassesCount.sectionCount === courseInstance.sectionGroupCount ||
+      foundClassesCount.sectionCount === 0) &&
+    (foundClassesCount.labCount === courseInstance.labGroupCount ||
+      foundClassesCount.labCount === 0)
   );
 };
 
-export const checkClassCount = (
+const checkLecturesCount = (
   classes: Class[],
+  courseInstance: {
+    id: string;
+    lectureCount: number | null;
+    hasLectureGroups: boolean | null;
+    lectureGroupCount: number | null;
+  }
+) => {
+  const lectures = classes.filter(
+    (c) => c.courseInstanceId === courseInstance.id && c.classType === "LECTURE"
+  );
+
+  if (lectures.length === 0) return true;
+
+  if (!courseInstance.hasLectureGroups) {
+    return (
+      lectures.length === courseInstance.lectureCount || lectures.length === 0
+    );
+  }
+
+  // get the number of lectures for each group
+  const groupCounts = lectures.reduce((acc, curr) => {
+    if (curr.group) {
+      acc[curr.group] = (acc[curr.group] || 0) + 1;
+    }
+    return acc;
+  }, {} as { [key: string]: number });
+  const groupCountValues = Object.values(groupCounts);
+  const groupCount = groupCountValues[0];
+
+  // validate that all groups have the same number of lectures
+  const groupCountValuesSet = new Set(groupCountValues);
+  if (groupCountValuesSet.size !== 1) {
+    return false;
+  }
+
+  // validate that the number of lectures is equal to the number of lectures in the course instance,
+  // and that the number of groups is equal to the number of groups in the course instance
+  return (
+    groupCountValues.length === courseInstance.lectureGroupCount &&
+    groupCount === courseInstance.lectureCount
+  );
+};
+
+// export const checkClassCount = (
+//   classes: Class[],
+//   courseInstances: {
+//     id: string;
+//     lectureCount: number | null;
+//     lectureGroupCount: number | null;
+//     hasLectureGroups: boolean;
+//     labGroupCount: number | null;
+//     sectionGroupCount: number | null;
+//   }[]
+// ) => {
+//   for (const courseInstance of courseInstances) {
+//     if (!checkLabAndSectionCount(classes, courseInstance)) {
+//       return false;
+//     }
+//   }
+//   return true;
+// };
+
+// export const validateClassesTable = (
+//   classesTable: Class[],
+//   courseInstances: {
+//     id: string;
+//     lectureCount: number | null;
+//     labCount: number | null;
+//   }[]
+// ) => {
+//   return (
+//     checkOverlapping(classesTable) &&
+//     checkClassCount(classesTable, courseInstances)
+//   );
+// };
+
+export const validateTable = (
   courseInstances: {
     id: string;
     lectureCount: number | null;
-    labCount: number | null;
-  }[]
+    lectureGroupCount: number | null;
+    hasLectureGroups: boolean | null;
+    labGroupCount: number | null;
+    sectionGroupCount: number | null;
+  }[],
+  classes: Class[]
 ) => {
   for (const courseInstance of courseInstances) {
-    if (!checkSingleCourseCount(classes, courseInstance)) {
-      return false;
+    if (!checkLabAndSectionCount(classes, courseInstance)) {
+      return {
+        valid: false,
+        type: "lab or section",
+        courseInstanceId: courseInstance.id,
+      };
+    }
+    if (!checkLecturesCount(classes, courseInstance)) {
+      return {
+        valid: false,
+        type: "lecture",
+        courseInstanceId: courseInstance.id,
+      };
     }
   }
-  return true;
-};
-
-export const validateClassesTable = (
-  classesTable: Class[],
-  courseInstances: {
-    id: string;
-    lectureCount: number | null;
-    labCount: number | null;
-  }[]
-) => {
-  return (
-    checkOverlapping(classesTable) &&
-    checkClassCount(classesTable, courseInstances)
-  );
+  return {
+    valid: true,
+    type: null,
+    courseInstanceId: null,
+  };
 };
 
 export class ClassesTableService {
@@ -119,8 +204,11 @@ export class ClassesTableService {
       classes,
       classesTable.programId
     );
-    if (!validateClassesTable(classes, courseInstances)) {
-      throw new Error("Invalid classes table");
+    const isValid = validateTable(courseInstances, classes);
+    if (!isValid.valid) {
+      throw new Error(
+        `Invalid classes table: Invalid ${isValid.type} for ${isValid.courseInstanceId}`
+      );
     }
     return await ClassesTable.create(classesTable);
   };
@@ -140,8 +228,15 @@ export class ClassesTableService {
     }
   ) => {
     const classes = classesTable.classes;
-    if (!checkOverlapping(classes)) {
-      throw new Error("Invalid classes table");
+    const courseInstances = await getCourseInstances(
+      classes,
+      classesTable.programId
+    );
+    const isValid = validateTable(courseInstances, classes);
+    if (!isValid.valid) {
+      throw new Error(
+        `Invalid classes table: Invalid ${isValid.type} for ${isValid.courseInstanceId}`
+      );
     }
     return await ClassesTable.update(id, classesTable);
   };

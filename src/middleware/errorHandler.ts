@@ -12,7 +12,10 @@ const errorHandler = (
     status = 400;
     message = err.meta;
   }
-  if (err.message.startsWith("Invalid")) {
+  if (
+    err.message.startsWith("Invalid") ||
+    err.message.startsWith("\nInvalid")
+  ) {
     status = 400;
   }
 

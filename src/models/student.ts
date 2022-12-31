@@ -2,6 +2,7 @@ import { Prisma, User } from "@prisma/client";
 import prisma from "../db";
 import { Student as StudentModel, User as UserModel } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { getCorrectDateFromDMY } from "../utils/date";
 
 export class Student {
   static getAll = async (collegeId: string) => {
@@ -53,11 +54,19 @@ export class Student {
             role: "STUDENT",
           },
         },
-        birthDate: new Date(birthDate || ""),
-        recruitmentDate: new Date(recruitmentDate || ""),
-        enrollmentYear: new Date(enrollmentYear || ""),
-        enrollmentYearEndDate: new Date(enrollmentYearEndDate || ""),
-        reserveEndDate: new Date(reserveEndDate || ""),
+        birthDate: birthDate ? getCorrectDateFromDMY(birthDate) : undefined,
+        recruitmentDate: recruitmentDate
+          ? new Date(recruitmentDate)
+          : undefined,
+        enrollmentYear: enrollmentYear
+          ? getCorrectDateFromDMY(enrollmentYear)
+          : undefined,
+        enrollmentYearEndDate: enrollmentYearEndDate
+          ? getCorrectDateFromDMY(enrollmentYearEndDate)
+          : undefined,
+        reserveEndDate: reserveEndDate
+          ? getCorrectDateFromDMY(reserveEndDate)
+          : undefined,
         ...studentData,
       },
     });

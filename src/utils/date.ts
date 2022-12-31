@@ -1,7 +1,5 @@
-// function dmy(date: String): string {
-//     if (!date) return "";
-//     let p = date.split('-');
-//   return `${p[2]}-${Number(p[1]) - 1}-${p[0]}`;
-// }
-
-// export default dmy;
+export function getCorrectDateFromDMY(date: Date): Date {
+  const dateString = date as unknown as string;
+  const [day, month, year] = dateString.split(/[-/]/);
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+}

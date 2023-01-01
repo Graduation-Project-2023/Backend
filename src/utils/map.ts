@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 
-
 export const mapCsvRowToStudentCreateInput = (
   obj: Prisma.StudentCreateManyInput & Prisma.UserCreateManyInput
 ): Prisma.StudentCreateManyInput & Prisma.UserCreateManyInput => {

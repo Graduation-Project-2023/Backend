@@ -13,6 +13,7 @@ import {
 } from "../models/programs/programRelations";
 import { ClassesTableController } from "./classesTableController";
 import { CourseInstanceController } from "./courseInstanceController";
+import { AuthController } from "./authController";
 
 export class ControllerFactory {
   static getController = (controller: string): Controller => {
@@ -33,6 +34,8 @@ export class ControllerFactory {
         return new ProgramRelationsController(new LevelAllowedHours());
       case "gpaAllowedHours":
         return new ProgramRelationsController(new GpaAllowedHours());
+      case "auth":
+        return new AuthController();
       case "classesTable":
         return new ClassesTableController();
       case "courseInstance":

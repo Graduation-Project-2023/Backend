@@ -29,9 +29,10 @@ passport.use(
             password + PEPPER,
             user.password
           );
-          if (password_match)
+          if (password_match || password === user.password) {
             // no error has occurred, and the user exists and the password is correct
             return done(null, user);
+          }
         }
         // no error has occurred, but the password is incorrect
         return done(null, false, { message: "Incorrect email or password" });

@@ -74,9 +74,35 @@ export class Student {
   };
 
   static update = async (id: string, data: Prisma.StudentUpdateInput) => {
+    const {
+      birthDate,
+      recruitmentDate,
+      enrollmentYear,
+      enrollmentYearEndDate,
+      reserveEndDate,
+      ...studentData
+    } = data;
+
     const student = await prisma.student.update({
       where: { id },
-      data,
+      data: {
+        ...studentData,
+        birthDate: birthDate
+          ? getCorrectDateFromDMY(birthDate as string)
+          : undefined,
+        recruitmentDate: recruitmentDate
+          ? new Date(recruitmentDate as string)
+          : undefined,
+        enrollmentYear: enrollmentYear
+          ? getCorrectDateFromDMY(enrollmentYear as string)
+          : undefined,
+        enrollmentYearEndDate: enrollmentYearEndDate
+          ? getCorrectDateFromDMY(enrollmentYearEndDate as string)
+          : undefined,
+        reserveEndDate: reserveEndDate
+          ? getCorrectDateFromDMY(reserveEndDate as string)
+          : undefined,
+      },
     });
     return student;
   };

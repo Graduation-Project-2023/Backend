@@ -1,6 +1,8 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import prisma from "../db";
+import { Student as StudentModel, User as UserModel } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { getCorrectDateFromDMY } from "../utils/date";
 
 export class Student {
   static getAll = async (collegeId: string) => {
@@ -24,37 +26,47 @@ export class Student {
     return students;
   };
 
-  static create = async (data: any) => {
+  static create = async (data: StudentModel & UserModel) => {
     const {
       email,
       password,
       collegeId,
+      programId,
+      enrollmentSemesterId,
       birthDate,
       recruitmentDate,
       enrollmentYear,
       enrollmentYearEndDate,
       reserveEndDate,
+      nationalId,
       ...studentData
     } = data;
     const student = await prisma.student.create({
       data: {
+        college: {
+          connect: { id: collegeId || undefined },
+        },
         user: {
           create: {
             email,
             password,
+            nationalId,
             role: "STUDENT",
           },
         },
-        college: {
-          connect: {
-            id: collegeId,
-          },
-        },
-        birthDate: new Date(birthDate || null),
-        recruitmentDate: new Date(recruitmentDate || null),
-        enrollmentYear: new Date(enrollmentYear || null),
-        enrollmentYearEndDate: new Date(enrollmentYearEndDate || null),
-        reserveEndDate: new Date(reserveEndDate || null),
+        birthDate: birthDate ? getCorrectDateFromDMY(birthDate) : undefined,
+        recruitmentDate: recruitmentDate
+          ? new Date(recruitmentDate)
+          : undefined,
+        enrollmentYear: enrollmentYear
+          ? getCorrectDateFromDMY(enrollmentYear)
+          : undefined,
+        enrollmentYearEndDate: enrollmentYearEndDate
+          ? getCorrectDateFromDMY(enrollmentYearEndDate)
+          : undefined,
+        reserveEndDate: reserveEndDate
+          ? getCorrectDateFromDMY(reserveEndDate)
+          : undefined,
         ...studentData,
       },
     });

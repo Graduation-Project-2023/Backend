@@ -18,8 +18,8 @@ describe("test classes table routes", () => {
           academicSemesterId,
           levelId: levelId,
           programId: programId,
+          labGroupCount: 0,
           lectureCount: 1,
-          labCount: 0,
           englishName: "English Name",
           arabicName: "Arabic Name",
         },
@@ -27,8 +27,8 @@ describe("test classes table routes", () => {
           programCourseId: programCourse2Id,
           academicSemesterId,
           levelId: levelId,
+          labGroupCount: 1,
           lectureCount: 0,
-          labCount: 1,
           programId: programId,
           englishName: "English Name",
           arabicName: "Arabic Name",
@@ -79,7 +79,7 @@ describe("test classes table routes", () => {
           },
           {
             courseInstanceId: courseInstance2Id,
-            classType: "SECTION",
+            classType: "LAB",
             day: "TUESDAY",
             startPeriod: 5,
             endPeriod: 6,
@@ -119,15 +119,12 @@ describe("test classes table routes", () => {
     expect(res.body.classes.length).to.equal(1);
   });
 
-  it("tests create invalid classesTable api", async () => {
+  it("tests update to an invalid classesTable", async () => {
     const res = await request
-      .post(
-        `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}`
+      .put(
+        `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${classesTableId}`
       )
       .send({
-        levelId,
-        programId,
-        academicSemesterId,
         classes: [
           {
             courseInstanceId: courseInstance1Id,
@@ -138,7 +135,7 @@ describe("test classes table routes", () => {
           },
           {
             courseInstanceId: courseInstance2Id,
-            classType: "LAB",
+            classType: "SECTION",
             day: "MONDAY",
             startPeriod: 2,
             endPeriod: 4,
@@ -146,5 +143,9 @@ describe("test classes table routes", () => {
         ],
       });
     expect(res.status).to.equal(400);
+    // expect message to start with "Invalid"
+    expect(res.body.message).to.match(
+      /^Invalid classes table: Invalid lab or section/
+    );
   });
 });

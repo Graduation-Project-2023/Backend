@@ -8,7 +8,7 @@ const admissionController = ControllerFactory.getController(
   "admission"
 ) as AdmissionController;
 
-// router.get("/all/:collegeId", ac.getAll);
+router.get("/", admissionController.getAll);
 
 router.get("/:id", admissionController.get);
 

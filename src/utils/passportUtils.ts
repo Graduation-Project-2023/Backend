@@ -55,11 +55,11 @@ declare module "express-session" {
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.session.passport?.user) {
-    return res.status(401).json({ message: "Unauthorized" });
-    //   return next({
-    //     status: 401,
-    //     message: "Unauthorized"
-    // })
+    // return res.status(401).json({ message: "Unauthorized" });
+    return next({
+      status: 401,
+      message: "Unauthorized",
+    });
   }
   const usr = await prisma.user.findUnique({
     where: { id: req.session.passport?.user },
@@ -90,11 +90,11 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
 const isStudent = async (req: Request, res: Response, next: NextFunction) => {
   console.log(req.session.passport?.user);
   if (!req.session.passport?.user) {
-    return res.status(401).json({ message: "Unauthorized" });
-    // return next({
-    //   status: 401,
-    //   message: "Unauthorized"
-    // })
+    // return res.status(401).json({ message: "Unauthorized" });
+    return next({
+      status: 401,
+      message: "Unauthorized",
+    });
   }
   const usr = await prisma.user.findUnique({
     where: { id: req.session.passport?.user },

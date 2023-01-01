@@ -1,8 +1,11 @@
 import express from "express";
-import { auth } from "../../controllers/authController";
+import { ControllerFactory } from "../../controllers/controllerFactory";
+import { AuthController } from "../../controllers/authController";
 
 const router = express.Router();
-const authController = new auth();
+const authController = ControllerFactory.getController(
+  "auth"
+) as AuthController;
 
 router.post("/login", authController.login);
 

@@ -10,7 +10,7 @@ const SECRET = process.env.JWT_SECRET as string;
 const PEPPER = process.env.PEPPER as string;
 const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
 
-export class auth extends Controller {
+export class AuthController extends Controller {
   constructor() {
     super(User);
   }

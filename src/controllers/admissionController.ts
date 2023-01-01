@@ -15,15 +15,15 @@ export class AdmissionController extends Controller {
     super(AdmissionService);
   }
 
-  // getAll = async (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     const collegeId = req.params.collegeId as string;
-  //     const data = await this.model.getAll(collegeId);
-  //     res.status(200).json(data);
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // };
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const collegeId = req.query.collegeId;
+      const data = await this.model.getAll(collegeId);
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  };
 
   // bulk = async (req: Request, res: Response, next: NextFunction) => {
   //   try {

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "../middleware/passport";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import sendEmail from "../utils/mail";
 import bcrypt from "bcrypt";
 import { User } from "../models/user";
 import { Controller } from "./controller";
@@ -15,46 +14,29 @@ export class AuthController extends Controller {
     super(User);
   }
 
-  login = async (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return next({
-          status: 401,
-          message: info.message,
-        });
-      }
-      req.logIn(user, (err) => {
+  login = (portal: string) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      passport.authenticate("local", (err, user, info) => {
         if (err) {
+          return next(err);
+        }
+        if (!user || user.role !== portal) {
           return next({
-            status: 400,
-            message: err.message,
+            status: 401,
+            message: "Invalid credentials",
           });
         }
-        return res.sendStatus(200);
-      });
-    })(req, res, next);
-    // console.log(req.session);
-    // console.log(req.sessionID);
-    // const user = await User.read({ email: req.body.email });
-    // console.log(req.user);
-    // const session = await Session.read({ sid: req.sessionID });
-    // console.log(session);
-    // // console.log(req.user.role);
-    // const token = jwt.sign(
-    //   {
-    //     userId: req.session.passport?.user,
-    //     role: req.user,
-    //     sid: req.sessionID,
-    //     expires: req.session.cookie.expires
-    //   },
-    //   "dfdfd", { expiresIn: "30d" }
-    //   );
-    // console.log(req.session.cookie.expires);
-    // res.status(200).json({ token });
-    // return res.sendStatus(200);
+        req.logIn(user, (err) => {
+          if (err) {
+            return next({
+              status: 400,
+              message: err.message,
+            });
+          }
+          return res.sendStatus(200);
+        });
+      })(req, res, next);
+    };
   };
 
   forgetPassword = async (req: Request, res: Response, next: NextFunction) => {

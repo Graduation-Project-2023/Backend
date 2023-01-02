@@ -7,12 +7,14 @@ const authController = ControllerFactory.getController(
   "auth"
 ) as AuthController;
 
-router.post("/login", authController.login);
+router.post("/admin_login", authController.login("ADMIN"));
+
+router.post("/student_login", authController.login("STUDENT"));
 
 router.post("/forgot_password", authController.forgetPassword);
 
 router.post("/reset_password/:token", authController.resetPassword);
 
-router.get("/logout", authController.logout);
+router.post("/logout", authController.logout);
 
 export default router;

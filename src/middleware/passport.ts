@@ -64,4 +64,18 @@ passport.deserializeUser(async (id: string, done) => {
   }
 });
 
+passport.authorize = (role: string) => {
+  return (req: any, res: any, next: any) => {
+    if (req.isAuthenticated()) {
+      if (req.user?.role.toLowerCase() === role.toLowerCase()) {
+        return next();
+      } else {
+        return next({ status: 401, message: "Unauthorized" });
+      }
+    } else {
+      return next({ status: 401, message: "Unauthorized" });
+    }
+  };
+};
+
 export default passport;

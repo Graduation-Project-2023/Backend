@@ -6,7 +6,7 @@ import session from "express-session";
 import router from "./routes/index";
 import prisma from "./db";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { isAdmin, isAuthed, isStudent } from "./utils/passportUtils";
+import errorHandler from "./middleware/errorHandler";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -34,38 +34,18 @@ app.use(
 app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
-// delete
 
-import bcrypt from "bcrypt";
-// import isAuthed from "./utils/passportUtils";
-require("dotenv").config();
-const PEPPER = process.env.PEPPER as string;
-const passwo = 123456;
-app.get("/", (req: express.Request, res: express.Response) => {
-  // const pass = bcrypt.hashSync(passwo + PEPPER, 13);
-  // prisma.user.create({
-  //   data: {
-  //     email: "321@eng.suez.edu.eg",
-  //     password: pass,
-  //     role: "STUDENT",
-  //   },
-  // });
-  res.status(418).send("Hello World!");
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
-// app.get("/", (req: express.Request, res: express.Response) => {
-//   res.send("Hello World!");
-// });
+app.get("/admin-portal", (req, res) => {
+  res.send("Admin Portal");
+});
 
 app.use("/api", router);
 
-app.get(
-  "/protected",
-  isAdmin,
-  (req: express.Request, res: express.Response, next) => {
-    res.send("Hello World!");
-  }
-);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

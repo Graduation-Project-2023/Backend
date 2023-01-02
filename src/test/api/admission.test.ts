@@ -3,25 +3,19 @@ import app from "../../server";
 import { expect } from "chai";
 import prisma from "../../db";
 
-const request = supertest(app);
-const csvApi = "/api/student/many";
-
 let college: any;
 let student: any;
+let csvApi: string;
 
 describe("test the admission routes", () => {
   before(async () => {
+    csvApi = `${url}/admin/student/many`;
     college = await prisma.college.create({
       data: {
         englishName: "Faculty of Engineering",
         arabicName: "هندسة",
       },
     });
-  });
-
-  after(async () => {
-    await prisma.student.deleteMany();
-    await prisma.user.deleteMany();
   });
 
   it("rejects a request with no file", async () => {

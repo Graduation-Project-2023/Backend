@@ -5,6 +5,10 @@ import { Course } from "../models/course";
 import { Program } from "../models/programs/program";
 import { ProgramCourse } from "../models/programs/programCourse";
 import { Level } from "../models/programs/programRelations";
+import superagent from "superagent";
+import supertest from "supertest";
+import server from "../server";
+import { User } from "../models/user";
 
 // declare a global variable for all tests
 declare global {
@@ -16,10 +20,27 @@ declare global {
   var programCourse1Id: string;
   var programCourse2Id: string;
   var academicSemesterId: string;
+  var url: string;
+  var request: superagent.SuperAgent<superagent.SuperAgentRequest>;
 }
 
 // run before any test
 before(async () => {
+  global.url = "/api";
+  const admin = await User.create({
+    email: "SalemEladmin@admin.com",
+    password: "123456",
+    role: "ADMIN",
+  });
+
+  // create a global request object with port 3000
+  global.request = supertest.agent(server);
+
+  await request.post(`/api/auth/admin_login`).send({
+    email: admin.email,
+    password: "123456",
+  });
+
   const college = await College.create({
     englishName: "Arts",
     arabicName: "الفنون",
@@ -104,6 +125,8 @@ before(async () => {
 });
 
 after(async () => {
+  await prisma.student.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.class.deleteMany();
   await prisma.classesTable.deleteMany();
   await prisma.courseInstance.deleteMany();

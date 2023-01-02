@@ -2,15 +2,13 @@ import supertest from "supertest";
 import server from "../../server";
 import { expect } from "chai";
 
-const request = supertest(server);
-
 describe("test programs routes", () => {
   let program1Id: string;
   let programCourse3: string;
   let course3Id: string;
 
   before(async () => {
-    const res = await request.post("/api/courses/").send({
+    const res = await request.post(`${url}/admin/courses/`).send({
       englishName: "Advanced English",
       arabicName: "اللغة الانجليزية المتقدمة",
       id: "ENG103",
@@ -20,7 +18,7 @@ describe("test programs routes", () => {
   });
 
   it("tests create program route", async () => {
-    const res = await request.post("/api/programs/").send({
+    const res = await request.post(`${url}/admin/programs`).send({
       englishName: "ِِArchitecture Engineering",
       arabicName: "الهندسة المعمارية",
       collegeId: `${collegeId}`,
@@ -44,31 +42,35 @@ describe("test programs routes", () => {
   });
 
   it("tests get all programs route", async () => {
-    const res = await request.get(`/api/programs?college_id=${collegeId}`);
+    const res = await request.get(
+      `${url}/admin/programs?college_id=${collegeId}`
+    );
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
   });
 
   it("tests create level", async () => {
-    const res = await request.post(`/api/programs/${program1Id}/levels`).send({
-      programId: `${program1Id}`,
-      englishName: "Fifth level",
-      arabicName: "المستوى الخامس ",
-      level: 5,
-      qualifyingHrs: 156,
-    });
+    const res = await request
+      .post(`${url}/admin/programs/${program1Id}/levels`)
+      .send({
+        programId: `${program1Id}`,
+        englishName: "Fifth level",
+        arabicName: "المستوى الخامس ",
+        level: 5,
+        qualifyingHrs: 156,
+      });
     expect(res.status).to.equal(201);
   });
 
   it("tests get all levels", async () => {
-    const res = await request.get(`/api/programs/${program1Id}/levels`);
+    const res = await request.get(`${url}/admin/programs/${program1Id}/levels`);
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
   });
 
   it("tests create programCourse", async () => {
     const res2 = await request
-      .post(`/api/programs/${program1Id}/program_courses`)
+      .post(`${url}/admin/programs/${program1Id}/program_courses`)
       .send({
         programId: `${program1Id}`,
         code: `${course3Id}`,
@@ -83,7 +85,7 @@ describe("test programs routes", () => {
 
   it("tests get all program courses", async () => {
     const res = await request.get(
-      `/api/programs/${program1Id}/program_courses`
+      `${url}/admin/programs/${program1Id}/program_courses`
     );
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
@@ -91,7 +93,7 @@ describe("test programs routes", () => {
 
   it("tests get a program course with prerequisites", async () => {
     const res = await request.get(
-      `/api/programs/${program1Id}/program_courses/${programCourse3}`
+      `${url}/admin/programs/${program1Id}/program_courses/${programCourse3}`
     );
     expect(res.status).to.equal(200);
     expect(res.body.prerequisites.length).to.equal(1);

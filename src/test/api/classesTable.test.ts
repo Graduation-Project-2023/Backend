@@ -1,9 +1,5 @@
-import supertest from "supertest";
-import server from "../../server";
 import { expect } from "chai";
 import prisma from "../../db";
-
-const request = supertest(server);
 
 describe("test classes table routes", () => {
   let courseInstance1Id: string;
@@ -46,7 +42,7 @@ describe("test classes table routes", () => {
   // get all course instances
   it("tests get all course instances", async () => {
     const res = await request.get(
-      `/api/course_instances/semesters/${academicSemesterId}/programs/${programId}`
+      `${url}/admin/course_instances/semesters/${academicSemesterId}/programs/${programId}`
     );
     expect(res.status).to.equal(200);
     expect(res.body.length).to.equal(2);
@@ -63,7 +59,7 @@ describe("test classes table routes", () => {
   it("tests create valid classesTable api", async () => {
     const res = await request
       .post(
-        `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}`
+        `${url}/admin/classes_tables/semesters/${academicSemesterId}/programs/${programId}`
       )
       .send({
         levelId,
@@ -93,7 +89,7 @@ describe("test classes table routes", () => {
 
   it("tests get classes table api", async () => {
     const res = await request.get(
-      `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${levelId}`
+      `${url}/admin/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${levelId}`
     );
     expect(res.status).to.equal(200);
     expect(res.body.classes.length).to.equal(2);
@@ -102,7 +98,7 @@ describe("test classes table routes", () => {
   it("tests update classes table api", async () => {
     const res = await request
       .put(
-        `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${classesTableId}`
+        `${url}/admin/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${classesTableId}`
       )
       .send({
         classes: [
@@ -122,7 +118,7 @@ describe("test classes table routes", () => {
   it("tests update to an invalid classesTable", async () => {
     const res = await request
       .put(
-        `/api/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${classesTableId}`
+        `${url}/admin/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${classesTableId}`
       )
       .send({
         classes: [

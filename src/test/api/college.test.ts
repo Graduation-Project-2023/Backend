@@ -1,13 +1,9 @@
-import supertest from "supertest";
-import server from "../../server";
 import { expect } from "chai";
-
-const request = supertest(server);
 
 describe("test colleges routes", () => {
   let college1Id: string;
   it("tests create college route", async () => {
-    const res = await request.post("/api/colleges/").send({
+    const res = await request.post(`${url}/admin/colleges/`).send({
       englishName: "Arts",
       arabicName: "الفنون",
     });
@@ -16,19 +12,19 @@ describe("test colleges routes", () => {
   });
 
   it("tests get all colleges route", async () => {
-    const res = await request.get("/api/colleges");
+    const res = await request.get(`${url}/admin/colleges`);
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
   });
 
   it("tests get college route", async () => {
-    const res = await request.get(`/api/colleges/${college1Id}`);
+    const res = await request.get(`${url}/admin/colleges/${college1Id}`);
     expect(res.status).to.equal(200);
     expect(res.body.id).to.equal(college1Id);
   });
 
   it("tests update college route", async () => {
-    const res = await request.put(`/api/colleges/${college1Id}`).send({
+    const res = await request.put(`${url}/admin/colleges/${college1Id}`).send({
       englishName: "Arts",
       arabicName: "الفنون",
     });
@@ -37,7 +33,7 @@ describe("test colleges routes", () => {
   });
 
   it("tests delete college route", async () => {
-    const res = await request.delete(`/api/colleges/${college1Id}`);
+    const res = await request.delete(`${url}/admin/colleges/${college1Id}`);
     expect(res.status).to.equal(200);
   });
 });

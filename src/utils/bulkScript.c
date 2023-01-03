@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 int main(void){
 int i;
 char* englishname = "Mohamed raafat abdel aziz";

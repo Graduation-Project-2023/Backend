@@ -31,7 +31,14 @@ app.use(
   })
 );
 
-app.use(cors());
+
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  // exposedHeaders: ["set-cookie"],
+};
+
+app.use(cors(corsOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 

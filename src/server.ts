@@ -14,6 +14,8 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
+app.set("trust proxy", 1);
+
 // mandatory for passport in order to work
 app.use(
   session({
@@ -22,8 +24,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      sameSite: "none",
+      httpOnly: true,
       secure: true,
+      sameSite: "none",
     },
     store: new PrismaSessionStore(prisma, {
       checkPeriod: 2 * 60 * 1000, //ms

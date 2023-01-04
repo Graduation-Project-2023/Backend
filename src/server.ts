@@ -24,9 +24,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      httpOnly: true,
-      secure: true,
       sameSite: "none",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      httpOnly: process.env.NODE_ENV === "production" ? true : false,
     },
     store: new PrismaSessionStore(prisma, {
       checkPeriod: 2 * 60 * 1000, //ms

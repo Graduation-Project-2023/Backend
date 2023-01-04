@@ -33,7 +33,10 @@ export class AuthController extends Controller {
               message: err.message,
             });
           }
-          return res.sendStatus(200);
+          return res.status(200).json({
+            email: user.email,
+            role: user.role,
+          });
         });
       })(req, res, next);
     };

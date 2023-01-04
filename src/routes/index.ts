@@ -11,7 +11,7 @@ router.get("/", (req: Request, res: Response) => {
 
 router.use("/auth", auth);
 
-// router.use("/admin", passport.authorize("admin"), admin);
-router.use("/admin", admin);
+router.use("/admin", passport.authorize("admin"), admin);
+// router.use("/admin", admin);
 
 export default router;

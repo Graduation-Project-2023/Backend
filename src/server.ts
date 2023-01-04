@@ -22,6 +22,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      // set the sameSite to none
+      sameSite: "none",
     },
     store: new PrismaSessionStore(prisma, {
       checkPeriod: 2 * 60 * 1000, //ms
@@ -30,7 +32,6 @@ app.use(
     }),
   })
 );
-
 
 const corsOptions = {
   origin: true,

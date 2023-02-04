@@ -29,6 +29,8 @@ model Professor {
   college     College          @relation(fields: [collegeId], references: [id])
   courses     CourseInstance[]
   classes    Class[]
+  departmentId String?
+  department Department? @relation(fields: [departmentId], references: [id])
 
   @@map("professors")
 }
@@ -83,6 +85,9 @@ model Student {
   enrollmentSemesterId           String?
   courses                        StudentCourseInstance[]
   studentTables                  StudentTable[]
+  // _________________________
+  departmentId                   String?
+  department                     Department?             @relation(fields: [departmentId], references: [id])
 
   @@map("students")
 }
@@ -95,8 +100,23 @@ model College {
   programs    Program[]
   students    Student[]
   professors  Professor[]
+  departments Department[]
 
   @@map("colleges")
+}
+
+model Department {
+  id         String      @id @default(uuid())
+  englishName String
+  arabicName  String
+  collegeId   String
+  system      SYSTEM
+  college     College     @relation(fields: [collegeId], references: [id])
+  programs    Program[]
+  professors  Professor[]
+  students    Student[]
+
+  @@map("departments")
 }
 
 model Course {
@@ -314,6 +334,8 @@ model Program {
   hasSummerSemester      Boolean?
   system                 SYSTEM
   maxGrade               Int?
+  departmentId           String?
+  department             Department?         @relation(fields: [departmentId], references: [id])
   college                College             @relation(fields: [collegeId], references: [id])
   prerequisiteProgram    Program?            @relation("prerequisites", fields: [prerequisiteProgramId], references: [id])
   gpaAllowedHrs          GpaAllowedHours[]

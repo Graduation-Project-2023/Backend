@@ -16,6 +16,8 @@ declare global {
   var course1Id: string;
   var course2Id: string;
   var programId: string;
+  var programId1: string;
+  var programId2: string;
   var levelId: string;
   var programCourse1Id: string;
   var programCourse2Id: string;
@@ -82,10 +84,58 @@ before(async () => {
     failureGrade: 50,
     degree: "BACHELOR",
     hasSummerSemester: true,
-    system: "SCHOOLYEAR",
+    system: "CREDIT",
     maxGrade: 100,
   });
   global.programId = program.id;
+
+  const program1 = await Program.create({
+    englishName: "Preparatory",
+    arabicName: "مستوى اول",
+    collegeId,
+    programCode: "BSX01",
+    creditHours: 120,
+    mandatoryHours: 60,
+    optionalHours: 60,
+    projectQualifyingHours: 0,
+    periodLength: 1,
+    feesType: "CREDITHOURS",
+    summerFeesType: "CREDITHOURS",
+    allowedHrs: "SEMESTER",
+    prerequisiteProgramId: null,
+    gradeLowering: 55,
+    attemptsToLowerGrade: 1,
+    failureGrade: 50,
+    degree: "BACHELOR",
+    hasSummerSemester: true,
+    system: "CREDIT",
+    maxGrade: 100,
+  });
+  global.programId1 = program1.id;
+
+  const program2 = await Program.create({
+    englishName: "Mechanical Power Engineering",
+    arabicName: "هندسة ميكانيكا القوى",
+    collegeId,
+    programCode: "BSX02",
+    creditHours: 120,
+    mandatoryHours: 60,
+    optionalHours: 60,
+    projectQualifyingHours: 0,
+    periodLength: 1,
+    feesType: "CREDITHOURS",
+    summerFeesType: "CREDITHOURS",
+    allowedHrs: "SEMESTER",
+    prerequisiteProgramId: programId1,
+    gradeLowering: 55,
+    attemptsToLowerGrade: 1,
+    failureGrade: 50,
+    degree: "BACHELOR",
+    hasSummerSemester: true,
+    system: "CREDIT",
+    maxGrade: 100,
+  });
+  global.programId2 = program2.id;
 
   const level = await new Level().create({
     englishName: "Level 1",
@@ -136,6 +186,7 @@ after(async () => {
   await prisma.gpaAllowedHours.deleteMany();
   await prisma.level.deleteMany();
   await prisma.program.deleteMany();
+  await prisma.department.deleteMany();
   await prisma.college.deleteMany();
   await prisma.academicSemester.deleteMany();
   await prisma.$disconnect();

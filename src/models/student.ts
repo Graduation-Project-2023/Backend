@@ -39,6 +39,7 @@ export class Student {
       enrollmentYearEndDate,
       reserveEndDate,
       nationalId,
+      departmentId,
       ...studentData
     } = data;
     const student = await prisma.student.create({

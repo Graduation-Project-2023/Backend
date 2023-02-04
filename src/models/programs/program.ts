@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../../db";
 
 export class Program {
@@ -8,11 +9,9 @@ export class Program {
     return data;
   };
 
-  static getAll = async (collegeId: string) => {
+  static getAll = async (filter: Prisma.ProgramWhereInput) => {
     const data = await prisma.program.findMany({
-      where: {
-        collegeId,
-      },
+      where: filter,
       select: {
         id: true,
         englishName: true,
@@ -26,6 +25,14 @@ export class Program {
             englishName: true,
             arabicName: true,
             level: true,
+          },
+        },
+        prerequisiteProgram: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            programCode: true,
           },
         },
       },

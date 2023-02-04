@@ -14,6 +14,7 @@ import {
 import { ClassesTableController } from "./classesTableController";
 import { CourseInstanceController } from "./courseInstanceController";
 import { AuthController } from "./authController";
+import { DepartmentController } from "./departmentController";
 
 export class ControllerFactory {
   static getController = (controller: string): Controller => {
@@ -42,6 +43,8 @@ export class ControllerFactory {
         return new CourseInstanceController();
       case "admission":
         return new AdmissionController();
+      case "department":
+        return new DepartmentController();
       default:
         throw new Error("Invalid controller");
     }

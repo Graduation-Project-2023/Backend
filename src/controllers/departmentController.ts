@@ -1,18 +1,16 @@
 import { Controller } from "./controller";
 import { Request, Response, NextFunction } from "express";
-import { Program } from "../models/programs/program";
+import { DepartmentService } from "../services/department";
 
-export class ProgramController extends Controller {
+export class DepartmentController extends Controller {
   constructor() {
-    super(Program);
+    super(DepartmentService);
   }
 
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const collegeId = req.query.college_id as string;
-      const data = await this.model.getAll({
-        collegeId,
-      });
+      const data = await this.model.getAll(collegeId);
       res.status(200).json(data);
     } catch (error) {
       next(error);

@@ -11,4 +11,8 @@ router.post("/", departmentController.create);
 
 router.get("/", departmentController.getAll);
 
+router.put("/:id", departmentController.update);
+
+router.delete("/:id", departmentController.delete);
+
 export default router;

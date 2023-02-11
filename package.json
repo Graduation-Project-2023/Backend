@@ -13,6 +13,7 @@
     "mocha:api": "mocha src/test/api/*.test.ts",
     "mocha:unit": "mocha --require  ts-node/register --no-config --timeout 20000000000 src/test/unit_tests/*.test.ts",
     "migrate": "npx prisma migrate dev",
+    "migrate:deploy": "npx prisma migrate deploy",
     "migrate:test": "dotenv -e .env.test npx prisma migrate dev",
     "test": "dotenv -e .env.test npm run mocha",
     "test:unit": "dotenv -e .env.test npm run mocha:unit",

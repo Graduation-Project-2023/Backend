@@ -18,7 +18,7 @@ jobs:
           script: |
             cd server
             git pull origin publish
-            npm run migrate
+            npm run migrate:deploy
             npm run migrate:test
             npm install
             npm run test:api

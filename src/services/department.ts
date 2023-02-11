@@ -20,6 +20,10 @@ const validatePrograms = (
   department: Prisma.Without<prismaDepartment, "collegeId">
 ) => {
   const programIds = programs.map((program) => program.id);
+  // validate only one program has no prerequisite
+  if (programs.filter((program) => !program.prerequisiteProgram).length !== 1) {
+    return false;
+  }
   for (const program of programs) {
     // validate system of programs and department
     if (program.system !== department.system) {
@@ -59,5 +63,25 @@ export class DepartmentService {
   static async get(id: string) {
     const data = await Department.get(id);
     return data;
+  }
+
+  static async update(
+    id: string,
+    data: Prisma.Without<prismaDepartment, "id"> & {
+      programs: string[];
+    }
+  ) {
+    const { programs, ...rest } = data;
+    const programsData = await getPrograms(programs);
+    if (programs && !validatePrograms(programsData, rest)) {
+      throw new Error("Invalid programs");
+    }
+    const department = await Department.update(id, data);
+    return department;
+  }
+
+  static async delete(id: string) {
+    const department = await Department.delete(id);
+    return department;
   }
 }

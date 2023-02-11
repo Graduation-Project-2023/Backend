@@ -39,10 +39,24 @@ export class Department {
     return department;
   };
 
-  static update = async (id: string, data: Prisma.DepartmentUpdateInput) => {
+  static update = async (id: string, data: any) => {
+    const { programs, ...rest } = data;
+    if (programs) {
+      await prisma.department.update({
+        where: { id },
+        data: {
+          programs: {
+            set: [],
+          },
+        },
+      });
+    }
     const department = await prisma.department.update({
       where: { id },
-      data,
+      data: {
+        ...rest,
+        programs: connectManyPrograms(programs),
+      },
     });
     return department;
   };

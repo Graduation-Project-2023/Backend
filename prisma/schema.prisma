@@ -86,8 +86,8 @@ model Student {
   courses                        StudentCourseInstance[]
   studentTables                  StudentTable[]
   // _________________________
-  departmentId                   String?
-  department                     Department?             @relation(fields: [departmentId], references: [id])
+  departmentCode                 String?
+  department                     Department?             @relation(fields: [departmentCode], references: [code])
 
   @@map("students")
 }
@@ -107,6 +107,7 @@ model College {
 
 model Department {
   id         String      @id @default(uuid())
+  code       String?      @unique
   englishName String
   arabicName  String
   collegeId   String

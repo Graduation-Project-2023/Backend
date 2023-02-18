@@ -4,6 +4,7 @@ import { College } from "../models/college";
 import { Course } from "../models/course";
 import { Program } from "../models/programs/program";
 import { ProgramCourse } from "../models/programs/programCourse";
+import { Department } from "../models/department";
 import { Level } from "../models/programs/programRelations";
 import superagent from "superagent";
 import supertest from "supertest";
@@ -24,6 +25,7 @@ declare global {
   var academicSemesterId: string;
   var url: string;
   var request: superagent.SuperAgent<superagent.SuperAgentRequest>;
+  var departmentCode: string;
 }
 
 // run before any test
@@ -166,6 +168,14 @@ before(async () => {
     levelId,
   });
   global.programCourse2Id = programCourse2.id;
+
+  const department = await Department.create({
+    englishName: "Computer Science",
+    arabicName: "علوم الحاسب",
+    code: "CS",
+    collegeId,
+    system: "CREDIT",
+  });
 
   const academicSemester = await AcademicSemester.create({
     academicYear: "2022/2023",

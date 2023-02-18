@@ -6,6 +6,7 @@ describe("test departments routes", () => {
     const res = await request.post(`${url}/admin/departments`).send({
       englishName: "Mechanical Engineering",
       arabicName: "هندسة الميكانيكا",
+      code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
       programs: [programId1, programId2],
@@ -19,6 +20,7 @@ describe("test departments routes", () => {
     const res = await request.post(`${url}/admin/departments`).send({
       englishName: "Mechanical Engineering",
       arabicName: "هندسة الميكانيكا",
+      code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
       programs: [programId, programId2],
@@ -30,6 +32,7 @@ describe("test departments routes", () => {
     const res = await request.post(`${url}/admin/departments`).send({
       englishName: "Mechanical Engineering",
       arabicName: "هندسة الميكانيكا",
+      code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
     });

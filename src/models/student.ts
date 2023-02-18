@@ -39,7 +39,7 @@ export class Student {
       enrollmentYearEndDate,
       reserveEndDate,
       nationalId,
-      departmentId,
+      departmentCode,
       ...studentData
     } = data;
     const student = await prisma.student.create({
@@ -68,6 +68,9 @@ export class Student {
         reserveEndDate: reserveEndDate
           ? getCorrectDateFromDMY(reserveEndDate)
           : undefined,
+        department: {
+          connect: { code: departmentCode || undefined },
+        },
         ...studentData,
       },
     });

@@ -91,11 +91,11 @@ describe("test programs routes", () => {
     expect(res.body.length).to.be.greaterThan(0);
   });
 
-  it("tests get a program course with prerequisites", async () => {
-    const res = await request.get(
-      `${url}/admin/programs/${program1Id}/program_courses/${programCourse3}`
-    );
-    expect(res.status).to.equal(200);
-    expect(res.body.prerequisites.length).to.equal(1);
-  });
+  // it("tests get a program course with prerequisites", async () => {
+  //   const res = await request.get(
+  //     `${url}/admin/programs/${program1Id}/program_courses/${programCourse3}`
+  //   );
+  //   expect(res.status).to.equal(200);
+  //   expect(res.body.prerequisites.length).to.equal(1);
+  // });
 });

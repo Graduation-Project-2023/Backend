@@ -8,11 +8,11 @@ import {
   getUserInputs,
   getStudentInputs,
 } from "../utils/mapAdmissionData";
-import { AdmissionService } from "../services/admissionService";
+import { StudentService } from "../services/studentService";
 
 export class AdmissionController extends Controller {
   constructor() {
-    super(AdmissionService);
+    super(StudentService);
   }
 
   getAll = async (req: Request, res: Response, next: NextFunction) => {

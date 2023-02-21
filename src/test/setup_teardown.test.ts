@@ -26,6 +26,7 @@ declare global {
   var url: string;
   var request: superagent.SuperAgent<superagent.SuperAgentRequest>;
   var departmentCode: string;
+  var departmentId: string;
 }
 
 // run before any test
@@ -170,12 +171,14 @@ before(async () => {
   global.programCourse2Id = programCourse2.id;
 
   const department = await Department.create({
-    englishName: "Computer Science",
-    arabicName: "علوم الحاسب",
+    englishName: "Mechanical Engineering",
+    arabicName: "هندسة الميكانيكا",
     code: "CS",
     collegeId,
     system: "CREDIT",
+    programs: [programId1, programId2],
   });
+  global.departmentId = department.id;
 
   const academicSemester = await AcademicSemester.create({
     academicYear: "2022/2023",

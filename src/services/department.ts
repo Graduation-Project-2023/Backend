@@ -84,4 +84,17 @@ export class DepartmentService {
     const department = await Department.delete(id);
     return department;
   }
+
+  static async getDepartmentNextProgram(
+    departmentId: string,
+    programId: string
+  ) {
+    const nextProgram = await Program.getNextProgram(departmentId, programId);
+    return nextProgram;
+  }
+
+  static async getDepartmentFirstProgram(departmentId: string) {
+    const firstProgram = await Program.getFirstProgram(departmentId);
+    return firstProgram;
+  }
 }

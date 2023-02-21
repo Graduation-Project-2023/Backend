@@ -13,6 +13,33 @@ export class Department {
   static get = async (id: string) => {
     const data = await prisma.department.findUnique({
       where: { id },
+      select: {
+        id: true,
+        code: true,
+        englishName: true,
+        arabicName: true,
+        system: true,
+        programs: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return data;
+  };
+
+  static getByCode = async (code: string) => {
+    const data = await prisma.department.findUnique({
+      where: { code },
+      select: {
+        id: true,
+        programs: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
     return data;
   };

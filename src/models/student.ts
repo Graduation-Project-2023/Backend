@@ -19,6 +19,25 @@ export class Student {
     return data;
   };
 
+  static getStudentProgram = async (id: string) => {
+    const data = await prisma.student.findUnique({
+      where: { id },
+      select: {
+        Program: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            programCode: true,
+            hrsToPass: true,
+            system: true,
+          },
+        },
+      },
+    });
+    return data?.Program;
+  };
+
   static createMany = async (data: Prisma.StudentCreateManyInput[]) => {
     const students = await prisma.student.createMany({
       data,

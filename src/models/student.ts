@@ -3,6 +3,7 @@ import prisma from "../db";
 import { Student as StudentModel, User as UserModel } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { getCorrectDateFromDMY } from "../utils/date";
+import { AnyARecord } from "dns";
 
 export class Student {
   static getAll = async (collegeId: string) => {
@@ -19,6 +20,35 @@ export class Student {
     return data;
   };
 
+  static getStudentWithDepartmentAndProgram = async (
+    id: string
+  ): Promise<any> => {
+    const data = await prisma.student.findUnique({
+      where: { id },
+      include: {
+        Program: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            programCode: true,
+            hrsToPass: true,
+            system: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            system: true,
+          },
+        },
+      },
+    });
+    return data;
+  };
+
   static createMany = async (data: Prisma.StudentCreateManyInput[]) => {
     const students = await prisma.student.createMany({
       data,
@@ -26,7 +56,7 @@ export class Student {
     return students;
   };
 
-  static create = async (data: StudentModel & UserModel) => {
+  static create = async (data: any) => {
     const {
       email,
       password,
@@ -39,7 +69,7 @@ export class Student {
       enrollmentYearEndDate,
       reserveEndDate,
       nationalId,
-      departmentId,
+      departmentCode,
       ...studentData
     } = data;
     const student = await prisma.student.create({
@@ -68,6 +98,9 @@ export class Student {
         reserveEndDate: reserveEndDate
           ? getCorrectDateFromDMY(reserveEndDate)
           : undefined,
+        department: {
+          connect: { code: departmentCode || undefined },
+        },
         ...studentData,
       },
     });

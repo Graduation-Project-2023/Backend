@@ -1,16 +1,18 @@
 import { expect } from "chai";
 
 describe("test departments routes", () => {
-  let departmentId: string;
+  let depratmentId1: string;
+
   it("tests create department route", async () => {
     const res = await request.post(`${url}/admin/departments`).send({
       englishName: "Mechanical Engineering",
       arabicName: "هندسة الميكانيكا",
+      code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
       programs: [programId1, programId2],
     });
-    departmentId = res.body.id;
+    depratmentId1 = res.body.id;
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property("id");
   });
@@ -19,6 +21,7 @@ describe("test departments routes", () => {
     const res = await request.post(`${url}/admin/departments`).send({
       englishName: "Mechanical Engineering",
       arabicName: "هندسة الميكانيكا",
+      code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
       programs: [programId, programId2],
@@ -30,6 +33,7 @@ describe("test departments routes", () => {
     const res = await request.post(`${url}/admin/departments`).send({
       englishName: "Mechanical Engineering",
       arabicName: "هندسة الميكانيكا",
+      code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
     });
@@ -38,7 +42,7 @@ describe("test departments routes", () => {
 
   it("tests update department without programs", async () => {
     const res = await request
-      .put(`${url}/admin/departments/${departmentId}`)
+      .put(`${url}/admin/departments/${depratmentId1}`)
       .send({
         englishName: "Mechanical Engineering",
         arabicName: "الهندسة الميكانيكية",

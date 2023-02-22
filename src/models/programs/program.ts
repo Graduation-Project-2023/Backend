@@ -78,4 +78,65 @@ export class Program {
     });
     return program;
   };
+
+  static getPrerequisiteProgram = async (id: string) => {
+    const data = await prisma.program.findUnique({
+      where: { id },
+      select: {
+        prerequisiteProgram: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            programCode: true,
+            hrsToPass: true,
+            system: true,
+          },
+        },
+      },
+    });
+    return data?.prerequisiteProgram;
+  };
+
+  static getNextProgram = async (departmentId: string, programId: string) => {
+    const data = await prisma.program.findMany({
+      where: {
+        departments: {
+          some: {
+            id: departmentId,
+          },
+        },
+        prerequisiteProgramId: programId,
+      },
+      select: {
+        id: true,
+        englishName: true,
+        arabicName: true,
+        programCode: true,
+        hrsToPass: true,
+        system: true,
+      },
+    });
+    return data[0];
+  };
+
+  static getFirstProgram = async (departmentId: string) => {
+    const data = await prisma.program.findMany({
+      where: {
+        departments: {
+          some: {
+            id: departmentId,
+          },
+        },
+        prerequisiteProgramId: null,
+      },
+      select: {
+        id: true,
+        englishName: true,
+        arabicName: true,
+        programCode: true,
+      },
+    });
+    return data[0];
+  };
 }

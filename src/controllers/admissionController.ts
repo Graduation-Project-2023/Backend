@@ -65,7 +65,8 @@ export class AdmissionController extends Controller {
     try {
       const { jsonData } = req.body;
       const collegeId = req.query.collegeId as string;
-      await this.model.createMany(collegeId, jsonData);
+      const departmentId = req.query.departmentId as string;
+      await this.model.createMany(collegeId, departmentId, jsonData);
       res.status(201).json("success");
     } catch (error) {
       next(error);

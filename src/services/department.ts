@@ -93,6 +93,12 @@ export class DepartmentService {
     return nextProgram;
   }
 
+  static async getDepartmentAdmission(departmentId: string) {
+    // return department code and first program of department
+    const department = await Department.getAdmission(departmentId);
+    return department;
+  }
+
   static async getDepartmentFirstProgram(departmentId: string) {
     const firstProgram = await Program.getFirstProgram(departmentId);
     return firstProgram;

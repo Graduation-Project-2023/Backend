@@ -14,20 +14,32 @@ const entryFilter = (obj: any) => {
 };
 
 export class StudentService {
-  static createMany = async (collegeId: string, jsonData: any[]) => {
+  static createMany = async (
+    collegeId: string,
+    departmentId: string,
+    jsonData: any[]
+  ) => {
     const filteredData = jsonData.filter(entryFilter);
     const usersInputs = getUserInputs(filteredData);
+    let departmentCode;
+    let programId;
     await User.createMany(usersInputs);
-    const studentsInputs = getStudentInputs(filteredData, collegeId);
+    if (departmentId) {
+      const department = await Department.getAdmission(departmentId);
+      departmentCode = department?.code;
+      programId = department?.programs[0]?.id;
+    }
+    const studentsInputs = getStudentInputs(
+      filteredData,
+      collegeId,
+      departmentCode,
+      programId
+    );
     await Student.createMany(studentsInputs);
   };
 
   static get = async (id: string) => {
     return await Student.get(id);
-  };
-
-  static getStudentProgram = async (id: string) => {
-    return await Student.getStudentProgram(id);
   };
 
   static setStudentProgram = async (
@@ -39,18 +51,16 @@ export class StudentService {
     });
   };
 
-  static moveStudentToNextProgram = async (
-    studentId: string,
-    departmentId: string
-  ) => {
-    const student = await Student.get(studentId);
-    let currProgram = await this.getStudentProgram(studentId);
+  static moveStudentToNextProgram = async (studentId: string) => {
+    const student = await Student.getStudentWithDepartmentAndProgram(studentId);
+    let currProgram = student?.Program;
+    const departmentId = student?.department?.id;
+
     if (!currProgram) {
       const firstProgram = await DepartmentService.getDepartmentFirstProgram(
         departmentId
       );
-      this.setStudentProgram(studentId, firstProgram.id);
-      return;
+      return await this.setStudentProgram(studentId, firstProgram.id);
     }
 
     if (
@@ -60,16 +70,19 @@ export class StudentService {
       student.creditHrs >= currProgram.hrsToPass
     ) {
       currProgram = await Program.getNextProgram(departmentId, currProgram.id);
-      this.setStudentProgram(studentId, currProgram?.id);
-      return;
+      if (currProgram?.id) {
+        return await this.setStudentProgram(studentId, currProgram?.id);
+      }
     }
+    return student;
   };
 
   static changeStudentDepartment = async (
     studentId: string,
     departmentId: string
   ) => {
-    let currProgram = await this.getStudentProgram(studentId);
+    const student = await Student.getStudentWithDepartmentAndProgram(studentId);
+    let currProgram = student?.Program;
     const department = await Department.get(departmentId);
 
     if (!department || !currProgram) {

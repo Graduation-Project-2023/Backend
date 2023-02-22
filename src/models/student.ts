@@ -3,6 +3,7 @@ import prisma from "../db";
 import { Student as StudentModel, User as UserModel } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { getCorrectDateFromDMY } from "../utils/date";
+import { AnyARecord } from "dns";
 
 export class Student {
   static getAll = async (collegeId: string) => {
@@ -19,10 +20,12 @@ export class Student {
     return data;
   };
 
-  static getStudentProgram = async (id: string) => {
+  static getStudentWithDepartmentAndProgram = async (
+    id: string
+  ): Promise<any> => {
     const data = await prisma.student.findUnique({
       where: { id },
-      select: {
+      include: {
         Program: {
           select: {
             id: true,
@@ -33,9 +36,17 @@ export class Student {
             system: true,
           },
         },
+        department: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            system: true,
+          },
+        },
       },
     });
-    return data?.Program;
+    return data;
   };
 
   static createMany = async (data: Prisma.StudentCreateManyInput[]) => {
@@ -45,7 +56,7 @@ export class Student {
     return students;
   };
 
-  static create = async (data: StudentModel & UserModel) => {
+  static create = async (data: any) => {
     const {
       email,
       password,

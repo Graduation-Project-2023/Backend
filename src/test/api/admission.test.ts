@@ -34,7 +34,7 @@ describe("test the admission routes", () => {
 
   it("accepts a request with a csv file and correct headers", async () => {
     const response = await request
-      .post(`${csvApi}?collegeId=${college.id}`)
+      .post(`${csvApi}?collegeId=${college.id}&departmentId=${departmentId}`)
       .attach("csv", "src/test/assets/right.csv");
 
     expect(response.status).to.equal(201);
@@ -59,7 +59,6 @@ describe("test the admission routes", () => {
       departmentCode: "CS",
       collegeId: college.id,
     });
-    // console.log(student.body);
     expect(student.status).to.equal(201);
     student = student.body;
   });

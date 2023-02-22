@@ -29,6 +29,24 @@ export class Department {
     return data;
   };
 
+  static getAdmission = async (id: string) => {
+    const data = await prisma.department.findUnique({
+      where: { id },
+      select: {
+        code: true,
+        programs: {
+          where: {
+            prerequisiteProgramId: null,
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return data;
+  };
+
   static getByCode = async (code: string) => {
     const data = await prisma.department.findUnique({
       where: { code },

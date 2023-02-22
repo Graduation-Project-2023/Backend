@@ -10,6 +10,7 @@ import superagent from "superagent";
 import supertest from "supertest";
 import server from "../server";
 import { User } from "../models/user";
+import { Student } from "../models/student";
 
 // declare a global variable for all tests
 declare global {
@@ -27,6 +28,7 @@ declare global {
   var request: superagent.SuperAgent<superagent.SuperAgentRequest>;
   var departmentCode: string;
   var departmentId: string;
+  var studentId: string;
 }
 
 // run before any test
@@ -112,6 +114,7 @@ before(async () => {
     degree: "BACHELOR",
     hasSummerSemester: true,
     system: "CREDIT",
+    hrsToPass: 25,
     maxGrade: 100,
   });
   global.programId1 = program1.id;
@@ -179,6 +182,27 @@ before(async () => {
     programs: [programId1, programId2],
   });
   global.departmentId = department.id;
+
+  const student = await Student.create({
+    email: "Hamood@eng.suez.edu.eg",
+    password: "123456",
+    englishName: "Raafat El Hamood",
+    arabicName: "سالم الحمود",
+    nationality: "Saudi",
+    nationalId: "12985278821235",
+    gender: "MALE",
+    religion: "MUSLIM",
+    birthDate: "1999-01-01",
+    creditHrs: 35,
+    birthPlace: "Riyadh",
+    guardianName: "Hamood El Hamood",
+    address: "Hamood El Hamood street, Riyadh, Saudi Arabia",
+    contactPhone: "+964 770 123 4567",
+    homePhone: "0643217123",
+    departmentCode: department.code,
+    collegeId,
+  });
+  global.studentId = student.id;
 
   const academicSemester = await AcademicSemester.create({
     academicYear: "2022/2023",

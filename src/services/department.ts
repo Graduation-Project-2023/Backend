@@ -26,10 +26,10 @@ const validatePrograms = (
   }
   for (const program of programs) {
     // validate system of programs and department
-    if (program.system !== department.system) {
-      return false;
-    }
-    // validate all prerequisite programs of programs are in the department
+    // if (program.system !== department.system) {
+    //   return false;
+    // }
+    // // validate all prerequisite programs of programs are in the department
     if (
       program.prerequisiteProgram &&
       !programIds.includes(program.prerequisiteProgram.id)

@@ -4,6 +4,7 @@ build
 .env.test
 req.rest
 test.rest
+rest.*
 uploads/*
 data/
 erd/

@@ -86,8 +86,9 @@ model Student {
   courses                        StudentCourseInstance[]
   studentTables                  StudentTable[]
   // _________________________
-  departmentId                   String?
-  department                     Department?             @relation(fields: [departmentId], references: [id])
+  departmentCode                 String?
+  department                     Department?             @relation(fields: [departmentCode], references: [code])
+  creditHrs                      Int?
 
   @@map("students")
 }
@@ -107,12 +108,13 @@ model College {
 
 model Department {
   id         String      @id @default(uuid())
+  code       String?      @unique
   englishName String
   arabicName  String
   collegeId   String
   system      SYSTEM
   college     College     @relation(fields: [collegeId], references: [id])
-  programs    Program[]
+  programs    Program[]   @relation("department_programs") 
   professors  Professor[]
   students    Student[]
 
@@ -332,10 +334,10 @@ model Program {
   failureGrade           Int?
   degree                 DEGREE?
   hasSummerSemester      Boolean?
+  hrsToPass              Int?
   system                 SYSTEM
   maxGrade               Int?
-  departmentId           String?
-  department             Department?         @relation(fields: [departmentId], references: [id])
+  departments           Department[]         @relation("department_programs") 
   college                College             @relation(fields: [collegeId], references: [id])
   prerequisiteProgram    Program?            @relation("prerequisites", fields: [prerequisiteProgramId], references: [id])
   gpaAllowedHrs          GpaAllowedHours[]

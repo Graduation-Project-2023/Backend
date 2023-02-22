@@ -49,9 +49,16 @@ export const mapCsvRowToUserCreateInput = (
 export const getUserInputs = (jsonData: any[]) =>
   jsonData.map((obj) => mapCsvRowToUserCreateInput(obj));
 
-export const getStudentInputs = (jsonData: any[], collegeId: string) =>
+export const getStudentInputs = (
+  jsonData: any[],
+  collegeId: string,
+  departmentCode: string | undefined | null,
+  programId: string | undefined | null
+) =>
   jsonData.map((obj) => {
     const studentInput = mapCsvRowToStudentCreateInput(obj);
+    studentInput.departmentCode = departmentCode;
+    studentInput.programId = programId;
     studentInput.collegeId = collegeId;
     return studentInput;
   });

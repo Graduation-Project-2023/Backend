@@ -2,6 +2,7 @@ import { ProgramCourse } from "../../models/programs/programCourse";
 import { Level } from "../../models/programs/programRelations";
 import { expect } from "chai";
 import { Course } from "../../models/course";
+import { Program } from "../../models/programs/program";
 
 describe("test program models", () => {
   let localProgramCourseId: string;
@@ -58,5 +59,10 @@ describe("test program models", () => {
     expect(programCourse?.semester).to.equal("FIRST");
     const programCourse2 = await ProgramCourse.getByCode(course4Id, programId);
     expect(programCourse2?.prerequisites.length).to.equal(0);
+  });
+
+  it("tests get next program in department", async () => {
+    const program = await Program.getNextProgram(departmentId, programId1);
+    expect(program?.id).to.equal(programId2);
   });
 });

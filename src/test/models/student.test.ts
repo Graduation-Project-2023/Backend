@@ -1,35 +1,12 @@
-import prisma from "../../db";
 import { expect } from "chai";
+import { StudentService } from "../../services/studentService";
 
-describe("Student Model", () => {
-    it("should get all students", async () => {
-        const students = await prisma.student.findMany();
-        expect(students).to.be.an("array");
-    });
-
-    it("should get a student", async () => {
-
-
-
-    });
-
-    it("should create a student", async () => {
-
-
-    });
-
-    it("should create many students", async () => {
-
-    });
-
-    it("should update a student", async () => {
-            
-        });
-
-    it("should delete a student", async () => {
-
-    })
+describe("Student service test", () => {
+  it("should move student to next program", async () => {
+    let student = await StudentService.moveStudentToNextProgram(studentId);
+    expect(student?.programId).to.equal(programId1);
+    student = await StudentService.moveStudentToNextProgram(studentId);
+    expect(student?.programId).to.equal(programId2);
+  });
 });
-
-
 

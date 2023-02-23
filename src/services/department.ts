@@ -26,10 +26,10 @@ const validatePrograms = (
   }
   for (const program of programs) {
     // validate system of programs and department
-    if (program.system !== department.system) {
-      return false;
-    }
-    // validate all prerequisite programs of programs are in the department
+    // if (program.system !== department.system) {
+    //   return false;
+    // }
+    // // validate all prerequisite programs of programs are in the department
     if (
       program.prerequisiteProgram &&
       !programIds.includes(program.prerequisiteProgram.id)
@@ -83,5 +83,24 @@ export class DepartmentService {
   static async delete(id: string) {
     const department = await Department.delete(id);
     return department;
+  }
+
+  static async getDepartmentNextProgram(
+    departmentId: string,
+    programId: string
+  ) {
+    const nextProgram = await Program.getNextProgram(departmentId, programId);
+    return nextProgram;
+  }
+
+  static async getDepartmentAdmission(departmentId: string) {
+    // return department code and first program of department
+    const department = await Department.getAdmission(departmentId);
+    return department;
+  }
+
+  static async getDepartmentFirstProgram(departmentId: string) {
+    const firstProgram = await Program.getFirstProgram(departmentId);
+    return firstProgram;
   }
 }

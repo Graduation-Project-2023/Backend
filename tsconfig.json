@@ -104,5 +104,10 @@
   },
   "ts-node": {
     "files": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "./build",
+    "./prisma/seed.ts"
+  ]
 }

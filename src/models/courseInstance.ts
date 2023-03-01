@@ -51,6 +51,24 @@ export class CourseInstance {
     return data;
   };
 
+  static getStudentAvailableClasses = async (
+    semesterId: string,
+    availableCourses: string[] | undefined
+  ) => {
+    const data = await prisma.courseInstance.findMany({
+      where: {
+        academicSemesterId: semesterId,
+        programCourseId: {
+          in: availableCourses,
+        },
+      },
+      select: {
+        classes: true,
+      },
+    });
+    return data;
+  };
+
   static create = async (data: any) => {
     const {
       academicSemesterId,

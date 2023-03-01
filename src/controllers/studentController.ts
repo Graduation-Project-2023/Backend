@@ -31,6 +31,24 @@ export class StudentController extends Controller {
     }
   };
 
+  getStudentAvailableClasses = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const semesterId = req.params.semester_id;
+      const studentId = req.params.student_id;
+      const data = await this.model.getStudentAvailableClasses(
+        semesterId,
+        studentId
+      );
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  };
+
   createMany = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { jsonData } = req.body;

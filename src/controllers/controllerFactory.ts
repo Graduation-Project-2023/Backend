@@ -4,7 +4,7 @@ import { ProgramController } from "./programController";
 import { CollegeController } from "./collegeController";
 import { ProgramCourseController } from "./programCourseController";
 import { ProgramRelationsController } from "./programRelationsController";
-import { AdmissionController } from "./admissionController";
+import { StudentController } from "./studentController";
 import {
   Level,
   Grade,
@@ -15,6 +15,8 @@ import { ClassesTableController } from "./classesTableController";
 import { CourseInstanceController } from "./courseInstanceController";
 import { AuthController } from "./authController";
 import { DepartmentController } from "./departmentController";
+import { AcquireController } from "./acquireController";
+import { StudentInfoController } from "./studentInfoController";
 
 export class ControllerFactory {
   static getController = (controller: string): Controller => {
@@ -37,14 +39,21 @@ export class ControllerFactory {
         return new ProgramRelationsController(new GpaAllowedHours());
       case "auth":
         return new AuthController();
+      case "acquire":
+        return new AcquireController();
       case "classesTable":
         return new ClassesTableController();
       case "courseInstance":
         return new CourseInstanceController();
       case "admission":
-        return new AdmissionController();
+        return new StudentController();
+      case "student":
+        return new StudentController();
       case "department":
         return new DepartmentController();
+      // student cases
+      case "studentInfo":
+        return new StudentInfoController();
       default:
         throw new Error("Invalid controller");
     }

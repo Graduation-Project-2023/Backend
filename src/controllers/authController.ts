@@ -8,6 +8,7 @@ import { Controller } from "./controller";
 const SECRET = process.env.JWT_SECRET as string;
 const PEPPER = process.env.PEPPER as string;
 const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
+const DOMAIN = process.env.DOMAIN as string;
 
 export class AuthController extends Controller {
   constructor() {
@@ -34,6 +35,7 @@ export class AuthController extends Controller {
             });
           }
           return res.status(200).json({
+            id: user.id,
             email: user.email,
             role: user.role,
           });
@@ -68,7 +70,7 @@ export class AuthController extends Controller {
           SECRET + user.password,
           { expiresIn: "15m" }
         );
-        const url = `http://localhost:8080/reset_password/${token}`;
+        const url = `http://${DOMAIN}/auth/reset_password/${token}`;
         console.log(url);
         // sendEmail(
         //   email,
@@ -123,7 +125,10 @@ export class AuthController extends Controller {
           });
         }
         const pass = bcrypt.hashSync(password + PEPPER, Number(SALT_ROUNDS));
-        await this.model.update(user.email, pass);
+        await this.model.update({
+          email: user.email, 
+          password: pass
+        });
         return res.status(200).json({ message: "Password updated" });
       });
     } catch (err) {

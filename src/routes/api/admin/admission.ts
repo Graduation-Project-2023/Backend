@@ -1,4 +1,4 @@
-import { AdmissionController } from "../../../controllers/admissionController";
+import { StudentController } from "../../../controllers/studentController";
 import { uploadSingle, validateCsv, csvToJson } from "../../../middleware/csv";
 import express from "express";
 import { ControllerFactory } from "../../../controllers/controllerFactory";
@@ -6,7 +6,7 @@ import { ControllerFactory } from "../../../controllers/controllerFactory";
 const router = express.Router();
 const admissionController = ControllerFactory.getController(
   "admission"
-) as AdmissionController;
+) as StudentController;
 
 router.get("/", admissionController.getAll);
 

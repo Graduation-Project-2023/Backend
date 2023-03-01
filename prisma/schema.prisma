@@ -12,6 +12,7 @@ model User {
   email     String     @unique
   password  String
   nationalId String?   @unique
+  obtained Boolean    @default(false)
   role      ROLE
   student   Student?
   professor Professor?
@@ -89,6 +90,7 @@ model Student {
   departmentCode                 String?
   department                     Department?             @relation(fields: [departmentCode], references: [code])
   creditHrs                      Int?
+  availableCourses               AvailableCourse[]
 
   @@map("students")
 }
@@ -151,6 +153,7 @@ model ProgramCourse {
   englishName          String?
   levelId              String?
   course               Course           @relation(fields: [code], references: [id], onDelete: Cascade)
+  availableCourses     AvailableCourse[]
   program              Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
   level                Level?           @relation(fields: [levelId], references: [id])
   prerequisites        ProgramCourse[]  @relation("CoursePrerequisites")
@@ -160,6 +163,19 @@ model ProgramCourse {
   @@unique([programId, code])
   @@index([programId], type: Hash)
   @@map("program_courses")
+}
+
+model AvailableCourse {
+  id       String           @id @default(uuid())
+  programCourseId String
+  studentId       String
+  finished       Boolean?
+  unlocked       Boolean?
+  programCourse  ProgramCourse @relation(fields: [programCourseId], references: [id])
+  student        Student       @relation(fields: [studentId], references: [id])
+
+  @@unique([programCourseId, studentId])
+  @@map("available_courses")
 }
 
 model StudentCourseInstance {
@@ -410,7 +426,7 @@ enum ROLE {
   ADMIN
   STUDENT
   PROFESSOR
-
+  SUPER
   @@map("Role")
 }
 

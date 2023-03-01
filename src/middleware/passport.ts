@@ -64,10 +64,10 @@ passport.deserializeUser(async (id: string, done) => {
   }
 });
 
-passport.authorize = (role: string) => {
+passport.authorize = (roles: string[]) => {
   return (req: any, res: any, next: any) => {
     if (req.isAuthenticated()) {
-      if (req.user?.role.toLowerCase() === role.toLowerCase()) {
+      if (roles.includes(req.user?.role.toLowerCase())) {
         return next();
       } else {
         return next({ status: 401, message: "Unauthorized" });

@@ -7,6 +7,8 @@ const authController = ControllerFactory.getController(
   "auth"
 ) as AuthController;
 
+// const authController = new AuthController();
+
 router.post("/admin_login", authController.login("ADMIN"));
 
 router.post("/student_login", authController.login("STUDENT"));

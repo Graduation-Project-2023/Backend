@@ -12,5 +12,4 @@ router.get(
   "/available_courses/:student_id",
   studentController.getStudentAvailableCourses
 );
-
 export default router;

@@ -75,3 +75,4 @@ describe("Student service test", () => {
     expect(availableCourses2).to.have.lengthOf(2);
   });
 });
+

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "dev": "nodemon src/server.ts",
     "build": "tsc",
@@ -15,6 +18,7 @@
     "migrate": "npx prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
     "migrate:test": "dotenv -e .env.test npx prisma migrate dev",
+    "seed": "npx prisma db seed",
     "test": "dotenv -e .env.test npm run mocha",
     "test:unit": "dotenv -e .env.test npm run mocha:unit",
     "test:models": "dotenv -e .env.test npm run mocha:models",

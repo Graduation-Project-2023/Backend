@@ -12,6 +12,7 @@ model User {
   email     String     @unique
   password  String
   nationalId String?   @unique
+  obtained Boolean    @default(false)
   role      ROLE
   student   Student?
   professor Professor?
@@ -425,7 +426,7 @@ enum ROLE {
   ADMIN
   STUDENT
   PROFESSOR
-
+  SUPER
   @@map("Role")
 }
 

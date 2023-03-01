@@ -7,9 +7,32 @@ export class User {
     return data;
   };
 
+  // get the user data using the email
   static get = async (email: string) => {
     const data = await prisma.user.findUnique({
       where: { email },
+    });
+    return data;
+  };
+
+  // to acquire the email and password of the user using the nationalId
+  static get_nationalId = async (nationalId: string) => {
+    const data = await prisma.user.findUnique({
+      where: {nationalId},
+    })
+    return data
+  }
+
+  // to acquire the student data using the user id 
+  static get_id = async (id: string) => {
+    const data = await prisma.user.findUnique({
+      where: {id},
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        student: {},
+      },      
     });
     return data;
   };
@@ -30,11 +53,12 @@ export class User {
     return users;
   };
 
-  static update = async (email: string, password: string) => {
+  static update = async (data: any) => {
+    const { email, ...userData } = data;
     const user = await prisma.user.update({
       where: { email },
       data: {
-        password,
+        ...userData
       },
     });
     return user;

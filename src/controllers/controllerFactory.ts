@@ -4,7 +4,7 @@ import { ProgramController } from "./programController";
 import { CollegeController } from "./collegeController";
 import { ProgramCourseController } from "./programCourseController";
 import { ProgramRelationsController } from "./programRelationsController";
-import { AdmissionController } from "./admissionController";
+import { StudentController } from "./studentController";
 import {
   Level,
   Grade,
@@ -46,7 +46,9 @@ export class ControllerFactory {
       case "courseInstance":
         return new CourseInstanceController();
       case "admission":
-        return new AdmissionController();
+        return new StudentController();
+      case "student":
+        return new StudentController();
       case "department":
         return new DepartmentController();
       // student cases

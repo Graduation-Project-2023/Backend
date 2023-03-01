@@ -1,16 +1,15 @@
-import express from "express";
-import info from "./info";
+import express, { Request, Response } from "express";
+import { ControllerFactory } from "../../../controllers/controllerFactory";
+import { StudentController } from "../../../controllers/studentController";
 
-/**
- * 
- * Student router, handles all student related routes
- * and imports them to the main router to be used and protected
- * by the passport middleware
- *
- */
+const studentController = ControllerFactory.getController(
+  "student"
+) as StudentController;
 
 const router = express.Router();
 
-router.use("/info", info);
-
+router.get(
+  "/available_courses/:student_id",
+  studentController.getStudentAvailableCourses
+);
 export default router;

@@ -64,6 +64,18 @@ export class ProgramCourse {
     return data;
   };
 
+  static getAllWithPrerequisites = async (programId: string) => {
+    const data = await prisma.programCourse.findMany({
+      where: {
+        programId,
+      },
+      include: {
+        ...prerequisitesInclude,
+      },
+    });
+    return data;
+  };
+
   static create = async (data: any) => {
     const { programId, levelId, code, prerequisites, ...rest } = data;
     const level = levelId ? { connect: { id: levelId } } : undefined;

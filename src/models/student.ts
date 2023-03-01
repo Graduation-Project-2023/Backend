@@ -20,6 +20,16 @@ export class Student {
     return data;
   };
 
+  static getStudentWithAvailableCourses = async (id: string) => {
+    const data = await prisma.student.findUnique({
+      where: { id },
+      include: {
+        availableCourses: true,
+      },
+    });
+    return data;
+  };
+
   static getStudentWithDepartmentAndProgram = async (
     id: string
   ): Promise<any> => {

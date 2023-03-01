@@ -15,9 +15,10 @@ router.get("/", (req: Request, res: Response) => {
 router.use("/auth", auth);
 router.use("/", acquire);
 
-// prefix the routes and protect them with passport authorize middleware
-router.use("/admin", passport.authorize("admin"), admin);
-router.use("/student", passport.authorize("student"), student);
+router.use("/admin", passport.authorize(["admin"]), admin);
+// router.use("/admin", admin);
 
+
+router.use("/student", passport.authorize(["student", "admin"]), student);
 
 export default router;

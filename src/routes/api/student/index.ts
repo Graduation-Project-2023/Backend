@@ -12,4 +12,10 @@ router.get(
   "/available_courses/:student_id",
   studentController.getStudentAvailableCourses
 );
+
+router.get(
+  "/available_classes/:semester_id/:student_id",
+  studentController.getStudentAvailableClasses
+);
+
 export default router;

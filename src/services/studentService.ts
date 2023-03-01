@@ -6,6 +6,7 @@ import { Department } from "../models/department";
 import { DepartmentService } from "./department";
 import { Program } from "../models/programs/program";
 import { ProgramCourse } from "../models/programs/programCourse";
+import { CourseInstance } from "../models/courseInstance";
 
 const entryFilter = (obj: any) => {
   if (!obj.nationalId || obj.nationalId.length != 14) {
@@ -94,6 +95,21 @@ export class StudentService {
         ?.availableCourses;
     }
     return student?.availableCourses;
+  };
+
+  static getStudentAvailableClasses = async (
+    semesterId: string,
+    studentId: string
+  ) => {
+    const availableCourses = (
+      await this.getStudentAvailableCourses(studentId)
+    )?.map((course) => course.programCourseId);
+
+    const classes = await CourseInstance.getStudentAvailableClasses(
+      semesterId,
+      availableCourses
+    );
+    return classes;
   };
 
   static moveStudentToNextProgram = async (studentId: string) => {

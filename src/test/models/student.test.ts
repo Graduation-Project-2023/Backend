@@ -51,6 +51,89 @@ describe("Student service test", () => {
         },
       },
     });
+
+    // create class instance
+    const courseInstance1 = await prisma.courseInstance.create({
+      data: {
+        programCourseId: id1,
+        academicSemesterId,
+        levelId: levelId,
+        programId: programId1,
+      },
+    });
+
+    const courseInstance2 = await prisma.courseInstance.create({
+      data: {
+        programCourseId: id2,
+        academicSemesterId,
+        levelId: levelId,
+        programId: programId2,
+      },
+    });
+
+    // create classesTable
+    await prisma.classesTable.create({
+      data: {
+        academicSemester: {
+          connect: {
+            id: academicSemesterId,
+          },
+        },
+        program: {
+          connect: {
+            id: programId1,
+          },
+        },
+        level: {
+          connect: {
+            id: levelId,
+          },
+        },
+        classes: {
+          create: [
+            {
+              courseInstance: {
+                connect: {
+                  id: courseInstance1.id,
+                },
+              },
+              classType: "LECTURE",
+              day: "SATURDAY",
+              startPeriod: 1,
+              endPeriod: 2,
+              englishName: "English 101",
+              arabicName: "Arabic 101",
+            },
+            {
+              courseInstance: {
+                connect: {
+                  id: courseInstance2.id,
+                },
+              },
+              classType: "LECTURE",
+              day: "SUNDAY",
+              startPeriod: 3,
+              endPeriod: 4,
+              englishName: "English 101",
+              arabicName: "Arabic 101",
+            },
+            {
+              courseInstance: {
+                connect: {
+                  id: courseInstance1.id,
+                },
+              },
+              classType: "LECTURE",
+              day: "SATURDAY",
+              startPeriod: 1,
+              endPeriod: 2,
+              englishName: "English 101",
+              arabicName: "Arabic 101",
+            },
+          ],
+        },
+      },
+    });
   });
 
   it("should move student to next program", async () => {
@@ -74,5 +157,12 @@ describe("Student service test", () => {
     );
     expect(availableCourses2).to.have.lengthOf(2);
   });
-});
 
+  it("should get available classes", async () => {
+    const availableClasses = await StudentService.getStudentAvailableClasses(
+      academicSemesterId,
+      studentId
+    );
+    expect(availableClasses).to.have.lengthOf(2);
+  });
+});

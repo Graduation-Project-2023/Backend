@@ -212,6 +212,7 @@ before(async () => {
 });
 
 after(async () => {
+  await prisma.availableCourse.deleteMany();
   await prisma.student.deleteMany();
   await prisma.user.deleteMany();
   await prisma.class.deleteMany();

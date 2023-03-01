@@ -5,12 +5,38 @@ import { Student as StudentModel, User as UserModel } from "@prisma/client";
 import { Department } from "../models/department";
 import { DepartmentService } from "./department";
 import { Program } from "../models/programs/program";
+import { ProgramCourse } from "../models/programs/programCourse";
 
 const entryFilter = (obj: any) => {
   if (!obj.nationalId || obj.nationalId.length != 14) {
     return false;
   }
   return true;
+};
+
+const connectOrCreateAvailableCourses = (
+  studentId: string,
+  programCourses: any[]
+) => {
+  const coursesWithoutPrereq = programCourses.filter(
+    (course) => course.prerequisites.length == 0
+  );
+
+  return {
+    connectOrCreate: coursesWithoutPrereq.map((course) => ({
+      where: {
+        programCourseId_studentId: {
+          programCourseId: course.id,
+          studentId: studentId,
+        },
+      },
+      create: {
+        finished: false,
+        programCourseId: course.id,
+        unlocked: true,
+      },
+    })),
+  };
 };
 
 export class StudentService {
@@ -42,13 +68,32 @@ export class StudentService {
     return await Student.get(id);
   };
 
-  static setStudentProgram = async (
+  static setStudentProgramAndAvailableCourses = async (
     id: string,
     programId: string | undefined
   ) => {
+    // set student's program to the given program and add program courses to student's available courses
+    const programCourses = await ProgramCourse.getAllWithPrerequisites(
+      programId as string
+    );
+
     return await Student.update(id, {
       Program: { connect: { id: programId } },
+      availableCourses: connectOrCreateAvailableCourses(id, programCourses),
     });
+  };
+
+  static getStudentAvailableCourses = async (studentId: string) => {
+    const student = await Student.getStudentWithAvailableCourses(studentId);
+    if (!student?.availableCourses.length) {
+      this.setStudentProgramAndAvailableCourses(
+        studentId,
+        student?.programId as string
+      );
+      return (await Student.getStudentWithAvailableCourses(studentId))
+        ?.availableCourses;
+    }
+    return student?.availableCourses;
   };
 
   static moveStudentToNextProgram = async (studentId: string) => {
@@ -60,7 +105,10 @@ export class StudentService {
       const firstProgram = await DepartmentService.getDepartmentFirstProgram(
         departmentId
       );
-      return await this.setStudentProgram(studentId, firstProgram.id);
+      return await this.setStudentProgramAndAvailableCourses(
+        studentId,
+        firstProgram.id
+      );
     }
 
     if (
@@ -71,7 +119,10 @@ export class StudentService {
     ) {
       currProgram = await Program.getNextProgram(departmentId, currProgram.id);
       if (currProgram?.id) {
-        return await this.setStudentProgram(studentId, currProgram?.id);
+        return await this.setStudentProgramAndAvailableCourses(
+          studentId,
+          currProgram?.id
+        );
       }
     }
     return student;

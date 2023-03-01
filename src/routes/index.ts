@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import auth from "./api/auth";
 import admin from "./api/admin";
 import passport from "passport";
+import student from "./api/student";
 
 const router = express.Router();
 
@@ -11,8 +12,9 @@ router.get("/", (req: Request, res: Response) => {
 
 router.use("/auth", auth);
 
-router.use("/admin", passport.authorize("admin"), admin);
+router.use("/admin", passport.authorize(["admin"]), admin);
 // router.use("/admin", admin);
 
+router.use("/student", passport.authorize(["student", "admin"]), student);
 
 export default router;

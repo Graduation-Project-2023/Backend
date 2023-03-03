@@ -171,6 +171,9 @@ model AvailableCourse {
   studentId       String
   finished       Boolean?
   unlocked       Boolean?
+  englishName    String?
+  arabicName     String?
+  code          String?
   programCourse  ProgramCourse @relation(fields: [programCourseId], references: [id])
   student        Student       @relation(fields: [studentId], references: [id])
 

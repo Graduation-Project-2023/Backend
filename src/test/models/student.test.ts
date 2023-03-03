@@ -7,6 +7,8 @@ describe("Student service test", () => {
     const id1 = (
       await prisma.programCourse.create({
         data: {
+          englishName: "English 101",
+          arabicName: "اللغة الانجليزية 101",
           programId: programId1,
           courseType: "ELECTIVE",
           code: "ENG101",
@@ -15,6 +17,8 @@ describe("Student service test", () => {
     ).id;
     await prisma.programCourse.create({
       data: {
+        englishName: "English 102",
+        arabicName: "اللغة الانجليزية 102",
         programId: programId1,
         courseType: "ELECTIVE",
         code: "ENG102",
@@ -31,6 +35,8 @@ describe("Student service test", () => {
     const id2 = (
       await prisma.programCourse.create({
         data: {
+          englishName: "English 101",
+          arabicName: "اللغة الانجليزية 101",
           programId: programId2,
           courseType: "ELECTIVE",
           code: "ENG101",
@@ -39,6 +45,8 @@ describe("Student service test", () => {
     ).id;
     await prisma.programCourse.create({
       data: {
+        englishName: "English 102",
+        arabicName: "اللغة الانجليزية 102",
         programId: programId2,
         courseType: "ELECTIVE",
         code: "ENG102",

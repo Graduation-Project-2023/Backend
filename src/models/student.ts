@@ -24,7 +24,17 @@ export class Student {
     const data = await prisma.student.findUnique({
       where: { id },
       include: {
-        availableCourses: true,
+        availableCourses: {
+          select: {
+            id: true,
+            code: true,
+            englishName: true,
+            arabicName: true,
+            finished: true,
+            unlocked: true,
+            programCourseId: true,
+          },
+        },
       },
     });
     return data;

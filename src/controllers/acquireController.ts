@@ -57,7 +57,7 @@ export class AcquireController extends Controller {
                     SECRET + user.password,
                     { expiresIn: "2d" }
                 );
-                const url = `http://${DOMAIN}/api/auth/reset_password/${token}`;
+                const url = `${DOMAIN}/api/auth/reset_password/${token}`;
                 console.log(url);
                 // update the obtained boolean to true
                 await this.model.update({

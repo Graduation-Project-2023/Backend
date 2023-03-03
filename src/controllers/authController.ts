@@ -70,7 +70,7 @@ export class AuthController extends Controller {
           SECRET + user.password,
           { expiresIn: "15m" }
         );
-        const url = `http://${DOMAIN}/auth/reset_password/${token}`;
+        const url = `${DOMAIN}/auth/reset_password/${token}`;
         console.log(url);
         // sendEmail(
         //   email,

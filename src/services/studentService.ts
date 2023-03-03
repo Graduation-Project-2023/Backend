@@ -35,6 +35,7 @@ const connectOrCreateAvailableCourses = (
         englishName: course.englishName,
         arabicName: course.arabicName,
         code: course.code,
+        levelId: course.levelId,
         finished: false,
         programCourseId: course.id,
         unlocked: true,

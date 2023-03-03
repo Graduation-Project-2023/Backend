@@ -174,6 +174,8 @@ model AvailableCourse {
   englishName    String?
   arabicName     String?
   code          String?
+  levelId        String?
+  level          Level?          @relation(fields: [levelId], references: [id])
   programCourse  ProgramCourse @relation(fields: [programCourseId], references: [id])
   student        Student       @relation(fields: [studentId], references: [id])
 
@@ -307,6 +309,7 @@ model Level {
   programId     String
   level         Int
   qualifyingHrs Int?
+  availableCourses AvailableCourse[]
   program       Program         @relation(fields: [programId], references: [id])
   courses       ProgramCourse[]
   courseInstances CourseInstance[]

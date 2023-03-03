@@ -32,6 +32,14 @@ export class Student {
             arabicName: true,
             finished: true,
             unlocked: true,
+            level: {
+              select: {
+                id: true,
+                englishName: true,
+                arabicName: true,
+                level: true,
+              },
+            },
             programCourseId: true,
           },
         },

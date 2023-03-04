@@ -40,13 +40,14 @@ export class AcquireController extends Controller {
                     message: "user not found",
                 });
             } else {
+                // disabled for testing purposes
                 // check if the user has already obtained the credentials
-                if (user.obtained) {
-                    return next({
-                        status: 400,
-                        message: "You have already obtained your credentials",
-                    });
-                }
+                // if (user.obtained) {
+                //     return next({
+                //         status: 400,
+                //         message: "You have already obtained your credentials",
+                //     });
+                // }
                 // issue the reset password token
                 const token = jwt.sign(
                     {
@@ -68,7 +69,7 @@ export class AcquireController extends Controller {
                 res.json({ 
                     nattionalId: user.nationalId,
                     email: user.email,
-                    password: url
+                    token
                  });
             }
         } catch (error) {

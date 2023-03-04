@@ -59,7 +59,7 @@ export class AcquireController extends Controller {
                     { expiresIn: "2d" }
                 );
                 const url = `${DOMAIN}/api/auth/reset_password/${token}`;
-                console.log(url);
+                // console.log(url);
                 // update the obtained boolean to true
                 await this.model.update({
                     email: user.email,
@@ -67,7 +67,7 @@ export class AcquireController extends Controller {
                 });
                 // return the email and the link to set the password
                 res.json({ 
-                    nattionalId: user.nationalId,
+                    nationalId: user.nationalId,
                     email: user.email,
                     token
                  });

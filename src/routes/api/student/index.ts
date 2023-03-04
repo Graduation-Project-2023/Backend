@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { ControllerFactory } from "../../../controllers/controllerFactory";
 import { StudentController } from "../../../controllers/studentController";
+import student from "./info";
 
 const studentController = ControllerFactory.getController(
   "student"
@@ -17,5 +18,7 @@ router.get(
   "/available_classes/:semester_id/:student_id",
   studentController.getStudentAvailableClasses
 );
+
+router.use("/info", student);
 
 export default router;

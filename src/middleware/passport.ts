@@ -64,6 +64,10 @@ passport.deserializeUser(async (id: string, done) => {
   }
 });
 
+/**
+ * to be done
+ * check if the user that is trying to acccess the assets is actually him 
+ */
 passport.authorize = (roles: string[]) => {
   return (req: any, res: any, next: any) => {
     if (req.isAuthenticated()) {

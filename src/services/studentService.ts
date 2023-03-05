@@ -15,6 +15,12 @@ const entryFilter = (obj: any) => {
   return true;
 };
 
+const connectClasses = (classes: string[]) => {
+  return {
+    connect: classes.map((id) => ({ id })),
+  };
+};
+
 const connectOrCreateAvailableCourses = (
   studentId: string,
   programCourses: any[]
@@ -174,6 +180,21 @@ export class StudentService {
       department: { connect: { id: departmentId } },
       Program: { connect: { id: currProgram?.id } },
     });
+  };
+
+  static getStudentTable = async (
+    studentId: string,
+    academicSemesterId: string
+  ) => {
+    return await Student.getStudentTable(studentId, academicSemesterId);
+  };
+
+  static studentRegister = async (
+    studentId: string,
+    academicSemesterId: string,
+    data: any
+  ) => {
+    return await Student.studentRegister(studentId, academicSemesterId, data);
   };
 
   static getAll = async (collegeId: string) => {

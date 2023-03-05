@@ -1,9 +1,28 @@
 import { Prisma, User } from "@prisma/client";
 import prisma from "../db";
-import { Student as StudentModel, User as UserModel } from "@prisma/client";
-import bcrypt from "bcrypt";
 import { getCorrectDateFromDMY } from "../utils/date";
-import { AnyARecord } from "dns";
+
+const createManyStudentCourses = (studentId: string, courses: any) => {
+  return {
+    create: courses?.map((course: any) => {
+      return {
+        studentId,
+        instanceId: course.courseInstanceId,
+      };
+    }),
+  };
+};
+
+const connectManyClasses = (courses: any) => {
+  const classesIds = courses
+    ?.reduce((acc: any, course: any) => {
+      return [...acc, ...course.classes];
+    }, [])
+    ?.map((id: string) => ({ id }));
+  return {
+    connect: classesIds,
+  };
+};
 
 export class Student {
   static getAll = async (collegeId: string) => {
@@ -167,6 +186,78 @@ export class Student {
       },
     });
     return student;
+  };
+
+  static studentRegister = async (
+    studentId: string,
+    academicSemesterId: string,
+    data: any
+  ) => {
+    const { courseInstances, ...rest } = data;
+    return await prisma.studentTable.create({
+      data: {
+        student: {
+          connect: { id: studentId },
+        },
+        academicSemester: {
+          connect: { id: academicSemesterId },
+        },
+        instances: createManyStudentCourses(studentId, courseInstances),
+        classes: connectManyClasses(courseInstances),
+        ...rest,
+      },
+      include: {
+        instances: true,
+        classes: true,
+      },
+    });
+  };
+
+  static getStudentTable = async (
+    studentId: string,
+    academicSemesterId: string
+  ) => {
+    const data = await prisma.studentTable.findUnique({
+      where: {
+        studentId_academicSemesterId: { studentId, academicSemesterId },
+      },
+      include: {
+        instances: true,
+        classes: true,
+      },
+    });
+    return data;
+  };
+
+  static updateStudentRegister = async (tableId: string, data: any) => {
+    const { courseInstances, ...rest } = data;
+    const prevClasses = await prisma.studentTable.findUnique({
+      where: { id: tableId },
+      select: {
+        classes: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    const prevClassesIds = prevClasses?.classes?.map((c: any) => c.id);
+    return await prisma.studentTable.update({
+      where: { id: tableId },
+      data: {
+        instances: {
+          deleteMany: {
+            tableId,
+          },
+          ...createManyStudentCourses(tableId, courseInstances),
+        },
+        // disconnect all classes and connect the new ones
+        classes: {
+          disconnect: prevClassesIds,
+          ...connectManyClasses(courseInstances),
+        },
+      },
+    });
   };
 
   static delete = async (id: string) => {

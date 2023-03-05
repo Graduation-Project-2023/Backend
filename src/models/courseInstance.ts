@@ -63,6 +63,7 @@ export class CourseInstance {
         },
       },
       select: {
+        id: true,
         classes: true,
         level: true,
       },

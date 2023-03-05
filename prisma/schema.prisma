@@ -78,14 +78,16 @@ model Student {
   programId                      String?
   directorate                    String?
   collegeCode                    String?
+  tableId                        String?
   // _________________________
+  tables                         StudentTable[]
   college                        College?                @relation(fields: [collegeId], references: [id])
   Program                        Program?                @relation(fields: [programId], references: [id])
   user                           User                    @relation(fields: [nationalId], references: [nationalId])
   enrollmentSemester             AcademicSemester?       @relation(fields: [enrollmentSemesterId], references: [id], name: "enrollmentSemester")
   enrollmentSemesterId           String?
   courses                        StudentCourseInstance[]
-  studentTables                  StudentTable[]
+
   // _________________________
   departmentCode                 String?
   department                     Department?             @relation(fields: [departmentCode], references: [code])
@@ -183,51 +185,38 @@ model AvailableCourse {
   @@map("available_courses")
 }
 
+model StudentTable {
+  id        String           @id @default(uuid())
+  studentId String
+  student   Student          @relation(fields: [studentId], references: [id])
+  academicSemesterId String
+  academicSemester AcademicSemester @relation(fields: [academicSemesterId], references: [id])
+  classes    Class[]
+  instances StudentCourseInstance[]
+
+  @@unique([studentId, academicSemesterId])
+  @@map("student_tables")
+}
+
 model StudentCourseInstance {
   id                 String         @id @default(uuid())
   studentId          String
   instanceId         String
   student            Student        @relation(fields: [studentId], references: [id])
   instance           CourseInstance @relation(fields: [instanceId], references: [id])
+  lectureGroup      GROUP?
+  sectionGroup      GROUP?
   // normalized data from course instance
-  englishName        String?
-  arabicName         String?
-  lectureDay         DAY
-  lectureStartPeriod Int
-  lectureStartDate   DateTime
-  lectureEndPeriod   Int
-  sectionStartPeriod Int?
-  sectionStartDate   DateTime?
-  sectionEndPeriod   Int?
-  tableId            String
-  finished           Boolean
+  finished           Boolean?
   midtermScore       Int?
   classworkScore     Int?
   finalScore         Int?
   gradeId            String?
+  tableId            String?
+  table              StudentTable?  @relation(fields: [tableId], references: [id])
   grade              Grade?         @relation(fields: [gradeId], references: [id])
-  studentTable       StudentTable?  @relation(fields: [studentTableId], references: [id])
-  studentTableId     String?
 
-  @@unique([studentId, instanceId])
   @@map("student_course_instances")
-}
-
-model StudentTable {
-  id               String                  @id @default(uuid())
-  studentId        String
-  levelId          String
-  semesterId       String
-  programId        String
-  courses          StudentCourseInstance[]
-  program          Program                 @relation(fields: [programId], references: [id])
-  level            Level                   @relation(fields: [levelId], references: [id])
-  academicSemester AcademicSemester        @relation(fields: [semesterId], references: [id])
-  student          Student                 @relation(fields: [studentId], references: [id])
-
-  @@unique([levelId, semesterId])
-  @@index([programId], type: Hash)
-  @@map("student_tables")
 }
 
 model CourseInstance {
@@ -277,6 +266,7 @@ model Class {
   day        DAY
   startDate  DateTime?
   endDate    DateTime? 
+  studentTables StudentTable[]
   group     GROUP?
   table      ClassesTable    @relation(fields: [tableId], references: [id])
   courseInstance   CourseInstance @relation(fields: [courseInstanceId], references: [id])
@@ -314,7 +304,6 @@ model Level {
   courses       ProgramCourse[]
   courseInstances CourseInstance[]
   tables        ClassesTable[]
-  StudentTable  StudentTable[]
 
   @@unique([programId, level])
   @@map("levels")
@@ -371,7 +360,6 @@ model Program {
   unlocksPrograms        Program[]           @relation("prerequisites")
   students               Student[]
   tables                 ClassesTable[]
-  studentTables           StudentTable[]
 
   @@map("programs")
 }
@@ -413,7 +401,7 @@ model AcademicSemester {
   enrolledStudents Student[]        @relation("enrollmentSemester")
   courseInstances  CourseInstance[]
   tables           ClassesTable[]
-  studentTables     StudentTable[]
+  studentTables    StudentTable[]
 
   @@unique([academicYear, semester])
   @@map("academic_semesters")

@@ -19,6 +19,13 @@ router.get(
   studentController.getStudentAvailableClasses
 );
 
+router.post(
+  "/register/:student_id/:academic_semester_id",
+  studentController.studentRegister
+);
+
+router.put("/register/:table_id", studentController.updateStudentRegister);
+
 router.use("/info", student);
 
 export default router;

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { StudentService } from "../../services/studentService";
 import prisma from "../../db";
+import { executionAsyncId } from "async_hooks";
 
 describe("Student service test", () => {
   let availableCourses: any;
@@ -192,5 +193,14 @@ describe("Student service test", () => {
       data
     );
     expect(table.instances).to.have.lengthOf(2);
+  });
+
+  it("should get student timetable", async () => {
+    const table = await StudentService.getStudentTable(
+      studentId,
+      academicSemesterId
+    );
+    expect(table?.instances).to.have.lengthOf(2);
+    expect(table?.classes).to.have.lengthOf(3);
   });
 });

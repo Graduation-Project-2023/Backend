@@ -20,7 +20,7 @@ router.get(
 );
 
 router.get(
-  "table/:student_id/:academic_semester_id",
+  "/table/:student_id/:academic_semester_id",
   studentController.getStudentTable
 );
 

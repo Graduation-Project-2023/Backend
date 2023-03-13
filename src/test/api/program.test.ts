@@ -13,7 +13,7 @@ describe("test programs routes", () => {
       arabicName: "اللغة الانجليزية المتقدمة",
       id: "ENG103",
       collegeId: `${collegeId}`,
-    });
+    }).set("Authorization", `Bearer ${global.token}`);
     course3Id = res.body.id;
   });
 
@@ -35,7 +35,7 @@ describe("test programs routes", () => {
       gradeLowering: 55,
       attemptsToLowerGrade: 4,
       failureGrade: 10,
-    });
+    }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property("id");
     program1Id = res.body.id;
@@ -44,7 +44,7 @@ describe("test programs routes", () => {
   it("tests get all programs route", async () => {
     const res = await request.get(
       `${url}/admin/programs?college_id=${collegeId}`
-    );
+    ).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
   });
@@ -58,12 +58,12 @@ describe("test programs routes", () => {
         arabicName: "المستوى الخامس ",
         level: 5,
         qualifyingHrs: 156,
-      });
+      }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(201);
   });
 
   it("tests get all levels", async () => {
-    const res = await request.get(`${url}/admin/programs/${program1Id}/levels`);
+    const res = await request.get(`${url}/admin/programs/${program1Id}/levels`).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
   });
@@ -78,7 +78,7 @@ describe("test programs routes", () => {
         courseType: "COMPULSORY",
         creditHours: 3,
         prerequisites: [`${programCourse1Id}`],
-      });
+      }).set("Authorization", `Bearer ${global.token}`);
     programCourse3 = res2.body.id;
     expect(res2.status).to.equal(201);
   });
@@ -86,7 +86,7 @@ describe("test programs routes", () => {
   it("tests get all program courses", async () => {
     const res = await request.get(
       `${url}/admin/programs/${program1Id}/program_courses`
-    );
+    ).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
     expect(res.body.length).to.be.greaterThan(0);
   });

@@ -10,6 +10,7 @@ import superagent from "superagent";
 import supertest from "supertest";
 import server from "../server";
 import { User } from "../models/user";
+import { Super } from "../models/super";
 import { Student } from "../models/student";
 
 // declare a global variable for all tests
@@ -30,15 +31,29 @@ declare global {
   var departmentId: string;
   var studentId: string;
   var userId: string;
+  var token: string;
 }
 
 // run before any test
 before(async () => {
   global.url = "/api";
-  const admin = await User.create({
+  const college = await College.create({
+    englishName: "Arts",
+    arabicName: "الفنون",
+  });
+  global.collegeId = college.id;
+
+  const admin = await Super.create({
     email: "SalemEladmin@admin.com",
     password: "123456",
     role: "ADMIN",
+    college: {
+      connect: {
+        id: global.collegeId,
+      },
+    },
+    englishName: "String",
+    arabicName: "String",
   });
 
   // const student_ = await User.create({
@@ -49,11 +64,16 @@ before(async () => {
 
   // create a global request object with port 3000
   global.request = supertest.agent(server);
+  // supertest.agent(server).set("Authorization", `Bearer ${global.token}`);
 
-  await request.post(`/api/auth/admin_login`).send({
-    email: admin.email,
+  const admin_login = await request.post(`/api/auth/admin_login`).send({
+    email: "SalemEladmin@admin.com",
     password: "123456",
   });
+  global.token = admin_login.body.token;
+  // console.log("admin_login.body.token", global.token);
+
+  // supertest.agent(server).set("Authorization", `Bearer ${global.token}`);
 
   // const student_login = await request.post(`/api/auth/student_login`).send({
   //   email: student_.email,
@@ -63,11 +83,7 @@ before(async () => {
   // global.userId = admin_login.body.id;
   // console.log("student_login.body.id", student_login.body.id);
 
-  const college = await College.create({
-    englishName: "Arts",
-    arabicName: "الفنون",
-  });
-  global.collegeId = college.id;
+  
 
   const course1 = await Course.create({
     englishName: "English",
@@ -231,6 +247,7 @@ after(async () => {
   await prisma.availableCourse.deleteMany();
   await prisma.studentCourseInstance.deleteMany();
   await prisma.student.deleteMany();
+  await prisma.admin.deleteMany();
   await prisma.user.deleteMany();
   await prisma.class.deleteMany();
   await prisma.classesTable.deleteMany();

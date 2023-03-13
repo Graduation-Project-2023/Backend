@@ -196,8 +196,6 @@ passport.authorize = (roles: string[]) => {
           const current_date = new Date();
           if (session_date.getTime() > current_date.getTime()) {
             // ensure that the admin doesn't access the assets of another college
-            // console.log("req", req.body.collegeId, "decoded", decoded.college);
-            console.log(req.body)
             if (req.body.collegeId) {
               if (req.body.collegeId !== decoded.college) {
                 return next({ 

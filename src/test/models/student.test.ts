@@ -1,8 +1,11 @@
 import { expect } from "chai";
 import { StudentService } from "../../services/studentService";
 import prisma from "../../db";
+import { executionAsyncId } from "async_hooks";
 
 describe("Student service test", () => {
+  let availableCourses: any;
+  let availableClasses: any;
   before(async () => {
     const id1 = (
       await prisma.programCourse.create({
@@ -152,7 +155,7 @@ describe("Student service test", () => {
   });
 
   it("should get available courses", async () => {
-    const availableCourses = await StudentService.getStudentAvailableCourses(
+    availableCourses = await StudentService.getStudentAvailableCourses(
       studentId
     );
     expect(availableCourses).to.have.lengthOf(2);
@@ -167,10 +170,37 @@ describe("Student service test", () => {
   });
 
   it("should get available classes", async () => {
-    const availableClasses = await StudentService.getStudentAvailableClasses(
+    availableClasses = await StudentService.getStudentAvailableClasses(
       academicSemesterId,
       studentId
     );
     expect(availableClasses).to.have.lengthOf(2);
+  });
+
+  it("should register student to classes", async () => {
+    const data = {
+      courseInstances: availableClasses.map((course: any) => {
+        const classes = course.classes.map((c: any) => c.id);
+        return {
+          courseInstanceId: course.id,
+          classes,
+        };
+      }),
+    };
+    const table = await StudentService.studentRegister(
+      studentId,
+      academicSemesterId,
+      data
+    );
+    expect(table.instances).to.have.lengthOf(2);
+  });
+
+  it("should get student timetable", async () => {
+    const table = await StudentService.getStudentTable(
+      studentId,
+      academicSemesterId
+    );
+    expect(table?.instances).to.have.lengthOf(2);
+    expect(table?.classes).to.have.lengthOf(3);
   });
 });

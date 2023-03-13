@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { ControllerFactory } from "../../../controllers/controllerFactory";
 import { StudentController } from "../../../controllers/studentController";
 import student from "./info";
@@ -18,6 +18,18 @@ router.get(
   "/available_classes/:semester_id/:student_id",
   studentController.getStudentAvailableClasses
 );
+
+router.get(
+  "/table/:student_id/:academic_semester_id",
+  studentController.getStudentTable
+);
+
+router.post(
+  "/register/:student_id/:academic_semester_id",
+  studentController.studentRegister
+);
+
+router.put("/register/:table_id", studentController.updateStudentRegister);
 
 router.use("/info", student);
 

@@ -7,6 +7,7 @@ import router from "./routes/index";
 import prisma from "./db";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import errorHandler from "./middleware/errorHandler";
+import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -19,6 +20,16 @@ app.set("trust proxy", 1);
 // mandatory for passport in order to work
 app.use(
   session({
+    genid: (req) => {
+      /**
+       * this happens second
+       */
+      if (req.body.session) {
+        return req.body.session; // use the sessionID from the request body that was generated in passport.ts
+      } else {
+        return uuidv4();
+      } 
+    },
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
@@ -33,6 +44,7 @@ app.use(
       dbRecordIdIsSessionId: true,
       dbRecordIdFunction: undefined,
     }),
+    rolling: false // Set the rolling option to false
   })
 );
 

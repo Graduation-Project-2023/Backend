@@ -23,20 +23,6 @@ export class User {
     return data
   }
 
-  // to acquire the student data using the user id 
-  static get_id = async (id: string) => {
-    const data = await prisma.user.findUnique({
-      where: {id},
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        student: {},
-      },
-    });
-    return data;
-  };
-
   // to acquire the student data using the user email
   static getUserByEmailWithStudent = async (email: string) => {
     const data = await prisma.user.findUnique({

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Controller } from "./controller";
-import { User } from "../models/user";
+import { Student } from "../models/student";
 
 
 export class StudentInfoController extends Controller {
@@ -10,19 +10,19 @@ export class StudentInfoController extends Controller {
      * to perform this action
      */
     constructor() {
-        super(User);
+        super(Student);
     }
 
     get_info = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id = req.body.id;
+            const id = req.body.student_id;
             if (!id) {
                 return next({
                     status: 400,
                     message: "Student Id is required",
                 });
             }
-            const student = await this.model.get_id(id);
+            const student = await this.model.get(id);
             res.status(200).json(student);
         } catch (err) {
             next(err);

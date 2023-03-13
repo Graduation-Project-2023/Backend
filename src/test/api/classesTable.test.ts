@@ -43,7 +43,7 @@ describe("test classes table routes", () => {
   it("tests get all course instances", async () => {
     const res = await request.get(
       `${url}/admin/course_instances/semesters/${academicSemesterId}/programs/${programId}`
-    );
+    ).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
     expect(res.body.length).to.equal(2);
     if (res.body[0].lectureCount === 1) {
@@ -81,7 +81,7 @@ describe("test classes table routes", () => {
             endPeriod: 6,
           },
         ],
-      });
+      }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(201);
     expect(res.body.levelId).to.equal(levelId);
     classesTableId = res.body.id;
@@ -90,7 +90,7 @@ describe("test classes table routes", () => {
   it("tests get classes table api", async () => {
     const res = await request.get(
       `${url}/admin/classes_tables/semesters/${academicSemesterId}/programs/${programId}/${levelId}`
-    );
+    ).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
     expect(res.body.classes.length).to.equal(2);
   });
@@ -110,7 +110,7 @@ describe("test classes table routes", () => {
             endPeriod: 2,
           },
         ],
-      });
+      }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
     expect(res.body.classes.length).to.equal(1);
   });
@@ -137,7 +137,7 @@ describe("test classes table routes", () => {
             endPeriod: 4,
           },
         ],
-      });
+      }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(400);
     // expect message to start with "Invalid"
     expect(res.body.message).to.match(

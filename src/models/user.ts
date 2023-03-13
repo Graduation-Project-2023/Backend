@@ -32,7 +32,52 @@ export class User {
         email: true,
         role: true,
         student: {},
-      },      
+      },
+    });
+    return data;
+  };
+
+  // to acquire the student data using the user email
+  static getUserByEmailWithStudent = async (email: string) => {
+    const data = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        student: {}
+      },
+    });
+    return data;
+  };
+
+  // to acquire the admin data using the user email
+  static getUserByEmailWithAdmin = async (email: string) => {
+    const data = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        admin: {}
+      },
+    });
+    return data;
+  };
+
+  // to acquire the professor data using the user email
+  static getUserByEmailWithProfessor = async (email: string) => {
+    const data = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        professor: {}
+      },
     });
     return data;
   };

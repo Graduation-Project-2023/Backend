@@ -10,23 +10,23 @@ let csvApi: string;
 describe("test the admission routes", () => {
   before(async () => {
     csvApi = `${url}/admin/student/many`;
-    college = await prisma.college.create({
-      data: {
-        englishName: "Faculty of Engineering",
-        arabicName: "هندسة",
-      },
-    });
+    // college = await prisma.college.create({
+    //   data: {
+    //     englishName: "Faculty of Engineering",
+    //     arabicName: "هندسة",
+    //   },
+    // });
   });
 
   it("rejects a request with no file", async () => {
-    const response = await request.post(csvApi);
+    const response = await request.post(csvApi).set("Authorization", `Bearer ${global.token}`);
     expect(response.status).to.equal(400);
     expect(response.body.message).to.equal("Invalid file");
   });
 
   it("rejects a request with a non-csv file", async () => {
     const response = await request
-      .post(csvApi)
+      .post(csvApi).set("Authorization", `Bearer ${global.token}`)
       .attach("csv", `${__dirname}/../assets/users.txt`);
     expect(response.status).to.equal(400);
     expect(response.body.message).to.equal("Invalid file");
@@ -35,6 +35,7 @@ describe("test the admission routes", () => {
   it("accepts a request with a csv file and correct headers", async () => {
     const response = await request
       .post(`${csvApi}?collegeId=${college.id}&departmentId=${departmentId}`)
+      .set("Authorization", `Bearer ${global.token}`)
       .attach("csv", "src/test/assets/right.csv");
 
     expect(response.status).to.equal(201);
@@ -57,8 +58,8 @@ describe("test the admission routes", () => {
       contactPhone: "+964 770 123 4567",
       homePhone: "0643217123",
       departmentCode: "CS",
-      collegeId: college.id,
-    });
+      collegeId: global.collegeId,
+    }).set("Authorization", `Bearer ${global.token}`);
     expect(student.status).to.equal(201);
     student = student.body;
   });

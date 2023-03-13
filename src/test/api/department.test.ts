@@ -11,7 +11,7 @@ describe("test departments routes", () => {
       collegeId: `${collegeId}`,
       system: "CREDIT",
       programs: [programId1, programId2],
-    });
+    }).set("Authorization", `Bearer ${global.token}`);
     depratmentId1 = res.body.id;
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property("id");
@@ -25,7 +25,7 @@ describe("test departments routes", () => {
       collegeId: `${collegeId}`,
       system: "CREDIT",
       programs: [programId, programId2],
-    });
+    }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(400);
   });
 
@@ -36,7 +36,7 @@ describe("test departments routes", () => {
       code: "ME",
       collegeId: `${collegeId}`,
       system: "CREDIT",
-    });
+    }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(400);
   });
 
@@ -48,7 +48,7 @@ describe("test departments routes", () => {
         arabicName: "الهندسة الميكانيكية",
         collegeId: `${collegeId}`,
         system: "CREDIT",
-      });
+      }).set("Authorization", `Bearer ${global.token}`);
     expect(res.status).to.equal(200);
   });
 });

@@ -17,6 +17,7 @@ export class AuthController extends Controller {
 
   login = (portal: string) => {
     return async (req: Request, res: Response, next: NextFunction) => {
+      req.body.portal = portal;
       passport.authenticate("local", (err, user, info) => {
         if (err) {
           return next(err);
@@ -34,11 +35,22 @@ export class AuthController extends Controller {
               message: err.message,
             });
           }
-          return res.status(200).json({
-            id: user.id,
-            email: user.email,
-            role: user.role,
-          });
+          if (user.role === "STUDENT") {
+            return res.status(200).json({
+              studentId: user.student.id,
+              email: user.email,
+              role: user.role,
+              college: user.student.collegeId,
+            });
+          } else if (user.role === "ADMIN") {
+            return res.status(200).json({
+              id: user.id,
+              email: user.email,
+              role: user.role,
+              college: user.admin.collegeId,
+              token: req.body.token,
+            });
+          }
         });
       })(req, res, next);
     };
@@ -137,11 +149,14 @@ export class AuthController extends Controller {
   };
 
   logout = async (req: Request, res: Response, next: NextFunction) => {
-    req.logout((err) => {
+    req.session.destroy((err) => {
       if (err) {
+        console.log(err);
         return next(err);
+      } else {
+        res.clearCookie("connect.sid", { path: "/" }); // replace example.com with your domain
+        res.status(200).send("Logout successful");
       }
-      res.sendStatus(200);
     });
   };
 }

@@ -16,6 +16,12 @@ export class StudentInfoController extends Controller {
     get_info = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.body.id;
+            if (!id) {
+                return next({
+                    status: 400,
+                    message: "Student Id is required",
+                });
+            }
             const student = await this.model.get_id(id);
             res.status(200).json(student);
         } catch (err) {

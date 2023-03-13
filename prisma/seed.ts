@@ -5,18 +5,18 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 async function seed() {
-    const admin = await prisma.user.upsert({
+    const sysadmin = await prisma.user.upsert({
         create: {
-            email: 'admin@suez.edu.eg',
-            password: process.env.ADMIN_PASSWORD as string,
-            role: 'ADMIN'
+            email: 'super@suez.edu.eg',
+            password: process.env.SUPER_PASSWORD as string,
+            role: 'SUPER'
         },
         where: {
-            email: 'admin@suez.edu.eg'
+            email: 'super@suez.edu.eg'
         },
         update: {}
     })
-  console.log({ admin })
+  console.log({ sysadmin })
 }
 seed()
   .then(async () => {

@@ -16,6 +16,7 @@ model User {
   role      ROLE
   student   Student?
   professor Professor?
+  admin     Admin?
 
   @@map("users")
 }
@@ -34,6 +35,19 @@ model Professor {
   department Department? @relation(fields: [departmentId], references: [id])
 
   @@map("professors")
+}
+
+model Admin {
+  id          String      @id @default(uuid())
+  userId      String      @unique
+  user        User        @relation(fields: [userId], references: [id])
+  englishName String
+  arabicName  String
+  role        ROLE
+  collegeId   String
+  college     College     @relation(fields: [collegeId], references: [id])
+
+  @@map("admins")
 }
 
 model Student {
@@ -103,6 +117,7 @@ model College {
   programs    Program[]
   students    Student[]
   professors  Professor[]
+  admins      Admin[]
   departments Department[]
 
   @@map("colleges")

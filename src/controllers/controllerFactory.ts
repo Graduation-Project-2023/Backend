@@ -17,6 +17,7 @@ import { AuthController } from "./authController";
 import { DepartmentController } from "./departmentController";
 import { AcquireController } from "./acquireController";
 import { StudentInfoController } from "./studentInfoController";
+import { SuperController } from "./superController";
 
 export class ControllerFactory {
   static getController = (controller: string): Controller => {
@@ -25,8 +26,6 @@ export class ControllerFactory {
         return new CourseController();
       case "program":
         return new ProgramController();
-      case "college":
-        return new CollegeController();
       case "programCourse":
         return new ProgramCourseController();
       case "level":
@@ -51,6 +50,11 @@ export class ControllerFactory {
         return new StudentController();
       case "department":
         return new DepartmentController();
+      // super  cases
+      case "super":
+        return new SuperController();
+      case "college":
+        return new CollegeController();
       // student cases
       case "studentInfo":
         return new StudentInfoController();

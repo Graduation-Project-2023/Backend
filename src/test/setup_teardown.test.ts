@@ -29,6 +29,7 @@ declare global {
   var departmentCode: string;
   var departmentId: string;
   var studentId: string;
+  var userId: string;
 }
 
 // run before any test
@@ -40,6 +41,12 @@ before(async () => {
     role: "ADMIN",
   });
 
+  // const student_ = await User.create({
+  //   email: "SalemElstudent@student.com",
+  //   password: "123456",
+  //   role: "STUDENT",
+  // });
+
   // create a global request object with port 3000
   global.request = supertest.agent(server);
 
@@ -47,6 +54,14 @@ before(async () => {
     email: admin.email,
     password: "123456",
   });
+
+  // const student_login = await request.post(`/api/auth/student_login`).send({
+  //   email: student_.email,
+  //   password: "123456",
+  // });
+
+  // global.userId = admin_login.body.id;
+  // console.log("student_login.body.id", student_login.body.id);
 
   const college = await College.create({
     englishName: "Arts",

@@ -37,7 +37,7 @@ export class AuthController extends Controller {
           }
           if (user.role === "STUDENT") {
             return res.status(200).json({
-              id: user.id,
+              studentId: user.student.id,
               email: user.email,
               role: user.role,
               college: user.student.collegeId,

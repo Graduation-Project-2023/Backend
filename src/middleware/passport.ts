@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import prisma from "../db";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../models/user";
+import { Student } from "../models/student";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,6 +17,7 @@ export interface UserTypes {
   email?: string;
   password?: string;
   role?: string;
+  student?: Student;
 }
 
 passport.use(
@@ -89,14 +91,21 @@ passport.serializeUser((user: UserTypes, done) => {
   /**
    * this happens third
    */
-  done(null, user.id);
+  if (user.role === "STUDENT") {
+    if (!user.student) {
+      return done(null, user.id);
+    }
+    done(null, {id: user.id, studentId: user.student.id});
+  } else {
+    done(null, {id: user.id});
+  }
 });
 
-passport.deserializeUser(async (id: string, done) => {
+passport.deserializeUser(async (id: UserTypes, done) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id,
+        id: id.id,
       },
     });
     if (!user) {
@@ -122,7 +131,7 @@ passport.authorize = (roles: string[]) => {
         // check if the user is trying to access the assets of the same student
         if (req.method === "GET") {
           // check the query params if the method is get
-          if (req.session.passport.user === req.query.student_id) {
+          if (req.session.passport.user.studentId === req.query.student_id) {
             return next();
           } else {
             return next({ 
@@ -132,7 +141,7 @@ passport.authorize = (roles: string[]) => {
           }
           // if the request method is not get
         } else {
-          if (req.session.passport.user === req.body.user_id) {
+          if (req.session.passport.user.studentId === req.body.student_id) {
             return next();
           } else {
             return next({ 

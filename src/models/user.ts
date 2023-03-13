@@ -32,7 +32,7 @@ export class User {
         email: true,
         role: true,
         student: {},
-      },      
+      },
     });
     return data;
   };

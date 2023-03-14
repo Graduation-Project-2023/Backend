@@ -9,6 +9,6 @@ const studentInfoController = ControllerFactory.getController(
 ) as StudentInfoController;
 // const studentInfoController = new StudentInfoController();
 
-router.post("/", studentInfoController.get_info);
+router.get("/", studentInfoController.get_info);
 
 export default router;

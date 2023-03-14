@@ -15,7 +15,7 @@ export class StudentInfoController extends Controller {
 
     get_info = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id = req.body.student_id;
+            const id = req.query.studentId;
             if (!id) {
                 return next({
                     status: 400,

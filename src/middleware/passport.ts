@@ -138,8 +138,7 @@ passport.authorize = (roles: string[]) => {
         // check if the user is trying to access the assets of the same student
         if (req.method === "GET") {
           // check the query params if the method is get
-          console.log(req.query.student_id);
-          if (req.session.passport.user.studentId === req.query.student_id) {
+          if (req.session.passport.user.studentId === req.query.studentId) {
             return next();
           } else {
             return next({ 

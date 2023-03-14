@@ -40,14 +40,14 @@ export class AuthController extends Controller {
               studentId: user.student.id,
               email: user.email,
               role: user.role,
-              college: user.student.collegeId,
+              college: user.college,
             });
           } else if (user.role === "ADMIN") {
             return res.status(200).json({
               id: user.id,
               email: user.email,
               role: user.role,
-              college: user.admin.collegeId,
+              college: user.college,
               token: req.body.token,
             });
           }

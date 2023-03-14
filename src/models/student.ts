@@ -266,4 +266,5 @@ export class Student {
     });
     return student;
   };
+  id: any;
 }

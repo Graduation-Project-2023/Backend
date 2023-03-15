@@ -10,26 +10,26 @@ const studentController = ControllerFactory.getController(
 const router = express.Router();
 
 router.get(
-  "/available_courses/:student_id",
+  "/available_courses",  // studentId
   studentController.getStudentAvailableCourses
 );
 
 router.get(
-  "/available_classes/:semester_id/:student_id",
+  "/available_classes",   // semesterId, studentId
   studentController.getStudentAvailableClasses
 );
 
 router.get(
-  "/table/:student_id/:academic_semester_id",
+  "/table",   // studentId, academic_semester_id  
   studentController.getStudentTable
 );
 
 router.post(
-  "/register/:student_id/:academic_semester_id",
+  "/register",    // studentId, academic_semester_id
   studentController.studentRegister
 );
 
-router.put("/register/:table_id", studentController.updateStudentRegister);
+router.put("/register/update", studentController.updateStudentRegister);  // tableId, studentId
 
 router.use("/info", student);
 

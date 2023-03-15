@@ -19,8 +19,8 @@ export class StudentController extends Controller {
 
   getStudentTable = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const studentId = req.params.student_id;
-      const academicSemesterId = req.params.academic_semester_id;
+      const studentId = req.query.studentId;
+      const academicSemesterId = req.query.academic_semester_id;
       const data = await this.model.getStudentTable(
         studentId,
         academicSemesterId
@@ -33,8 +33,8 @@ export class StudentController extends Controller {
 
   studentRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const studentId = req.params.student_id;
-      const academicSemesterId = req.params.academic_semester_id;
+      const studentId = req.query.studentId;
+      const academicSemesterId = req.query.academic_semester_id;
       const data = await this.model.studentRegister(
         studentId,
         academicSemesterId,
@@ -52,7 +52,7 @@ export class StudentController extends Controller {
     next: NextFunction
   ) => {
     try {
-      const tableId = req.params.table_id;
+      const tableId = req.query.tableId;
       const data = await this.model.updateStudentRegister(tableId, req.body);
       res.status(200).json(data);
     } catch (err) {
@@ -66,7 +66,7 @@ export class StudentController extends Controller {
     next: NextFunction
   ) => {
     try {
-      const studentId = req.params.student_id;
+      const studentId = req.query.student_id;
       const data = await this.model.getStudentAvailableCourses(studentId);
       res.status(200).json(data);
     } catch (err) {
@@ -80,8 +80,8 @@ export class StudentController extends Controller {
     next: NextFunction
   ) => {
     try {
-      const semesterId = req.params.semester_id;
-      const studentId = req.params.student_id;
+      const semesterId = req.query.semesterId;
+      const studentId = req.query.studentId;
       const data = await this.model.getStudentAvailableClasses(
         semesterId,
         studentId

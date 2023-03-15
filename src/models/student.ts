@@ -35,6 +35,16 @@ export class Student {
     return data;
   };
 
+  static getAllByProgram = async (programId: string) => {
+    const data = await prisma.student.findMany({
+      where: { programId },
+      include: {
+        level: true,
+      },
+    });
+    return data;
+  };
+
   static get = async (id: string) => {
     const data = await prisma.student.findUnique({
       where: { id },

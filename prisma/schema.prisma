@@ -90,6 +90,7 @@ model Student {
   // Other details
   collegeId                      String?
   programId                      String?
+  levelId                        String?
   directorate                    String?
   collegeCode                    String?
   tableId                        String?
@@ -101,6 +102,7 @@ model Student {
   enrollmentSemester             AcademicSemester?       @relation(fields: [enrollmentSemesterId], references: [id], name: "enrollmentSemester")
   enrollmentSemesterId           String?
   courses                        StudentCourseInstance[]
+  level                          Level?                  @relation(fields: [levelId], references: [id])
 
   // _________________________
   departmentCode                 String?
@@ -319,6 +321,7 @@ model Level {
   courses       ProgramCourse[]
   courseInstances CourseInstance[]
   tables        ClassesTable[]
+  students      Student[]
 
   @@unique([programId, level])
   @@map("levels")

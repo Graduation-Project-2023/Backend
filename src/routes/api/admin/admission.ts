@@ -14,6 +14,8 @@ router.get("/:id", admissionController.get);
 
 router.post("/", admissionController.create);
 
+router.get("/program/:programId", admissionController.getAllByProgram);
+
 router.post(
   "/many",
   uploadSingle,

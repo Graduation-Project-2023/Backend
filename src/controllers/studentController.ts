@@ -20,7 +20,7 @@ export class StudentController extends Controller {
   getStudentTable = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const studentId = req.query.studentId;
-      const academicSemesterId = req.query.academic_semester_id;
+      const academicSemesterId = req.query.semesterId;
       const data = await this.model.getStudentTable(
         studentId,
         academicSemesterId
@@ -34,7 +34,7 @@ export class StudentController extends Controller {
   studentRegister = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const studentId = req.query.studentId;
-      const academicSemesterId = req.query.academic_semester_id;
+      const academicSemesterId = req.query.semesterId;
       const data = await this.model.studentRegister(
         studentId,
         academicSemesterId,

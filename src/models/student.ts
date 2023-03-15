@@ -2,7 +2,10 @@ import { Prisma, User } from "@prisma/client";
 import prisma from "../db";
 import { getCorrectDateFromDMY } from "../utils/date";
 
-const createManyStudentCourses = (studentId: string, courses: any) => {
+const createManyStudentCourses = (
+  studentId: string | undefined,
+  courses: any
+) => {
   return {
     create: courses?.map((course: any) => {
       return {
@@ -239,9 +242,12 @@ export class Student {
             id: true,
           },
         },
+        studentId: true,
       },
     });
-    const prevClassesIds = prevClasses?.classes?.map((c: any) => c.id);
+    const prevClassesIds = prevClasses?.classes?.map((c: any) => ({
+      id: c.id,
+    }));
     return await prisma.studentTable.update({
       where: { id: tableId },
       data: {
@@ -249,13 +255,17 @@ export class Student {
           deleteMany: {
             tableId,
           },
-          ...createManyStudentCourses(tableId, courseInstances),
+          ...createManyStudentCourses(prevClasses?.studentId, courseInstances),
         },
         // disconnect all classes and connect the new ones
         classes: {
           disconnect: prevClassesIds,
           ...connectManyClasses(courseInstances),
         },
+      },
+      include: {
+        instances: true,
+        classes: true,
       },
     });
   };

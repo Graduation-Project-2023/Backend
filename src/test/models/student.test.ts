@@ -6,6 +6,7 @@ import { executionAsyncId } from "async_hooks";
 describe("Student service test", () => {
   let availableCourses: any;
   let availableClasses: any;
+  let tableId: string;
   before(async () => {
     const id1 = (
       await prisma.programCourse.create({
@@ -192,6 +193,7 @@ describe("Student service test", () => {
       academicSemesterId,
       data
     );
+    tableId = table.id;
     expect(table.instances).to.have.lengthOf(2);
   });
 
@@ -202,5 +204,19 @@ describe("Student service test", () => {
     );
     expect(table?.instances).to.have.lengthOf(2);
     expect(table?.classes).to.have.lengthOf(3);
+  });
+
+  it("should update student timetable", async () => {
+    const data = {
+      courseInstances: availableClasses.map((course: any) => {
+        const classes = course.classes.map((c: any) => c.id);
+        return {
+          courseInstanceId: course.id,
+          classes,
+        };
+      }),
+    };
+    const table = await StudentService.updateStudentRegister(tableId, data);
+    expect(table?.instances).to.have.lengthOf(2);
   });
 });

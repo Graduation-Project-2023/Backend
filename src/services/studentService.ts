@@ -197,6 +197,10 @@ export class StudentService {
     return await Student.studentRegister(studentId, academicSemesterId, data);
   };
 
+  static updateStudentRegister = async (tableId: string, data: any) => {
+    return await Student.updateStudentRegister(tableId, data);
+  };
+
   static getAll = async (collegeId: string) => {
     return await Student.getAll(collegeId);
   };

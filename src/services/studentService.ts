@@ -205,6 +205,10 @@ export class StudentService {
     return await Student.getAll(collegeId);
   };
 
+  static getAllByProgram = async (programId: string) => {
+    return await Student.getAllByProgram(programId);
+  };
+
   static create = async (data: StudentModel & UserModel) => {
     return await Student.create(data);
   };

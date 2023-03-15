@@ -66,7 +66,7 @@ export class StudentController extends Controller {
     next: NextFunction
   ) => {
     try {
-      const studentId = req.query.student_id;
+      const studentId = req.query.studentId;
       const data = await this.model.getStudentAvailableCourses(studentId);
       res.status(200).json(data);
     } catch (err) {

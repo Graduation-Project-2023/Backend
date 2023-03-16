@@ -17,6 +17,16 @@ export class StudentController extends Controller {
     }
   };
 
+  getAllByProgram = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const programId = req.params.programId;
+      const data = await this.model.getAllByProgram(programId);
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  };
+
   getStudentTable = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const studentId = req.query.studentId;

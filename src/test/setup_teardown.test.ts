@@ -83,8 +83,6 @@ before(async () => {
   // global.userId = admin_login.body.id;
   // console.log("student_login.body.id", student_login.body.id);
 
-  
-
   const course1 = await Course.create({
     englishName: "English",
     arabicName: "اللغة الانجليزية",
@@ -243,9 +241,9 @@ before(async () => {
 });
 
 after(async () => {
+  await prisma.studentCourseInstance.deleteMany();
   await prisma.studentTable.deleteMany();
   await prisma.availableCourse.deleteMany();
-  await prisma.studentCourseInstance.deleteMany();
   await prisma.student.deleteMany();
   await prisma.admin.deleteMany();
   await prisma.user.deleteMany();

@@ -6,6 +6,7 @@ import courseIntance from "./courseInstance";
 import professor from "./professor";
 import admission from "./admission";
 import department from "./department";
+import student from "./student";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/professor", professor);
 router.use("/classes_tables", classesTable);
 router.use("/course_instances", courseIntance);
 router.use("/departments", department);
+router.use("/view", student);
 
 export default router;

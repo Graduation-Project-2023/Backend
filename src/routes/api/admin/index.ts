@@ -6,7 +6,7 @@ import courseIntance from "./courseInstance";
 import professor from "./professor";
 import admission from "./admission";
 import department from "./department";
-import student from "./student";
+import student from "../student/index";
 
 const router = express.Router();
 

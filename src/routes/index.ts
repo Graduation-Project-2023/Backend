@@ -18,7 +18,7 @@ router.use("/", acquire);
 
 router.use("/admin", passport.authorize(["admin"]), admin);
 
-router.use("/student", passport.authorize(["student"]), student);
+router.use("/student", passport.authorize(["student", "admin"]), student);
 
 router.use("/master", passport.authorize(["super", "admin"]), master);
 

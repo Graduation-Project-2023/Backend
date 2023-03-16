@@ -134,7 +134,17 @@ passport.authorize = (roles: string[]) => {
        * if the user is an admin, then check if the user is trying to access the assets of the same admin
        * 
        */
-      if (roles.includes("admin")) {
+      if (roles.includes("student")) {
+        // check if the user is trying to access the assets of the same student
+        if (req.session.passport.user.studentId === req.query.studentId) {
+          return next();
+        } else {
+          return next({ 
+            status: 401, 
+            message: "You don't have access to this resource" 
+          });
+        }        
+      } else if (roles.includes("admin")) {
         // check the jwt token if the method is get
         if (req.method === "GET") {
           const authHeader = req.headers["authorization"];
@@ -204,16 +214,6 @@ passport.authorize = (roles: string[]) => {
             });
           }
         }
-    } else if (roles.includes("student")) {
-        // check if the user is trying to access the assets of the same student
-        if (req.session.passport.user.studentId === req.query.studentId) {
-          return next();
-        } else {
-          return next({ 
-            status: 401, 
-            message: "You don't have access to this resource" 
-          });
-        }        
       }
       // check the identity of the user
       // if (roles.includes(req.user?.role.toLowerCase())) {

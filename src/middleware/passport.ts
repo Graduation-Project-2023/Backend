@@ -7,8 +7,7 @@ import { User } from "../models/user";
 import { College } from "@prisma/client";
 import { Student } from "../models/student";
 import dotenv from "dotenv";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
 
 dotenv.config();
 const PEPPER = process.env.PEPPER as string;
@@ -26,7 +25,7 @@ passport.use(
     { usernameField: "email", passReqToCallback: true },
     async (req, email, password, done) => {
       try {
-        // console.log(req.body.portal)  // comment this out 
+        // console.log(req.body.portal)  // comment this out
         let user: any;
         if (req.body.portal === "STUDENT") {
           // get the user from the student table
@@ -37,16 +36,16 @@ passport.use(
         } else {
           // get the user from the admin table
           user = await User.getUserByEmailWithData(email);
-          if (user.role === "ADMIN") {
+          if (user?.role === "ADMIN") {
             user.college = await prisma.college.findUnique({
-              where: { id: user.admin.collegeId },
+              where: { id: user.admin?.collegeId },
             });
-          } else if (user.role === "PROFESSOR") {
+          } else if (user?.role === "PROFESSOR") {
             user.college = await prisma.college.findUnique({
               where: { id: user.professor.collegeId },
             });
           }
-        } 
+        }
         // else if (req.body.portal === "Professor") {
         //   // get the user from the professor table
         //   user = await User.getUserByEmailWithProfessor(email);
@@ -60,7 +59,11 @@ passport.use(
             user.password
           );
           if (password_match || password === user.password) {
-            if (user.role === "ADMIN" || user.role === "SUPER" || user.role === "PROFESSOR") {
+            if (
+              user.role === "ADMIN" ||
+              user.role === "SUPER" ||
+              user.role === "PROFESSOR"
+            ) {
               /**
                * the sessionID, when it reaches the session store in server.ts it changes for seome reason that
                *  I don't know, so I'm generating a new one here and passing it to the request body so that
@@ -72,7 +75,7 @@ passport.use(
               // attach JWT token to the request body if the user is admin
               let token;
               if (user.role === "ADMIN") {
-                  token = jwt.sign(
+                token = jwt.sign(
                   {
                     id: user.id,
                     email: user.email,
@@ -85,7 +88,7 @@ passport.use(
                   { expiresIn: "1w" }
                 );
               } else if (user.role === "PROFESSOR") {
-                  token = jwt.sign(
+                token = jwt.sign(
                   {
                     id: user.id,
                     email: user.email,
@@ -126,9 +129,9 @@ passport.serializeUser((user: UserTypes, done) => {
     if (!user.student) {
       return done(null, user.id);
     }
-    done(null, {id: user.id, studentId: user.student.id});
+    done(null, { id: user.id, studentId: user.student.id });
   } else {
-    done(null, {id: user.id});
+    done(null, { id: user.id });
   }
 });
 
@@ -148,7 +151,6 @@ passport.deserializeUser(async (id: UserTypes, done) => {
   }
 });
 
-
 passport.authorize = (roles: string[]) => {
   return async (req: any, res: any, next: any) => {
     if (req.isAuthenticated()) {
@@ -156,18 +158,18 @@ passport.authorize = (roles: string[]) => {
        * check the portal of the user
        * if the user is a student, then check if the user is trying to access the assets of the same student
        * if the user is an admin, then check if the user is trying to access the assets of the same admin
-       * 
+       *
        */
       if (roles.includes("student")) {
         // check if the user is trying to access the assets of the same student
         if (req.session.passport.user.studentId === req.query.studentId) {
           return next();
         } else {
-          return next({ 
-            status: 401, 
-            message: "You don't have access to this resource" 
+          return next({
+            status: 401,
+            message: "You don't have access to this resource",
           });
-        }        
+        }
       } else if (roles.includes("admin")) {
         // check the jwt token if the method is get
         if (req.method === "GET") {
@@ -183,17 +185,17 @@ passport.authorize = (roles: string[]) => {
             const current_date = new Date();
             // the token is not expired
             if (session_date.getTime() > current_date.getTime()) {
-             return next();
-           } else {
-              return next({ 
-               status: 401, 
-               message: "You don't have access to this resource" 
-             });
+              return next();
+            } else {
+              return next({
+                status: 401,
+                message: "You don't have access to this resource",
+              });
             }
           } catch (err) {
-            return next({ 
-              status: 401, 
-              message: "You don't have access to this resource" 
+            return next({
+              status: 401,
+              message: "You don't have access to this resource",
             });
           }
           // if the request method is not get
@@ -224,17 +226,17 @@ passport.authorize = (roles: string[]) => {
             // ensure that the admin doesn't access the assets of another college
             if (req.body.collegeId) {
               if (req.body.collegeId !== decoded.college) {
-                return next({ 
-                  status: 401, 
-                  message: "You don't have access to this college" 
+                return next({
+                  status: 401,
+                  message: "You don't have access to this college",
                 });
               }
             }
             return next();
           } else {
-            return next({ 
-              status: 401, 
-              message: "You don't have access to this resource" 
+            return next({
+              status: 401,
+              message: "You don't have access to this resource",
             });
           }
         }

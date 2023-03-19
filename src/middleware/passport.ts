@@ -38,7 +38,7 @@ passport.use(
           user = await User.getUserByEmailWithData(email);
           if (user?.role === "ADMIN") {
             user.college = await prisma.college.findUnique({
-              where: { id: user.admin.collegeId },
+              where: { id: user.admin?.collegeId },
             });
           } else if (user?.role === "PROFESSOR") {
             user.college = await prisma.college.findUnique({

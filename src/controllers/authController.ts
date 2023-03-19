@@ -100,7 +100,7 @@ export class AuthController extends Controller {
         //   url,
         //   "Reset Password"
         // );
-        res.json({ message: "Reset link sent", url });
+        res.json({ message: "Reset link sent", url: token });
       }
     } catch (err) {
       return next(err);

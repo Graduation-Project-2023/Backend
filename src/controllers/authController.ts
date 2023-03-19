@@ -22,7 +22,7 @@ export class AuthController extends Controller {
         if (err) {
           return next(err);
         }
-        if (!user || user.role !== portal) {
+        if (!user) {
           return next({
             status: 401,
             message: "Invalid credentials",
@@ -43,6 +43,14 @@ export class AuthController extends Controller {
               college: user.college,
             });
           } else if (user.role === "ADMIN") {
+            return res.status(200).json({
+              id: user.id,
+              email: user.email,
+              role: user.role,
+              college: user.college,
+              token: req.body.token,
+            });
+          } else if (user.role === "PROFESSOR") {
             return res.status(200).json({
               id: user.id,
               email: user.email,
@@ -92,7 +100,7 @@ export class AuthController extends Controller {
         //   url,
         //   "Reset Password"
         // );
-        res.json({ message: "Reset link sent" });
+        res.json({ message: "Reset link sent", url });
       }
     } catch (err) {
       return next(err);

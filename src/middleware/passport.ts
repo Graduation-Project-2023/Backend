@@ -84,7 +84,7 @@ passport.use(
                     session: req.body.session,
                     expires: req.session.cookie.expires,
                   },
-                  "SECRET",
+                  SECRET,
                   { expiresIn: "1w" }
                 );
               } else if (user.role === "PROFESSOR") {
@@ -98,7 +98,7 @@ passport.use(
                     session: req.body.session,
                     expires: req.session.cookie.expires,
                   },
-                  "SECRET",
+                  SECRET,
                   { expiresIn: "1w" }
                 );
               }
@@ -180,7 +180,7 @@ passport.authorize = (roles: string[]) => {
           const token = authHeader.split(" ")[1] as string;
           try {
             // check if the token is not altered
-            let decoded = jwt.verify(token, "SECRET") as JwtPayload;
+            let decoded = jwt.verify(token, SECRET) as JwtPayload;
             const session_date = new Date(decoded.expires);
             const current_date = new Date();
             // the token is not expired
@@ -206,7 +206,7 @@ passport.authorize = (roles: string[]) => {
             return res.status(401).json({ err: "No token provided" });
           }
           const token = authHeader.split(" ")[1] as string;
-          let decoded = jwt.verify(token, "SECRET") as JwtPayload;
+          let decoded = jwt.verify(token, SECRET) as JwtPayload;
           // check if the session actually exists
           const session_data = await prisma.session.findUnique({
             where: {

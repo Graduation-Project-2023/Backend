@@ -30,20 +30,27 @@ passport.use(
         let user: any;
         if (req.body.portal === "STUDENT") {
           // get the user from the student table
-          user = await User.getUserByEmailWithStudent(email);
+          user = await User.getUserByEmailWithData(email);
           user.college = await prisma.college.findUnique({
             where: { id: user.student.collegeId },
           });
-        } else if (req.body.portal === "ADMIN" || req.body.portal === "SUPER") {
+        } else {
           // get the user from the admin table
-          user = await User.getUserByEmailWithAdmin(email);
-          user.college = await prisma.college.findUnique({
-            where: { id: user.admin.collegeId },
-          });
-        } else if (req.body.portal === "Professor") {
-          // get the user from the professor table
-          user = await User.getUserByEmailWithProfessor(email);
-        }
+          user = await User.getUserByEmailWithData(email);
+          if (user.role === "ADMIN") {
+            user.college = await prisma.college.findUnique({
+              where: { id: user.admin.collegeId },
+            });
+          } else if (user.role === "PROFESSOR") {
+            user.college = await prisma.college.findUnique({
+              where: { id: user.professor.collegeId },
+            });
+          }
+        } 
+        // else if (req.body.portal === "Professor") {
+        //   // get the user from the professor table
+        //   user = await User.getUserByEmailWithProfessor(email);
+        // }
         if (!user) {
           // no error has occurred, but the user does not exist
           return done(null, false, { message: "Incorrect email or password" });
@@ -53,7 +60,7 @@ passport.use(
             user.password
           );
           if (password_match || password === user.password) {
-            if (user.role === "ADMIN" || user.role === "SUPER") {
+            if (user.role === "ADMIN" || user.role === "SUPER" || user.role === "PROFESSOR") {
               /**
                * the sessionID, when it reaches the session store in server.ts it changes for seome reason that
                *  I don't know, so I'm generating a new one here and passing it to the request body so that
@@ -63,18 +70,35 @@ passport.use(
                */
               req.body.session = uuidv4();
               // attach JWT token to the request body if the user is admin
-              const token = jwt.sign(
-                {
-                  id: user.id,
-                  email: user.email,
-                  role: user.role,
-                  college: user.admin.collegeId,
-                  session: req.body.session,
-                  expires: req.session.cookie.expires,
-                },
-                "SECRET",
-                { expiresIn: "1w" }
-              );
+              let token;
+              if (user.role === "ADMIN") {
+                  token = jwt.sign(
+                  {
+                    id: user.id,
+                    email: user.email,
+                    role: user.role,
+                    college: user.admin.collegeId,
+                    session: req.body.session,
+                    expires: req.session.cookie.expires,
+                  },
+                  "SECRET",
+                  { expiresIn: "1w" }
+                );
+              } else if (user.role === "PROFESSOR") {
+                  token = jwt.sign(
+                  {
+                    id: user.id,
+                    email: user.email,
+                    role: user.role,
+                    college: user.professor.collegeId,
+
+                    session: req.body.session,
+                    expires: req.session.cookie.expires,
+                  },
+                  "SECRET",
+                  { expiresIn: "1w" }
+                );
+              }
               req.body.token = token;
             }
             // no error has occurred, and the user exists and the password is correct

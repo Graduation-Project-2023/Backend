@@ -27,6 +27,8 @@ model Professor {
   user        User             @relation(fields: [userId], references: [id])
   englishName String
   arabicName  String
+  title       String?
+  position    POSITION         @default(permanent)
   collegeId   String
   college     College          @relation(fields: [collegeId], references: [id])
   courses     CourseInstance[]
@@ -55,7 +57,7 @@ model Student {
   //personal details
   arabicName                     String?
   englishName                    String?
-  SeatId                         Int?                    @unique @default(autoincrement())
+  seatId                         Int?                    @unique @default(autoincrement())
   gender                         GENDER?
   religion                       RELIGION?
   birthDate                      DateTime?
@@ -74,9 +76,9 @@ model Student {
   guardianNationality            String?
   guardianPhone                  String?
   // academic details
-  InstitutePreviousQualification String?
-  PreviousQualification          String?
-  TotalPreviousQualification     String?
+  institutePreviousQualification String?
+  previousQualification          String?
+  totalPreviousQualification     String?
   schoolMarks                    String?
   schoolSeatId                   String?
   // Army details
@@ -440,6 +442,12 @@ enum ROLE {
   PROFESSOR
   SUPER
   @@map("Role")
+}
+
+enum POSITION {
+  delegated
+  permanent
+  @@map("Position")
 }
 
 enum SEMESTER {

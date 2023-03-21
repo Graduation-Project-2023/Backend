@@ -18,13 +18,14 @@ export class Professor {
   };
 
   static create = async (data: any) => {
-    const { email, password, collegeId, ...professorData } = data;
+    const { email, password, collegeId, nationalId, departmentId, ...professorData } = data;
     const professor = await prisma.professor.create({
       data: {
         user: {
           create: {
             email,
             password: await bcrypt.hash(password + process.env.PEPPER, 10),
+            nationalId,
             role: "PROFESSOR",
           },
         },
@@ -33,6 +34,11 @@ export class Professor {
             id: collegeId,
           },
         },
+        department: {
+          connect: {
+            id: departmentId,
+        },
+      },
         ...professorData,
       },
     });

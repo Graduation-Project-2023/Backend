@@ -195,7 +195,7 @@ passport.authorize = (roles: string[]) => {
           } catch (err) {
             return next({
               status: 401,
-              message: "You don't have access to this resource",
+              message: "Invalid token",
             });
           }
           // if the request method is not get
@@ -205,40 +205,48 @@ passport.authorize = (roles: string[]) => {
           if (!authHeader) {
             return res.status(401).json({ err: "No token provided" });
           }
-          const token = authHeader.split(" ")[1] as string;
-          let decoded = jwt.verify(token, SECRET) as JwtPayload;
-          // check if the session actually exists
-          const session_data = await prisma.session.findUnique({
-            where: {
-              id: decoded.session,
-            },
-          });
-          if (!session_data) {
-            return next({
-              status: 401,
-              message: "Try logging in again",
+          try {
+            const token = authHeader.split(" ")[1] as string;
+            let decoded = jwt.verify(token, SECRET) as JwtPayload;
+            // check if the session actually exists
+            const session_data = await prisma.session.findUnique({
+              where: {
+                id: decoded.session,
+              },
             });
-          }
-          // check if the session is not expired
-          const session_date = new Date(session_data.expiresAt);
-          const current_date = new Date();
-          if (session_date.getTime() > current_date.getTime()) {
-            // ensure that the admin doesn't access the assets of another college
-            if (req.body.collegeId) {
-              if (req.body.collegeId !== decoded.college) {
-                return next({
-                  status: 401,
-                  message: "You don't have access to this college",
-                });
-              }
+            if (!session_data) {
+              return next({
+                status: 401,
+                message: "Try logging in again",
+              });
             }
-            return next();
-          } else {
+            // check if the session is not expired
+            const session_date = new Date(session_data.expiresAt);
+            const current_date = new Date();
+            if (session_date.getTime() > current_date.getTime()) {
+              // ensure that the admin doesn't access the assets of another college
+              if (req.body.collegeId) {
+                if (req.body.collegeId !== decoded.college) {
+                  return next({
+                    status: 401,
+                    message: "You don't have access to this college",
+                  });
+                }
+              }
+              return next();
+            } else {
+              return next({
+                status: 401,
+                message: "You don't have access to this resource",
+              });
+            }
+          } catch (error) {
             return next({
               status: 401,
-              message: "You don't have access to this resource",
+              message: "Invalid token",
             });
           }
+          
         }
       }
       // check the identity of the user

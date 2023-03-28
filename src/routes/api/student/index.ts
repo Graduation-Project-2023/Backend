@@ -1,6 +1,7 @@
 import express from "express";
 import { ControllerFactory } from "../../../controllers/controllerFactory";
 import { StudentController } from "../../../controllers/studentController";
+import { Assist } from "../../../controllers/assist";
 import student from "./info";
 
 const studentController = ControllerFactory.getController(
@@ -28,6 +29,11 @@ router.post(
   "/register", // studentId, academic_semester_id
   studentController.studentRegister
 );
+
+router.post(
+  "/assist",
+  new Assist().answer
+)
 
 router.put("/register/update", studentController.updateStudentRegister);
 

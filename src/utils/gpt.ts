@@ -11,23 +11,29 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-async function answerQuestion(question: string, choices: string[]) {
-    let answers = ''
-    for (let i = 0; i < choices.length; i++) {
-        answers += choices[i]+ ', '
+async function answerQuestion(question: string, choices: string[], mode: string) {
+    if (mode === 'bank') {
+      let answers = ''
+      for (let i = 0; i < choices.length; i++) {
+          answers += choices[i]+ ', '
+      }
+      const ans = await openai.createCompletion({
+          
+          model: 'text-davinci-003',
+          prompt: `explain this question for me \n ${question} \n and tell me which one is correct \n ${answers} \n`,
+          temperature: 0.7,
+          max_tokens: 4000,
+      });
+      return ans.data.choices[0].text;
+    } else if (mode === 'question') {
+      const ans = await openai.createCompletion({
+          model: 'text-davinci-003',
+          prompt: question,
+          temperature: 0.7,
+          max_tokens: 4000,
+      });
+      return ans.data.choices[0].text;
     }
-    console.log('anss' ,answers)
-    const ans = await openai.createCompletion({
-        
-        model: 'text-davinci-003',
-        prompt: `explain this question for me \n ${question} \n and tell me which one is correct \n ${answers} \n`,
-    });
-    console.log(`explain this question for me \n ${question} \n and tell me which one is correct \n ${answers} \n`);
-    return ans.data.choices[0].text;
 }
 
-const r = answerQuestion('what is a localhost? ', ['10.10.10.10', '127.0.0.1', ':1', '192.168.0.1'])
-    .then((res) => {
-        console.log(res);
-    })
 export default answerQuestion;

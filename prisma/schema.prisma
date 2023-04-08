@@ -33,6 +33,8 @@ model Professor {
   college     College          @relation(fields: [collegeId], references: [id])
   courses     CourseInstance[]
   classes    Class[]
+  questions   Question[]
+  sheets      Sheet[]
   departmentId String?
   department Department? @relation(fields: [departmentId], references: [id])
 
@@ -105,7 +107,7 @@ model Student {
   enrollmentSemesterId           String?
   courses                        StudentCourseInstance[]
   level                          Level?                  @relation(fields: [levelId], references: [id])
-
+  instances                      SheetInstance[]
   // _________________________
   departmentCode                 String?
   department                     Department?             @relation(fields: [departmentCode], references: [code])
@@ -113,6 +115,63 @@ model Student {
   availableCourses               AvailableCourse[]
 
   @@map("students")
+}
+
+model Bank {
+  id          String      @id @default(uuid())
+  englishName String
+  arabicName  String
+  code        String      @unique
+  questions   Question[]
+
+  @@map("banks")
+}
+
+model Question {
+  id          String      @id @default(uuid())
+  question    String
+  choices     Json
+  answer      String
+  bankId      String
+  bank        Bank        @relation(fields: [bankId], references: [id])
+  addedBy     String
+  professor   Professor   @relation(fields: [addedBy], references: [id])
+  time        DateTime    @default(now())
+  sheetId     String?
+  sheet       Sheet?      @relation(fields: [sheetId], references: [id])
+
+  @@map("questions")
+}
+
+model Sheet {
+  id          String      @id @default(uuid())
+  englishName String
+  arabicName  String
+  coursename  String
+  course      Course      @relation(fields: [coursename], references: [id])
+  questions   Question[]
+  time        Float
+  createdby   String
+  professor   Professor   @relation(fields: [createdby], references: [id])
+  totalMarks  Float
+  instances   SheetInstance[]
+
+  @@map("sheets")
+}
+
+model SheetInstance {
+  id          String      @id @default(uuid())
+  sheetId     String
+  sheet       Sheet       @relation(fields: [sheetId], references: [id])
+  studentId   String
+  student     Student     @relation(fields: [studentId], references: [id])
+  answers     Json
+  marks       Float
+  time        Float
+  submitted   Boolean     @default(false)
+  submittedAt DateTime?
+
+  @@map("sheet_instances")
 }
 
 model College {
@@ -153,6 +212,7 @@ model Course {
   id                 String          @id
   college            College?        @relation(fields: [collegeId], references: [id])
   programCourses     ProgramCourse[]
+  sheets             Sheet[]
 
   @@map("courses")
 }

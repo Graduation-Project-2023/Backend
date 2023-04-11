@@ -117,63 +117,6 @@ model Student {
   @@map("students")
 }
 
-model Bank {
-  id          String      @id @default(uuid())
-  englishName String
-  arabicName  String
-  code        String      @unique
-  questions   Question[]
-
-  @@map("banks")
-}
-
-model Question {
-  id          String      @id @default(uuid())
-  question    String
-  choices     Json
-  answer      String
-  bankId      String
-  bank        Bank        @relation(fields: [bankId], references: [id])
-  addedBy     String
-  professor   Professor   @relation(fields: [addedBy], references: [id])
-  time        DateTime    @default(now())
-  sheetId     String?
-  sheet       Sheet?      @relation(fields: [sheetId], references: [id])
-
-  @@map("questions")
-}
-
-model Sheet {
-  id          String      @id @default(uuid())
-  englishName String
-  arabicName  String
-  coursename  String
-  course      Course      @relation(fields: [coursename], references: [id])
-  questions   Question[]
-  time        Float
-  createdby   String
-  professor   Professor   @relation(fields: [createdby], references: [id])
-  totalMarks  Float
-  instances   SheetInstance[]
-
-  @@map("sheets")
-}
-
-model SheetInstance {
-  id          String      @id @default(uuid())
-  sheetId     String
-  sheet       Sheet       @relation(fields: [sheetId], references: [id])
-  studentId   String
-  student     Student     @relation(fields: [studentId], references: [id])
-  answers     Json
-  marks       Float
-  time        Float
-  submitted   Boolean     @default(false)
-  submittedAt DateTime?
-
-  @@map("sheet_instances")
-}
-
 model College {
   id          String      @id @default(uuid())
   englishName String
@@ -212,7 +155,7 @@ model Course {
   id                 String          @id
   college            College?        @relation(fields: [collegeId], references: [id])
   programCourses     ProgramCourse[]
-  sheets             Sheet[]
+  bank               Bank?
 
   @@map("courses")
 }
@@ -485,6 +428,63 @@ model AcademicSemester {
 
   @@unique([academicYear, semester])
   @@map("academic_semesters")
+}
+
+model Bank {
+  id        String     @id @unique
+  englishName String
+  arabicName  String
+  questions   Question[]
+  sheets      Sheet[]
+  courseCode  Course     @relation(fields: [id], references: [id])
+
+  @@map("banks")
+}
+
+model Question {
+  id          String      @id @default(uuid())
+  question    String
+  choices     Json
+  answer      String[]  //editeddddddddddd to be arr
+  image       String?
+  bankId      String
+  addedBy     String
+  lastEdit        DateTime    @default(now())
+  sheet     Sheet[]
+  bank        Bank        @relation(fields: [bankId], references: [id])
+  professor   Professor   @relation(fields: [addedBy], references: [id])
+
+  @@map("questions")
+}
+
+model Sheet {
+  id          String      @id @default(uuid())
+  englishName String
+  arabicName  String?
+  description String?
+  bankId  String
+  createdBy   String
+  totalMarks  Float
+  questions   Question[]
+  instances   SheetInstance[]
+  bank      Bank      @relation(fields: [bankId], references: [id])
+  professor   Professor   @relation(fields: [createdBy], references: [id])
+
+  @@map("sheets")
+}
+
+model SheetInstance {
+  id          String      @id @default(uuid())
+  sheetId     String
+  studentId   String
+  answers     Json
+  marks       Float
+  startTime   Float
+  endTime     Float
+  sheet       Sheet       @relation(fields: [sheetId], references: [id])
+  student     Student     @relation(fields: [studentId], references: [id])
+
+  @@map("sheet_instances")
 }
 
 model Session {

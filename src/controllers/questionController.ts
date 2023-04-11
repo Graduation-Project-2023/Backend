@@ -1,17 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import { Controller } from "./controller";
-import { Bank } from "../models/bank";
+import { Question } from "../models/question";
 
-export class BankController extends Controller {
+export class QuestionController extends Controller {
+
   constructor() {
-    super(Bank);
+    super(Question);
   }
 
     getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const student = await this.model.getAll();
+            const bankId = req.query.bankId as string;
+            const student = await this.model.getAll(bankId);
             res.status(200).json(student);
         } catch (err) {
+            console.log(err);
             next(err);
         }
     }

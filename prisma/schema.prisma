@@ -463,6 +463,7 @@ model Sheet {
   arabicName  String?
   description String?
   bankId  String
+  givenTime   Float?
   createdBy   String
   totalMarks  Float
   questions   Question[]
@@ -477,10 +478,13 @@ model SheetInstance {
   id          String      @id @default(uuid())
   sheetId     String
   studentId   String
-  answers     Json
-  marks       Float
-  startTime   Float
-  endTime     Float
+  answers     Json?
+  result      Float?
+  startTime   DateTime?
+
+  endTime     DateTime?
+  finished    Boolean?    @default(false)
+  started     Boolean?    @default(false)
   sheet       Sheet       @relation(fields: [sheetId], references: [id])
   student     Student     @relation(fields: [studentId], references: [id])
 

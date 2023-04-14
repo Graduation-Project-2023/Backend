@@ -18,6 +18,9 @@ import { DepartmentController } from "./departmentController";
 import { AcquireController } from "./acquireController";
 import { StudentInfoController } from "./studentInfoController";
 import { SuperController } from "./superController";
+import { BankController } from "./bankController";
+import { QuestionController } from "./questionController";
+import { SheetController } from "./sheetController";
 
 export class ControllerFactory {
   static getController = (controller: string): Controller => {
@@ -58,6 +61,12 @@ export class ControllerFactory {
       // student cases
       case "studentInfo":
         return new StudentInfoController();
+      case "bank":
+        return new BankController();
+      case "question":
+        return new QuestionController();
+      case "sheet":
+        return new SheetController();
       default:
         throw new Error("Invalid controller");
     }

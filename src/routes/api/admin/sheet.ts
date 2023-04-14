@@ -8,7 +8,7 @@ const router = express.Router();
 // ) as BankController;
 const sheetController = new SheetController();
 
-router.get("/", sheetController.getAll);
+router.get("/:bankId/all", sheetController.getAll);
 
 router.get("/:id", sheetController.get);
 

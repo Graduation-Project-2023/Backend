@@ -10,6 +10,7 @@ import student from "../student/index";
 import bank from "./bank"
 import question from "./question"
 import sheet from "./sheet"
+import sheetInstance from "./sheetInstance"
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.use("/departments", department);
 router.use("/bank", bank);
 router.use("/question", question);
 router.use("/sheet", sheet);
+router.use("/sheetInstance", sheetInstance);
 router.use("/view", student);
 
 export default router;

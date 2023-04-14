@@ -480,8 +480,8 @@ model SheetInstance {
   studentId   String
   answers     Json?
   result      Float?
+  givenTime   Float?
   startTime   DateTime?
-
   endTime     DateTime?
   finished    Boolean?    @default(false)
   started     Boolean?    @default(false)

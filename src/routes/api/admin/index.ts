@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import program from "./program";
 import course from "./course";
 import classesTable from "./classesTable";
@@ -7,6 +7,10 @@ import professor from "./professor";
 import admission from "./admission";
 import department from "./department";
 import student from "../student/index";
+import bank from "./bank"
+import question from "./question"
+import sheet from "./sheet"
+import sheetInstance from "./sheetInstance"
 
 const router = express.Router();
 
@@ -17,6 +21,10 @@ router.use("/professor", professor);
 router.use("/classes_tables", classesTable);
 router.use("/course_instances", courseIntance);
 router.use("/departments", department);
+router.use("/bank", bank);
+router.use("/question", question);
+router.use("/sheet", sheet);
+router.use("/sheetInstance", sheetInstance);
 router.use("/view", student);
 
 export default router;

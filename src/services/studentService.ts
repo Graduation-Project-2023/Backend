@@ -51,6 +51,35 @@ const connectOrCreateAvailableCourses = (
 };
 
 export class StudentService {
+  static setManyStudentCourseGrades = async (
+    jsonData: any[],
+    instanceId: string
+  ) => {
+    const seatIds = jsonData.map((entry) => entry.seatId);
+    let students: any = await Student.getManyBySeatIds(seatIds);
+    // set grades for each student
+    students = students.map((student: any) => {
+      const studentData = jsonData.find(
+        (entry) => entry.seatId == student.seatId
+      );
+      return {
+        ...student,
+        grade: studentData.grade,
+      };
+    });
+    const res = [];
+    // update students grades
+    for (const student of students) {
+      const resultStudent = await Student.setStudentCourseScore(
+        student.id,
+        instanceId,
+        student.grade as number
+      );
+      res.push(resultStudent);
+    }
+    return res;
+  };
+
   static createMany = async (
     collegeId: string,
     departmentId: string,

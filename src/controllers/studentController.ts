@@ -113,4 +113,19 @@ export class StudentController extends Controller {
       next(error);
     }
   };
+
+  setManyStudentCourseGrade = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { jsonData } = req.body;
+      const instanceId = req.query.instanceId as string;
+      await this.model.setManyStudentGrade(jsonData, instanceId);
+      res.status(201).json("success");
+    } catch (error) {
+      next(error);
+    }
+  };
 }

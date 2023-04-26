@@ -231,10 +231,12 @@ model StudentCourseInstance {
   classworkScore     Int?
   finalScore         Int?
   gradeId            String?
+  totalScore         Int?
   tableId            String?
   table              StudentTable?  @relation(fields: [tableId], references: [id])
   grade              Grade?         @relation(fields: [gradeId], references: [id])
 
+  @@unique([instanceId, studentId])
   @@map("student_course_instances")
 }
 

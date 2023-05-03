@@ -1,28 +1,53 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { ModRequest } from "../types/jwt";
+import prisma from "../db";
 
 const SECRET = process.env.JWT_SECRET as string;
 
 // verify token middleware
-function verifyToken(req: ModRequest, res: Response, next: Function) {
+async function verifyToken(req: Request, res: Response, next: Function) {
+  // check the session id from the jwt token
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
     return res.status(401).json({ err: "No token provided" });
   }
-  const token = authHeader.split(" ")[1] as string;
   try {
-    const decoded: JwtPayload = jwt.verify(token, SECRET) as JwtPayload;
-    req.userId = decoded.userId;
-    req.sid = decoded.sid;
-    req.role = decoded.role;
-    req.faculty = decoded.faculty;
-    req.expires = decoded.expires;
-  } catch (err) {
-    const e = err as Error;
-    return res.status(401).json({ err: e.message });
-  }
-  next();
+    const token = authHeader.split(" ")[1] as string;
+    let decoded = jwt.verify(token, SECRET) as JwtPayload;
+    // check if the session actually exists
+    const session_data = await prisma.session.findUnique({
+      where: {
+        id: decoded.session,
+      },
+    });
+    if (!session_data) {
+      return next({
+        status: 401,
+        message: "Try logging in again",
+      });
+    }
+    // check if the session is not expired
+    const session_date = new Date(session_data.expiresAt);
+    const current_date = new Date();
+    if (session_date.getTime() > current_date.getTime()) {
+      // ensure that the admin doesn't access the assets of another college
+      if (req.body.collegeId) {
+        if (req.body.collegeId !== decoded.college) {
+          return next({
+            status: 401,
+            message: "You don't have access to this college",
+          });
+        }
+      }
+      return next();
+    }
 }
+ 
+ catch (error) {
+return next({
+  status: 401,
+  message: "Invalid token",
+});
+}}
 
 export default verifyToken;

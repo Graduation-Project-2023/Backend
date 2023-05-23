@@ -11,7 +11,7 @@ export class Question {
                 bank: {
                     connect: { id: bankId },
                 },
-                professor: {
+                user: {
                     connect: { id: addedBy },
                 },
             },

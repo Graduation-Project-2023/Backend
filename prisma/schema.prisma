@@ -454,7 +454,7 @@ model Question {
   lastEdit        DateTime    @default(now())
   sheet     Sheet[]
   bank        Bank        @relation(fields: [bankId], references: [id])
-  professor   User   @relation(fields: [addedBy], references: [id])
+  user   User   @relation(fields: [addedBy], references: [id])
 
   @@map("questions")
 }
@@ -471,7 +471,7 @@ model Sheet {
   questions   Question[]
   instances   SheetInstance[]
   bank      Bank      @relation(fields: [bankId], references: [id])
-  professor   User   @relation(fields: [createdBy], references: [id])
+  user   User   @relation(fields: [createdBy], references: [id])
 
   @@map("sheets")
 }

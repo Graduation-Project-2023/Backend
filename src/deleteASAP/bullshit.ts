@@ -71,9 +71,9 @@ export const testingCourses = [
     },
 ];
 
-export const staffScedule = {
+export const staffSchedules1 = {
     "id": "34beeac2-5b0a-408b-bac1-543e2034c267",
-    "professorId": "test",
+    "professorId": "test1",
     "academicSemesterId": "decc46ba-7d4b-11ed-a1eb-0242ac120002",
     "classes": [
         {
@@ -99,4 +99,34 @@ export const staffScedule = {
             "day": "WEDNESDAY",
         }
     ]
+}
+
+export const staffSchedules2 = {
+  "id": "6e7441c6-168e-4a1b-9b1e-a191914d44e0",
+  "professorId": "test2",
+  "academicSemesterId": "67936e15-9d70-4d95-a89d-5f786640da2c",
+  "classes": [
+      {
+          "id": "ef5a925b-8d0e-404e-ad75-1c8056e700ed",
+          "tableId": "3c1bee2d-98b3-443b-b574-58dad3d471ab",
+          "courseInstanceId": "23026360-a448-4584-b1c0-d78904f487b8",
+          "englishName": "English",
+          "arabicName": "لغة انجليزية",
+          "classType": "LAB",
+          "startPeriod": 2,
+          "endPeriod": 3,
+          "day": "TUESDAY",
+      },
+      {
+          "id": "e2e89365-51d7-4939-aad1-64ad4e4153c2",
+          "tableId": "48845b55-9ba5-4598-8270-4c9ce4c08439",
+          "courseInstanceId": "3f0e35f9-5ecb-4477-847d-5ccb5e8eca44",
+          "englishName": "Arabic",
+          "arabicName": "لغة عربية",
+          "classType": "LAB",
+          "startPeriod": 2,
+          "endPeriod": 9,
+          "day": "SATURDAY",
+      }
+  ]
 }

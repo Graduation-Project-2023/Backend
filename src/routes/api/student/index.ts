@@ -17,6 +17,11 @@ router.get("/available_courses", studentController.getStudentAvailableCourses);
 
 router.get("/available_classes", studentController.getStudentAvailableClasses);
 
+// delete this route
+import { Progress } from "../../../controllers/progressDELL";
+const progress = new Progress();
+router.get("/progress", progress.get);
+
 router.get("/table", studentController.getStudentTable);
 
 router.post("/register", studentController.studentRegister);

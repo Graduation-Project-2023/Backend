@@ -27,4 +27,9 @@ router.use("/sheet", sheet);
 router.use("/sheetInstance", sheetInstance);
 router.use("/view", student);
 
+// delete this route
+import { Schedule } from "../../../controllers/staffSceduleDELL";
+const schedule = new Schedule();
+router.get("/schedules", schedule.get);
+
 export default router;

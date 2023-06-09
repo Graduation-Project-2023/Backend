@@ -11,6 +11,7 @@ import bank from "./bank"
 import question from "./question"
 import sheet from "./sheet"
 import sheetInstance from "./sheetInstance"
+import payment from "./payment"
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.use("/bank", bank);
 router.use("/question", question);
 router.use("/sheet", sheet);
 router.use("/sheetInstance", sheetInstance);
+router.use("/payments", payment);
 router.use("/view", student);
 
 // delete this route

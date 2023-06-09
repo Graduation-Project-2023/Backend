@@ -5,6 +5,7 @@ import passport from "passport";
 import student from "./api/student";
 import acquire from "./api/acquire";
 import master from "./api/super/index";
+import callback from "./api/callback";
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.get("/", (req: Request, res: Response) => {
 // public routes that don't need authentication
 router.use("/auth", auth);
 router.use("/", acquire);
+router.use("/payments", callback);
 
 router.use("/admin", passport.authorize(["admin"]), admin);
 

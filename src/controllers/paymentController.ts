@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { createHmac } from "crypto";
 import axios from "axios";
 
+const PAY_URL = "https://accept.paymob.com/api/acceptance/payments/pay";
+
 export class PaymentController {
   checkout = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -17,9 +19,8 @@ export class PaymentController {
       if (type == "card") {
         return res.status(200).json(paymentKey);
       } else if (type == "wallet" && identifier.length == 11) {
-        const url = "https://accept.paymob.com/api/acceptance/payments/pay";
         const req = await axios.post(
-          url,
+          PAY_URL,
           {
             source: {
               identifier: identifier,
@@ -35,6 +36,27 @@ export class PaymentController {
           }
         );
         return res.status(200).json(req.data.redirect_url);
+      } else if (type == "koshk") {
+        const req = await axios.post(
+          PAY_URL,
+          {
+            "source": {
+              "identifier": "AGGREGATOR", 
+              "subtype": "AGGREGATOR"
+            },
+            payment_token: paymentKey,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return res.status(200).json({
+          bill_reference: req.data.data.bill_reference,
+          amount: req.data.amount_cents,
+          message: req.data.data.message,
+        });
       }
     } catch (err) {
       next(err);

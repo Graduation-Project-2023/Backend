@@ -10,7 +10,8 @@ const {
   PAY_API,
   PAYMOB_TOKEN,
   CARD,
-  WALLET
+  WALLET,
+  KOSHK
 } = process.env;
 
 // Function to fetch transaction details by ID from Paymob servers
@@ -61,7 +62,7 @@ export class PaymentProcessor {
       order_id: orderId,
       billing_data,
       currency: "EGP",
-      integration_id: type == "card" ? CARD : WALLET, // Replace with your integration id
+      integration_id: type == "card" ? CARD : (type == 'wallet' ? WALLET : KOSHK), // Replace with your integration id
     };
     const paymentKey = await axios.post(paymentKeyUrl, paymentKeyData, {
       headers,

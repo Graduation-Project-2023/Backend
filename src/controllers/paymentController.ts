@@ -15,8 +15,7 @@ export class PaymentController {
         type
       );
       if (type == "card") {
-        const link = `https://accept.paymob.com/api/acceptance/iframes/416800?payment_token=${paymentKey}`;
-        return res.status(200).json(link);
+        return res.status(200).json(paymentKey);
       } else if (type == "wallet" && identifier.length == 11) {
         const url = "https://accept.paymob.com/api/acceptance/payments/pay";
         const req = await axios.post(

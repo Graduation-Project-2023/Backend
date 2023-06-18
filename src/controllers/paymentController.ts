@@ -166,6 +166,7 @@ export class PaymentController {
     // Compare the hash with the hmac sent by Paymob to verify the request is authentic
     if (hash === req.query.hmac) {
         console.log("hash is correct");
+        console.log(Date.now());
       // the request is authentic and you can store in the db whtever you want
     //   const payment = new payStore({
     //     amount_cents,

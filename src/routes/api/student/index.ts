@@ -5,11 +5,13 @@ import { SheetInstanceController } from "../../../controllers/sheetInstanceContr
 import { Assist } from "../../../controllers/assist";
 import { PaymentController } from "../../../controllers/paymentController";
 import student from "./info";
+import { SheetController } from "../../../controllers/sheetController";
 
 const studentController = ControllerFactory.getController(
   "student"
 ) as StudentController;
 
+const sheet = new SheetController();
 const sheetInstance = new SheetInstanceController();
 
 const router = express.Router();
@@ -31,6 +33,8 @@ router.post("/register", studentController.studentRegister);
 router.post("/assist", new Assist().answer);
 
 router.put("/quiz/:id", sheetInstance.update);
+
+router.get("/sheet/:id", sheet.getForStudent);    // get sheetInstance by id/////////////////////////////
 
 router.get("/quizzes", sheetInstance.getSheetByUser);
 

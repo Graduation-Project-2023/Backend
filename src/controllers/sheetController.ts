@@ -8,6 +8,23 @@ export class SheetController extends Controller {
     super(Sheet);
   }
 
+    getForStudent = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = req.params.id as string;
+            const sheet = await this.model.get(id);
+            const updatedData = {
+              ...sheet,
+              questions: sheet.questions.map((question: { [x: string]: any; answer: any; }) => {
+                const { answer, ...rest } = question;
+                return rest;
+              })
+            };
+            res.status(200).json(updatedData);
+        } catch (err) {
+            next(err);
+        }
+    }
+
     getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const bankId = req.params.bankId as string;

@@ -1,0 +1,132 @@
+export const testingCourses = [
+    {
+      id: "6ba865ee-6b20-41a8-ad31-4348263da4b3",
+      code: "CCE3",
+      englishName: "arabic",
+      arabicName: "arabic but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 0,
+      programCourseId: "a7acf042-2ec7-446d-9a0d-510e3f8f2d98",
+    },
+    {
+      id: "20df8986-5f6f-4280-9f53-47425e496ba6",
+      code: "CCZ24",
+      englishName: "english",
+      arabicName: "english but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 0,
+      programCourseId: "e021c8c0-8bfc-49ab-9fc9-3c3ee60a40d0",
+    },
+    {
+      id: "6f5fd4a3-471d-472c-904a-38174da7464a",
+      code: "CZF42",
+      englishName: "Maths",
+      arabicName: "maths but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 1,
+      programCourseId: "c2951774-34d1-4c9d-80c5-08d788d3280a",
+    },
+    {
+      id: "e3eb0162-80f7-443e-96ea-569f9adfde58",
+      code: "cszd2",
+      englishName: "physics",
+      arabicName: "physics but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 2,
+      programCourseId: "193cab8d-2a93-478f-a4c5-621727ce7f1d",
+    },
+    {
+      id: "51a5b028-e94e-4a2b-a0c4-710753bd2513",
+      code: "sfgs3",
+      englishName: "chemistry",
+      arabicName: "chemistry but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 3,
+      programCourseId: "46c154c7-7b87-4372-a14b-cb8dfef2d6f5",
+    },
+    {
+      id: "1874a499-6e61-411b-962f-cdcfde608b38",
+      code: "sadsa1",
+      englishName: "biology",
+      arabicName: "biology but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 3,
+      programCourseId: "d69effe1-a8d2-46be-9239-a9581b87be56",
+    },
+    {
+      id: "24e371d3-b4f1-4f45-aa8a-e31088539635",
+      code: "sadsa2",
+      englishName: "geograpeee eeeeeeeee eeee eeeeeeeeeehy",
+      arabicName: "geography but in arabic",
+      finished: false,
+      unlocked: true,
+      level: 4,
+      programCourseId: "b535dd44-b11b-4fee-af2c-a14b750b78db",
+    },
+];
+
+export const staffSchedules1 = {
+    "id": "34beeac2-5b0a-408b-bac1-543e2034c267",
+    "professorId": "test1",
+    "academicSemesterId": "decc46ba-7d4b-11ed-a1eb-0242ac120002",
+    "classes": [
+        {
+            "id": "af83952b-dabe-4b43-a3dd-f2a451752480",
+            "tableId": "48845b55-9ba5-4598-8270-4c9ce4c08439",
+            "courseInstanceId": "3f0e35f9-5ecb-4477-847d-5ccb5e8eca44",
+            "englishName": "English",
+            "arabicName": "لغة انجليزية",
+            "classType": "LAB",
+            "startPeriod": 1,
+            "endPeriod": 4,
+            "day": "MONDAY",
+        },
+        {
+            "id": "e2e89365-51d7-4939-aad1-64ad4e4153c2",
+            "tableId": "48845b55-9ba5-4598-8270-4c9ce4c08439",
+            "courseInstanceId": "3f0e35f9-5ecb-4477-847d-5ccb5e8eca44",
+            "englishName": "English",
+            "arabicName": "لغة انجليزية",
+            "classType": "LAB",
+            "startPeriod": 2,
+            "endPeriod": 5,
+            "day": "WEDNESDAY",
+        }
+    ]
+}
+
+export const staffSchedules2 = {
+  "id": "6e7441c6-168e-4a1b-9b1e-a191914d44e0",
+  "professorId": "test2",
+  "academicSemesterId": "67936e15-9d70-4d95-a89d-5f786640da2c",
+  "classes": [
+      {
+          "id": "ef5a925b-8d0e-404e-ad75-1c8056e700ed",
+          "tableId": "3c1bee2d-98b3-443b-b574-58dad3d471ab",
+          "courseInstanceId": "23026360-a448-4584-b1c0-d78904f487b8",
+          "englishName": "English",
+          "arabicName": "لغة انجليزية",
+          "classType": "LAB",
+          "startPeriod": 2,
+          "endPeriod": 3,
+          "day": "TUESDAY",
+      },
+      {
+          "id": "e2e89365-51d7-4939-aad1-64ad4e4153c2",
+          "tableId": "48845b55-9ba5-4598-8270-4c9ce4c08439",
+          "courseInstanceId": "3f0e35f9-5ecb-4477-847d-5ccb5e8eca44",
+          "englishName": "Arabic",
+          "arabicName": "لغة عربية",
+          "classType": "LAB",
+          "startPeriod": 2,
+          "endPeriod": 9,
+          "day": "SATURDAY",
+      }
+  ]
+}

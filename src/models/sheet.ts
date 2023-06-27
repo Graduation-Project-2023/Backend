@@ -11,7 +11,7 @@ export class Sheet {
                 bank: {
                     connect: { id: bankId },
                 },
-                professor: {
+                user: {
                     connect: { id: createdBy },
                 },
             }

@@ -11,4 +11,8 @@ router.post("/refund", paymentController.refund);
 
 router.get("/trx/:transactionId", paymentController.getById);
 
+router.get("/trx/email/:email", paymentController.getByEmail);
+
+router.get("/all_trxs", paymentController.getAll);
+
 export default router;

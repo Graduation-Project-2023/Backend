@@ -174,6 +174,7 @@ export class PaymentController {
     // Compare the hash with the hmac sent by Paymob to verify the request is authentic
     if (hash === req.query.hmac) {
         // the request is authentic and you can store in the db whtever you want
+        console.log("request is authentic");
         await PaymentProcessor.callback({id, amount: amount_cents, student: req.body.obj.order.shipping_data.email, items: req.body.obj.order.items, order_id, date: new Date(created_at), isRefunded: is_refunded, isVoided: is_voided});
         return;
     }

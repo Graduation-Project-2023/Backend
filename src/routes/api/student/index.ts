@@ -13,6 +13,7 @@ const studentController = ControllerFactory.getController(
 
 const sheet = new SheetController();
 const sheetInstance = new SheetInstanceController();
+const paymentController = new PaymentController();
 
 const router = express.Router();
 
@@ -41,6 +42,8 @@ router.get("/quizzes", sheetInstance.getSheetByUser);
 router.put("/register/update", studentController.updateStudentRegister);
 
 router.post("/payment", new PaymentController().checkout);
+
+router.get("/trx/email/:email", paymentController.getByEmail);
 
 router.use("/info", student);
 

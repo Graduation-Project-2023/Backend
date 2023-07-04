@@ -73,11 +73,14 @@ export class CourseInstanceController extends Controller {
   assignMarks = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.instanceId as string;
-      const data = await this.model.assignMarks(
-        id,
-        req.body
-      );
-      res.status(200).json(data);
+      const marks = req.body as any[];
+      for (const mark of marks) {
+        await this.model.assignMarks(
+          id,
+          mark
+        );
+      }
+      res.status(200).json({data: "success"});
     } catch (error) {
       console.log(error);
       next(error);

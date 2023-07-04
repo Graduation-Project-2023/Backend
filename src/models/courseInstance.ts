@@ -51,6 +51,64 @@ export class CourseInstance {
     return data;
   };
 
+  static getProfessorInstances = async (
+    filter: Prisma.CourseInstanceWhereInput
+  ) => {
+    const data = await prisma.courseInstance.findMany({
+      where: filter,
+      select: {
+        id: true,
+        englishName: true,
+        arabicName: true,
+        levelId: true,
+        code: true,
+      },
+    });
+    return data;
+  };
+
+  static getAllStudents = async (id: string) => {
+    const data = await prisma.studentCourseInstance.findMany({
+      where: { instanceId: id },
+      select: {
+        student: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            nationalId: true,
+          },
+        },
+      },
+    });
+    return data;
+  };
+  static assignProfessor = async (
+    professorId: string,
+    courseInstanceId: string
+  ) => {
+    const data = await prisma.courseInstance.update({
+      where: { id: courseInstanceId },
+      data: {
+        professor: {
+          connect: { id: professorId },
+        },        
+      },
+    });
+    return data;
+  };
+
+  static assignMarks = async (
+    courseInstanceId: string,
+    body: Prisma.StudentCourseInstanceUpdateManyArgs["data"]
+  ) => {
+    const data = await prisma.studentCourseInstance.updateMany({
+      where: { instanceId: courseInstanceId },
+      data: body,
+    });
+    return data;
+  };
+
   static getStudentAvailableClasses = async (
     semesterId: string,
     availableCourses: string[] | undefined

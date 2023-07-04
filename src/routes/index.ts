@@ -6,7 +6,7 @@ import student from "./api/student";
 import acquire from "./api/acquire";
 import master from "./api/super/index";
 import callback from "./api/callback";
-
+import professor from "./api/professor";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response) => {
@@ -21,6 +21,8 @@ router.use("/payments", callback);
 router.use("/admin", passport.authorize(["admin"]), admin);
 
 router.use("/student", passport.authorize(["student"]), student);
+
+router.use("/professor", passport.authorize(["admin", "professor"]), professor);
 
 router.use("/master", passport.authorize(["super", "admin"]), master);
 

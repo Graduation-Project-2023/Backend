@@ -91,26 +91,22 @@ export class CourseInstance {
     professorId: string,
     courseInstanceId: string
   ) => {
-    const data = await prisma.courseInstance.update({
+    const data = await prisma.courseInstance.updateMany({
       where: { id: courseInstanceId },
-      data: {
-        professor: {
-          connect: { id: professorId },
-        },        
-      },
+      data: { professorId },
     });
     return data;
   };
 
   static assignMarks = async (
     courseInstanceId: string,
-    body: Prisma.StudentCourseInstanceUpdateManyArgs["data"]
+    data: any
   ) => {
-    const data = await prisma.studentCourseInstance.updateMany({
+    const assigned = await prisma.studentCourseInstance.updateMany({
       where: { instanceId: courseInstanceId },
-      data: body,
+      data,
     });
-    return data;
+    return assigned;
   };
 
   static getStudentAvailableClasses = async (

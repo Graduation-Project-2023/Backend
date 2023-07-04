@@ -79,6 +79,10 @@ export class CourseInstance {
             nationalId: true,
           },
         },
+        finished: true,
+        midtermScore: true,
+        classworkScore: true,
+        finalScore: true,
       },
     });
     return data;

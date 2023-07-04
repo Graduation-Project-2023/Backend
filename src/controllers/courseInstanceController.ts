@@ -56,6 +56,17 @@ export class CourseInstanceController extends Controller {
     }
   }
 
+  getStudent = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.query.studentId as string;
+      const data = await this.model.getStudents(id);
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
   assignProfessor = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.instanceId as string;

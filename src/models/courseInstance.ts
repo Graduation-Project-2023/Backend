@@ -129,6 +129,25 @@ export class CourseInstance {
     return data;
   };
 
+  static getStudents = async (id: string) => {
+    const data = await prisma.studentCourseInstance.findMany({
+      where: {
+        studentId: id,
+      },
+      include: {
+        instance: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            code: true,
+          },
+        },
+      },
+    });
+    return data;
+  };
+
   static create = async (data: any) => {
     const {
       academicSemesterId,

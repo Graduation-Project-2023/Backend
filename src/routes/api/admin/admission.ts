@@ -24,6 +24,14 @@ router.post(
   admissionController.createMany
 );
 
+router.post(
+  "/scores",
+  uploadSingle,
+  validateCsv,
+  csvToJson,
+  admissionController.setManyStudentCourseGrade
+);
+
 router.put("/:id", admissionController.update);
 
 router.delete("/:id", admissionController.delete);

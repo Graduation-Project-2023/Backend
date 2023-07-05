@@ -6,6 +6,7 @@ import { Assist } from "../../../controllers/assist";
 import { PaymentController } from "../../../controllers/paymentController";
 import student from "./info";
 import { SheetController } from "../../../controllers/sheetController";
+import { CourseInstanceController } from "../../../controllers/courseInstanceController";
 
 const studentController = ControllerFactory.getController(
   "student"
@@ -13,6 +14,8 @@ const studentController = ControllerFactory.getController(
 
 const sheet = new SheetController();
 const sheetInstance = new SheetInstanceController();
+const paymentController = new PaymentController();
+const InstanceController = new CourseInstanceController();
 
 const router = express.Router();
 
@@ -41,6 +44,10 @@ router.get("/quizzes", sheetInstance.getSheetByUser);
 router.put("/register/update", studentController.updateStudentRegister);
 
 router.post("/payment", new PaymentController().checkout);
+
+router.get("/trx/email/:email", paymentController.getByEmail);
+
+router.get("/courses", InstanceController.getStudent);
 
 router.use("/info", student);
 

@@ -8,6 +8,7 @@ datasource db {
 }
 
 model User {
+
   id        String     @id @default(uuid())
   email     String     @unique
   password  String
@@ -39,34 +40,34 @@ model Message {
 }
 
 model Professor {
-  id          String           @id @default(uuid())
-  userId      String           @unique
-  user        User             @relation(fields: [userId], references: [id])
-  englishName String
-  arabicName  String
-  title       String?
-  position    POSITION         @default(permanent)
-  collegeId   String
-  college     College          @relation(fields: [collegeId], references: [id])
-  courses     CourseInstance[]
-  classes    Class[]
+  id           String           @id @default(uuid())
+  userId       String           @unique
+  user         User             @relation(fields: [userId], references: [id])
+  englishName  String
+  arabicName   String
+  title        String?
+  position     POSITION         @default(permanent)
+  collegeId    String
+  college      College          @relation(fields: [collegeId], references: [id])
+  courses      CourseInstance[]
+  classes      Class[]
   // questions   Question[]
   // sheets      Sheet[]
   departmentId String?
-  department Department? @relation(fields: [departmentId], references: [id])
+  department   Department?      @relation(fields: [departmentId], references: [id])
 
   @@map("professors")
 }
 
 model Admin {
-  id          String      @id @default(uuid())
-  userId      String      @unique
-  user        User        @relation(fields: [userId], references: [id])
+  id          String  @id @default(uuid())
+  userId      String  @unique
+  user        User    @relation(fields: [userId], references: [id])
   englishName String
   arabicName  String
   role        ROLE
   collegeId   String
-  college     College     @relation(fields: [collegeId], references: [id])
+  college     College @relation(fields: [collegeId], references: [id])
 
   @@map("admins")
 }
@@ -130,12 +131,13 @@ model Student {
   department                     Department?             @relation(fields: [departmentCode], references: [code])
   creditHrs                      Int?
   availableCourses               AvailableCourse[]
+  // Payment                        Payment[]
 
   @@map("students")
 }
 
 model College {
-  id          String      @id @default(uuid())
+  id          String       @id @default(uuid())
   englishName String
   arabicName  String
   courses     Course[]
@@ -149,14 +151,14 @@ model College {
 }
 
 model Department {
-  id         String      @id @default(uuid())
-  code       String?      @unique
+  id          String      @id @default(uuid())
+  code        String?     @unique
   englishName String
   arabicName  String
   collegeId   String
   system      SYSTEM
   college     College     @relation(fields: [collegeId], references: [id])
-  programs    Program[]   @relation("department_programs") 
+  programs    Program[]   @relation("department_programs")
   professors  Professor[]
   students    Student[]
 
@@ -178,7 +180,7 @@ model Course {
 }
 
 model ProgramCourse {
-  id                   String           @id @default(uuid())
+  id                   String            @id @default(uuid())
   programId            String
   semester             SEMESTER?
   creditHours          Int?
@@ -193,12 +195,12 @@ model ProgramCourse {
   code                 String
   englishName          String?
   levelId              String?
-  course               Course           @relation(fields: [code], references: [id], onDelete: Cascade)
+  course               Course            @relation(fields: [code], references: [id], onDelete: Cascade)
   availableCourses     AvailableCourse[]
-  program              Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
-  level                Level?           @relation(fields: [levelId], references: [id])
-  prerequisites        ProgramCourse[]  @relation("CoursePrerequisites")
-  unlocks              ProgramCourse[]  @relation("CoursePrerequisites")
+  program              Program           @relation(fields: [programId], references: [id], onDelete: Cascade)
+  level                Level?            @relation(fields: [levelId], references: [id])
+  prerequisites        ProgramCourse[]   @relation("CoursePrerequisites")
+  unlocks              ProgramCourse[]   @relation("CoursePrerequisites")
   instances            CourseInstance[]
 
   @@unique([programId, code])
@@ -207,44 +209,44 @@ model ProgramCourse {
 }
 
 model AvailableCourse {
-  id       String           @id @default(uuid())
+  id              String        @id @default(uuid())
   programCourseId String
   studentId       String
-  finished       Boolean?
-  unlocked       Boolean?
-  englishName    String?
-  arabicName     String?
-  code          String?
-  levelId        String?
-  level          Level?          @relation(fields: [levelId], references: [id])
-  programCourse  ProgramCourse @relation(fields: [programCourseId], references: [id])
-  student        Student       @relation(fields: [studentId], references: [id])
+  finished        Boolean?
+  unlocked        Boolean?
+  englishName     String?
+  arabicName      String?
+  code            String?
+  levelId         String?
+  level           Level?        @relation(fields: [levelId], references: [id])
+  programCourse   ProgramCourse @relation(fields: [programCourseId], references: [id])
+  student         Student       @relation(fields: [studentId], references: [id])
 
   @@unique([programCourseId, studentId])
   @@map("available_courses")
 }
 
 model StudentTable {
-  id        String           @id @default(uuid())
-  studentId String
-  student   Student          @relation(fields: [studentId], references: [id])
+  id                 String                  @id @default(uuid())
+  studentId          String
+  student            Student                 @relation(fields: [studentId], references: [id])
   academicSemesterId String
-  academicSemester AcademicSemester @relation(fields: [academicSemesterId], references: [id])
-  classes    Class[]
-  instances StudentCourseInstance[]
+  academicSemester   AcademicSemester        @relation(fields: [academicSemesterId], references: [id])
+  classes            Class[]
+  instances          StudentCourseInstance[]
 
   @@unique([studentId, academicSemesterId])
   @@map("student_tables")
 }
 
 model StudentCourseInstance {
-  id                 String         @id @default(uuid())
-  studentId          String
-  instanceId         String
-  student            Student        @relation(fields: [studentId], references: [id])
-  instance           CourseInstance @relation(fields: [instanceId], references: [id])
-  lectureGroup      GROUP?
-  sectionGroup      GROUP?
+  id             String         @id @default(uuid())
+  studentId      String
+  instanceId     String
+  student        Student        @relation(fields: [studentId], references: [id])
+  instance       CourseInstance @relation(fields: [instanceId], references: [id])
+  lectureGroup   GROUP?
+  sectionGroup   GROUP?
   // normalized data from course instance
   finished           Boolean?
   midtermScore       Int?
@@ -262,17 +264,17 @@ model StudentCourseInstance {
 
 model CourseInstance {
   id                 String                  @id @default(uuid())
-  lectureCount      Int?                    @default(1)
-  lectureHrs        Int?                    @default(2)
-  labCount          Int?                    @default(0)
-  labHrs            Int?                    @default(0)
-  sectionHrs        Int?                    @default(0)
+  lectureCount       Int?                    @default(1)
+  lectureHrs         Int?                    @default(2)
+  labCount           Int?                    @default(0)
+  labHrs             Int?                    @default(0)
+  sectionHrs         Int?                    @default(0)
   hasLectureGroups   Boolean?
-  lectureGroupCount      Int?
-  labGroupCount          Int?
-  sectionGroupCount      Int?
-  programCourseId           String 
-  academicSemesterId         String
+  lectureGroupCount  Int?
+  labGroupCount      Int?
+  sectionGroupCount  Int?
+  programCourseId    String
+  academicSemesterId String
   professorId        String?
   // normalized data from program course
   levelId            String?
@@ -281,11 +283,11 @@ model CourseInstance {
   englishName        String?
   arabicName         String?
   creditHours        Int?
-  level             Level?                   @relation(fields: [levelId], references: [id])
+  level              Level?                  @relation(fields: [levelId], references: [id])
   programCourse      ProgramCourse           @relation(fields: [programCourseId], references: [id])
-  program           Program?                 @relation(fields: [programId], references: [id])
+  program            Program?                @relation(fields: [programId], references: [id])
   academicSemester   AcademicSemester        @relation(fields: [academicSemesterId], references: [id])
-  professor          Professor?               @relation(fields: [professorId], references: [id])
+  professor          Professor?              @relation(fields: [professorId], references: [id])
   registeredStudents StudentCourseInstance[]
   classes            Class[]
 
@@ -295,38 +297,37 @@ model CourseInstance {
 }
 
 model Class {
-  id         String          @id @default(uuid())
-  professorId String?
-  tableId    String
+  id               String         @id @default(uuid())
+  professorId      String?
+  tableId          String
   courseInstanceId String
-  englishName String
-  arabicName String
-  classType  CLASSTYPE
-  startPeriod Int
-  endPeriod  Int
-  day        DAY
-  startDate  DateTime?
-  endDate    DateTime? 
-  studentTables StudentTable[]
-  group     GROUP?
-  table      ClassesTable    @relation(fields: [tableId], references: [id])
+  englishName      String
+  arabicName       String
+  classType        CLASSTYPE
+  startPeriod      Int
+  endPeriod        Int
+  day              DAY
+  startDate        DateTime?
+  endDate          DateTime?
+  studentTables    StudentTable[]
+  group            GROUP?
+  table            ClassesTable   @relation(fields: [tableId], references: [id])
   courseInstance   CourseInstance @relation(fields: [courseInstanceId], references: [id])
-  professor  Professor?      @relation(fields: [professorId], references: [id])
-
+  professor        Professor?     @relation(fields: [professorId], references: [id])
 
   @@index([tableId], type: Hash)
   @@map("classes")
 }
 
 model ClassesTable {
-  id                    String                  @id @default(uuid())
-  levelId               String
-  semesterId            String
-  programId             String
-  program               Program                 @relation(fields: [programId], references: [id])
-  level                 Level                   @relation(fields: [levelId], references: [id])
-  academicSemester      AcademicSemester        @relation(fields: [semesterId], references: [id])
-  classes               Class[]
+  id               String           @id @default(uuid())
+  levelId          String
+  semesterId       String
+  programId        String
+  program          Program          @relation(fields: [programId], references: [id])
+  level            Level            @relation(fields: [levelId], references: [id])
+  academicSemester AcademicSemester @relation(fields: [semesterId], references: [id])
+  classes          Class[]
 
   @@unique([levelId, semesterId])
   @@index([programId], type: Hash)
@@ -334,18 +335,18 @@ model ClassesTable {
 }
 
 model Level {
-  id            String          @id @default(uuid())
-  englishName   String
-  arabicName    String
-  programId     String
-  level         Int
-  qualifyingHrs Int?
+  id               String            @id @default(uuid())
+  englishName      String
+  arabicName       String
+  programId        String
+  level            Int
+  qualifyingHrs    Int?
   availableCourses AvailableCourse[]
-  program       Program         @relation(fields: [programId], references: [id])
-  courses       ProgramCourse[]
-  courseInstances CourseInstance[]
-  tables        ClassesTable[]
-  students      Student[]
+  program          Program           @relation(fields: [programId], references: [id])
+  courses          ProgramCourse[]
+  courseInstances  CourseInstance[]
+  tables           ClassesTable[]
+  students         Student[]
 
   @@unique([programId, level])
   @@map("levels")
@@ -390,7 +391,7 @@ model Program {
   hrsToPass              Int?
   system                 SYSTEM
   maxGrade               Int?
-  departments           Department[]         @relation("department_programs") 
+  departments            Department[]        @relation("department_programs")
   college                College             @relation(fields: [collegeId], references: [id])
   prerequisiteProgram    Program?            @relation("prerequisites", fields: [prerequisiteProgramId], references: [id])
   gpaAllowedHrs          GpaAllowedHours[]
@@ -444,13 +445,30 @@ model AcademicSemester {
   courseInstances  CourseInstance[]
   tables           ClassesTable[]
   studentTables    StudentTable[]
+  // Payment          Payment[]
 
   @@unique([academicYear, semester])
   @@map("academic_semesters")
 }
 
+model Payment {
+  id         Int      @id
+  student    String
+  // semesterId String
+  amount     Float
+  date       DateTime
+  isRefunded Boolean
+  isVoided   Boolean
+  order_id   Int
+  items      Json
+  // student    Student          @relation(fields: [studentId], references: [email])
+  // semester   AcademicSemester @relation(fields: [semesterId], references: [id])
+
+  @@map("payments")
+}
+
 model Bank {
-  id        String     @id @unique
+  id          String     @id @unique
   englishName String
   arabicName  String
   questions   Question[]
@@ -461,51 +479,51 @@ model Bank {
 }
 
 model Question {
-  id          String      @id @default(uuid())
-  question    String
-  choices     Json
-  answer      String[]  //editeddddddddddd to be arr
-  image       String?
-  bankId      String
-  addedBy     String
-  lastEdit        DateTime    @default(now())
-  sheet     Sheet[]
-  bank        Bank        @relation(fields: [bankId], references: [id])
-  user   User   @relation(fields: [addedBy], references: [id])
+  id       String   @id @default(uuid())
+  question String
+  choices  Json
+  answer   String[] //editeddddddddddd to be arr
+  image    String?
+  bankId   String
+  addedBy  String
+  lastEdit DateTime @default(now())
+  sheet    Sheet[]
+  bank     Bank     @relation(fields: [bankId], references: [id])
+  user     User     @relation(fields: [addedBy], references: [id])
 
   @@map("questions")
 }
 
 model Sheet {
-  id          String      @id @default(uuid())
+  id          String          @id @default(uuid())
   englishName String
   arabicName  String?
   description String?
-  bankId  String
+  bankId      String
   givenTime   Float?
   createdBy   String
   totalMarks  Float
   questions   Question[]
   instances   SheetInstance[]
-  bank      Bank      @relation(fields: [bankId], references: [id])
-  user   User   @relation(fields: [createdBy], references: [id])
+  bank        Bank            @relation(fields: [bankId], references: [id])
+  user        User            @relation(fields: [createdBy], references: [id])
 
   @@map("sheets")
 }
 
 model SheetInstance {
-  id          String      @id @default(uuid())
-  sheetId     String
-  studentId   String
-  answers     Json?
-  result      Float?
-  givenTime   Float?
-  startTime   DateTime?
-  endTime     DateTime?
-  finished    Boolean?    @default(false)
-  started     Boolean?    @default(false)
-  sheet       Sheet       @relation(fields: [sheetId], references: [id])
-  student     Student     @relation(fields: [studentId], references: [id])
+  id        String    @id @default(uuid())
+  sheetId   String
+  studentId String
+  answers   Json?
+  result    Float?
+  givenTime Float?
+  startTime DateTime?
+  endTime   DateTime?
+  finished  Boolean?  @default(false)
+  started   Boolean?  @default(false)
+  sheet     Sheet     @relation(fields: [sheetId], references: [id])
+  student   Student   @relation(fields: [studentId], references: [id])
 
   @@map("sheet_instances")
 }
@@ -524,12 +542,14 @@ enum ROLE {
   STUDENT
   PROFESSOR
   SUPER
+
   @@map("Role")
 }
 
 enum POSITION {
   delegated
   permanent
+
   @@map("Position")
 }
 
@@ -638,5 +658,5 @@ enum GROUP {
   K
   L
 
-  @@map("Group")  
+  @@map("Group")
 }

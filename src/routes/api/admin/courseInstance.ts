@@ -32,4 +32,10 @@ router.delete(
   courseInstanceController.delete
 );
 
+// assign professor to a course
+router.put(
+  "/assign/:instanceId/professor/:professorId",
+  courseInstanceController.assignProfessor
+);
+
 export default router;

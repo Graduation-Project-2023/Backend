@@ -67,8 +67,35 @@ export class PaymentProcessor {
     const paymentKey = await axios.post(paymentKeyUrl, paymentKeyData, {
       headers,
     });
+    // store the payment details here and flag it as pending when a request callback is received move it to paid
+    // console.log(id, amount_cents, order_id, created_at, is_refunded, is_voided)
+    // await this.callback(paymentKey.data.token, orderId);
+    //////////////////////////////////////////////////////////////
     return paymentKey.data.token;
   }
+
+  static async getAll() {
+    try {
+      const result = await prisma.payment.findMany();
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async getByEmail(email: string) {
+    try {
+      const result = await prisma.payment.findMany({
+        where: {
+          student: email,
+        },
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   
   static async getById(transactionId: string) {
     const accessToken = await this.init();
@@ -122,27 +149,19 @@ export class PaymentProcessor {
     return response.data;
   }
 
-  static async order(order_id: string) {
-
+  static async callback(data: any) {
+    const { id, student, semesterId, ...rest } = data;
+    const payment = await prisma.payment.upsert({
+      where: { 
+        id,
+       },
+      update: rest,
+      create: {
+        id,
+        student,
+        ...rest,
+      },
+    });
+    return payment;
   }
-
-  // static async callback(data: any) {
-  //   const { studentId, semesterId, ...rest } = data;
-  //   const payment = await prisma.payment.create({
-  //     data: {
-  //       student: {
-  //         connect: {
-  //           id: studentId,
-  //         },
-  //       },
-  //       semester: {
-  //         connect: {
-  //           id: semesterId,
-  //         },
-  //       },
-  //       ...rest,
-  //     },
-  //   });
-  //   return payment;
-  // }
 }

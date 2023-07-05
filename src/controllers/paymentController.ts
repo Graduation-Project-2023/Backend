@@ -63,6 +63,25 @@ export class PaymentController {
     }
   };
 
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const transactions = await PaymentProcessor.getAll();
+      res.status(200).json(transactions);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getByEmail = async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.params;
+    try {
+      const transactions = await PaymentProcessor.getByEmail(email);
+      res.status(200).json(transactions);
+    } catch (err) {
+      next(err);
+    }
+  };
+
   // get trx by id
   getById = async (req: Request, res: Response, next: NextFunction) => {
     const { transactionId } = req.params;
@@ -97,18 +116,7 @@ export class PaymentController {
     }
   };
 
-  order = async (req: Request, res: Response, next: NextFunction) => {
-    const order_id = req.params.id;
-    try {
-      const transaction = await PaymentProcessor.order(order_id);
-      res.status(200).json(transaction);
-    } catch (err) {
-      next(err);
-    }
-  };
-
   callback = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("callback");
     // Get the transaction details from the request body
     const {
       amount_cents,
@@ -165,33 +173,10 @@ export class PaymentController {
 
     // Compare the hash with the hmac sent by Paymob to verify the request is authentic
     if (hash === req.query.hmac) {
-        console.log("hash is correct");
-        console.log(Date.now());
-      // the request is authentic and you can store in the db whtever you want
-    //   const payment = new payStore({
-    //     amount_cents,
-    //     created_at,
-    //     currency,
-    //     error_occured,
-    //     has_parent_transaction,
-    //     id,
-    //     integration_id,
-    //     is_3d_secure,
-    //     is_auth,
-    //     is_capture,
-    //     is_refunded,
-    //     is_standalone_payment,
-    //     is_voided,
-    //     order_id,
-    //     owner,
-    //     pending,
-    //     source_data_pan,
-    //     source_data_sub_type,
-    //     source_data_type,
-    //     success,
-    //   });
-    //   await payment.save();
-      return;
+        // the request is authentic and you can store in the db whtever you want
+        console.log("request is authentic");
+        await PaymentProcessor.callback({id, amount: amount_cents, student: req.body.obj.order.shipping_data.email, items: req.body.obj.order.items, order_id, date: new Date(created_at), isRefunded: is_refunded, isVoided: is_voided});
+        return;
     }
   };
 }

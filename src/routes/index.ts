@@ -7,6 +7,7 @@ import acquire from "./api/acquire";
 import master from "./api/super/index";
 import callback from "./api/callback";
 import { MessageController } from "../controllers/messages";
+import professor from "./api/professor";
 
 const router = express.Router();
 
@@ -25,11 +26,15 @@ router.use("/admin", passport.authorize(["admin"]), admin);
 
 router.use("/student", passport.authorize(["student"]), student);
 
+
 router.use(
   "/message",
   passport.authorize(["bypass"]),
   messageController.getAll
 );
+
+router.use("/professor", passport.authorize(["admin", "professor"]), professor);
+
 
 router.use("/master", passport.authorize(["super", "admin"]), master);
 

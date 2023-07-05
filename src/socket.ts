@@ -49,8 +49,16 @@ export const initConnection = (server: any) => {
     socket.on("message-sent", async (message: any) => {
       const newMessage = await prisma.message.create({
         data: {
-          senderId: message.senderId,
-          receiverId: message.receiverId,
+          sender: {
+            connect: {
+              id: message.senderId,
+            },
+          },
+          receiver: {
+            connect: {
+              id: message.receiverId,
+            },
+          },
           text: message.text,
         },
       });

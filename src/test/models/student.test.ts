@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { StudentService } from "../../services/studentService";
+import { Student } from "../../models/student";
 import prisma from "../../db";
 import { executionAsyncId } from "async_hooks";
 
@@ -195,6 +196,28 @@ describe("Student service test", () => {
     );
     tableId = table.id;
     expect(table.instances).to.have.lengthOf(2);
+  });
+
+  it("should test setting student final grade", async () => {
+    const studentCourse = await Student.setStudentCourseScore(
+      studentId,
+      availableClasses[0].id,
+      100
+    );
+    expect(studentCourse.finalScore).to.equal(100);
+  });
+
+  it("should test setting multiple student final grade", async () => {
+    const grades = await StudentService.setManyStudentCourseGrades(
+      [
+        {
+          seatId,
+          grade: 75,
+        },
+      ],
+      availableClasses[1].id
+    );
+    expect(grades[0].finalScore).to.equal(75);
   });
 
   it("should get student timetable", async () => {

@@ -84,7 +84,7 @@ export const emitMessage = (receiverId: any, message: any) => {
   if (clientsByUserId[receiverId] && ioInstance) {
     clientsByUserId[receiverId].forEach((clientId: any) => {
       console.log("emitting message");
-      ioInstance.to(clientId).emit("message-recieved", message);
+      ioInstance.to(clientId).emit("receive-message", message);
     });
   }
 };

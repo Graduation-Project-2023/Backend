@@ -50,4 +50,25 @@ return next({
 });
 }}
 
-export default verifyToken;
+async function tokenDecode(req: Request, res: Response, next: Function) {
+  // check the session id from the jwt token
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) {
+    return res.status(401).json({ err: "No token provided" });
+  }
+  try {
+    const token = authHeader.split(" ")[1] as string;
+    let decoded = jwt.verify(token, SECRET) as JwtPayload;
+    // get the user id from the jwt token
+    return decoded.professorId;
+  } catch (error) {
+    return next({
+      status: 401,
+      message: "Invalid token",
+    });
+  }
+}
+
+    
+
+export default tokenDecode;

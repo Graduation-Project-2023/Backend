@@ -35,6 +35,36 @@ export class Student {
     return data;
   };
 
+  static getManyBySeatIds = async (seatIds: number[]) => {
+    const data = await prisma.student.findMany({
+      where: {
+        seatId: {
+          in: seatIds,
+        },
+      },
+    });
+    return data;
+  };
+
+  static setStudentCourseScore = async (
+    studentId: string,
+    instanceId: string,
+    score: number
+  ) => {
+    const data = await prisma.studentCourseInstance.update({
+      where: {
+        instanceId_studentId: {
+          instanceId,
+          studentId,
+        },
+      },
+      data: {
+        finalScore: score,
+      },
+    });
+    return data;
+  };
+
   static getAllByProgram = async (programId: string) => {
     const data = await prisma.student.findMany({
       where: { programId },

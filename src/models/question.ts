@@ -11,7 +11,7 @@ export class Question {
                 bank: {
                     connect: { id: bankId },
                 },
-                professor: {
+                user: {
                     connect: { id: addedBy },
                 },
             },
@@ -19,6 +19,13 @@ export class Question {
         });
         return question;
     }
+
+    static createMany = async (data: any) => {
+        const questions = await prisma.question.createMany({
+            data,
+         });
+        return questions;
+    };
 
     static get = async (id: string) => {
         const data = await prisma.question.findUnique({

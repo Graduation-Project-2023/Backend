@@ -30,6 +30,7 @@ declare global {
   var departmentCode: string;
   var departmentId: string;
   var studentId: string;
+  var seatId: number | null;
   var userId: string;
   var token: string;
 }
@@ -232,6 +233,7 @@ before(async () => {
     collegeId,
   });
   global.studentId = student.id;
+  global.seatId = student.seatId;
 
   const academicSemester = await AcademicSemester.create({
     academicYear: "2022/2023",

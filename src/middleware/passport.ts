@@ -154,6 +154,9 @@ passport.deserializeUser(async (id: UserTypes, done) => {
 passport.authorize = (roles: string[]) => {
   return async (req: any, res: any, next: any) => {
     if (req.isAuthenticated()) {
+      if (roles.includes("bypass")) {
+        return next();
+      }
       /**
        * check the portal of the user
        * if the user is a student, then check if the user is trying to access the assets of the same student
@@ -246,7 +249,6 @@ passport.authorize = (roles: string[]) => {
               message: "Invalid token",
             });
           }
-          
         }
       }
       // check the identity of the user

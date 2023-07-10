@@ -14,6 +14,8 @@ router.get("/:id", questionController.get);
 
 router.post("/", questionController.create);
 
+router.post("/many", questionController.createMany);
+
 router.put("/:id", questionController.update);
 
 router.delete("/:id", questionController.delete);

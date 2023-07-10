@@ -1,52 +1,25 @@
 import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
 import cors from "cors";
 import passport from "passport";
-import session from "express-session";
 import router from "./routes/index";
-import prisma from "./db";
-import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import errorHandler from "./middleware/errorHandler";
-import { v4 as uuidv4 } from 'uuid';
+import sessionMiddleware from "./sessionMiddleware";
+import { initConnection } from "./socket";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
 
 const app = express();
+const server = createServer(app);
 app.use(express.json());
 
 app.set("trust proxy", 1);
 
 // mandatory for passport in order to work
-app.use(
-  session({
-    genid: (req) => {
-      /**
-       * this happens second
-       */
-      if (req.body.session) {
-        return req.body.session; // use the sessionID from the request body that was generated in passport.ts
-      } else {
-        return uuidv4();
-      } 
-    },
-    secret: process.env.SESSION_SECRET as string,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      sameSite: "none",
-      secure: process.env.NODE_ENV === "production" ? true : false,
-      httpOnly: process.env.NODE_ENV === "production" ? true : false,
-    },
-    store: new PrismaSessionStore(prisma, {
-      checkPeriod: 2 * 60 * 1000, //ms
-      dbRecordIdIsSessionId: true,
-      dbRecordIdFunction: undefined,
-    }),
-    rolling: false // Set the rolling option to false
-  })
-);
+app.use(sessionMiddleware);
 
 const corsOptions = {
   origin: true,
@@ -70,7 +43,23 @@ app.use("/api", router);
 
 app.use(errorHandler);
 
-app.listen(port, () => {
+initConnection(server);
+// const io = new Server(server, {
+//   cors: {
+//     origin: true,
+//     credentials: true,
+//   },
+// });
+
+// // test socket
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+//   io.on("test event", () => {
+//     console.log("testing");
+//   });
+// });
+
+server.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 

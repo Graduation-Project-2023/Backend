@@ -51,6 +51,64 @@ export class CourseInstance {
     return data;
   };
 
+  static getProfessorInstances = async (
+    filter: Prisma.CourseInstanceWhereInput
+  ) => {
+    const data = await prisma.courseInstance.findMany({
+      where: filter,
+      select: {
+        id: true,
+        englishName: true,
+        arabicName: true,
+        levelId: true,
+        code: true,
+      },
+    });
+    return data;
+  };
+
+  static getAllStudents = async (id: string) => {
+    const data = await prisma.studentCourseInstance.findMany({
+      where: { instanceId: id },
+      select: {
+        student: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            nationalId: true,
+          },
+        },
+        finished: true,
+        midtermScore: true,
+        classworkScore: true,
+        finalScore: true,
+      },
+    });
+    return data;
+  };
+  static assignProfessor = async (
+    professorId: string,
+    courseInstanceId: string
+  ) => {
+    const data = await prisma.courseInstance.updateMany({
+      where: { id: courseInstanceId },
+      data: { professorId },
+    });
+    return data;
+  };
+
+  static assignMarks = async (
+    courseInstanceId: string,
+    data: any
+  ) => {
+    const assigned = await prisma.studentCourseInstance.updateMany({
+      where: { instanceId: courseInstanceId },
+      data,
+    });
+    return assigned;
+  };
+
   static getStudentAvailableClasses = async (
     semesterId: string,
     availableCourses: string[] | undefined
@@ -66,6 +124,25 @@ export class CourseInstance {
         id: true,
         classes: true,
         level: true,
+      },
+    });
+    return data;
+  };
+
+  static getStudents = async (id: string) => {
+    const data = await prisma.studentCourseInstance.findMany({
+      where: {
+        studentId: id,
+      },
+      include: {
+        instance: {
+          select: {
+            id: true,
+            englishName: true,
+            arabicName: true,
+            code: true,
+          },
+        },
       },
     });
     return data;
